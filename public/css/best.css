@@ -1,0 +1,185 @@
+@font-face {
+font-family:Tayle_B;
+src: url(/fonts/Tayle_B.eot);
+src: local("Tayle_B"), url(/fonts/Tayle_B.woff) format("woff");
+}
+h1{font-family:Tayle_B;font-size:68.4px;}
+input, textarea { 
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none; 
+}
+
+
+/*best.html*/
+
+
+#box{
+	position: absolute;
+    top: 205.5px;
+	border: 1px solid gray;
+	width: 860px;
+	height : 475px;
+}
+
+#top3{
+	padding-top:65px;
+	padding-bottom:60px;
+}
+
+#date{
+	   font: bold 16px sans-serif;
+	color:RGB(155,155,155);
+}
+
+#like{
+	height:100px;
+}
+/*fullPage.css 수정 */
+.content{max-width:860px;margin:0 auto;text-align: center;    height: 768px;
+   }
+.content img{width:860px;height:475px;margin-top:5px;}
+.fp-controlArrow.fp-next{border-left-color:#000!important}
+.fp-controlArrow.fp-prev{border-right-color:#000!important}
+.fp-slidesNav ul li a.active span{background:rgb(46, 51, 142);width:22.5px;height:22.5px;margin:-11.25px 0 0 -11.25px;}
+.fp-slidesNav ul li a span{width:22.5px;height:22.5px;background:#9E9E9E;margin:-11.25px 0 0 -11.25px;}
+.fp-slidesNav ul li{width: 22.5px;height: 22.5px;margin:0 13.75px;}
+.fp-slidesNav.bottom{bottom: 53.5px;}
+
+.price{
+	      margin-right: -14.5px;
+    margin-top: -90px;
+   
+    float: right;
+    width: 100px;
+}
+.price i{
+	margin-right:-14.5px;
+	width:100px;
+	height:100px;
+}
+/*menu bar css*/
+.back{
+    z-index: 70;
+    position: absolute;
+    top:35px;
+    right:35px;
+    font-size: 70px;
+    
+}
+#menu li {
+
+	float:right;
+	display:inline-block;
+	margin-bottom: 15px;
+	color: #000;
+	width:125px;
+	height:60px;
+	/*background:#fff;*/
+/*	background: rgb(162,222,248);*/
+	-webkit-border-radius: 10px;
+         text-shadow: -2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000;
+            
+}
+#menu li.active{
+/*나중에지우기<!--	background:#666;*/
+	/*background: rgb(30,42,94);*/
+
+	color: #fff;
+		width:200px;
+	height:60px;
+	font-size:29.64px;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+#menu li.active span{
+	position: absolute;
+	margin-top: -40px;
+	margin-left: 40px;
+}
+#menu li a{
+	text-decoration:none;
+	color: #fff;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+
+}
+#menu li.active a:hover{
+	color: #fff;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+#menu li:hover{
+	background: rgba(255,255,255, 0.8);
+}
+#menu li a,
+#menu li.active a{
+	padding: 9px 18px;
+	display:block;
+	
+}
+#menu li.active a{
+	color: #fff;
+}
+#menu li img{
+	width:125px;height:50px
+}
+#menu li.active img{
+	width:200px;
+}
+#menu li span{
+	 position :absolute;margin-top: -40px;margin-left: 25px
+}
+#menu{
+	font-family:Tayle_B;
+	font-size:25.53px;
+	float:right;
+	position:fixed;
+	top:188px;
+	right:0px;
+	width: 200px;
+	z-index: 70;
+	height: 100%;
+	padding: 0;
+	margin-top:0;
+}
+/*summery.css*/
+.zipper{
+  width:100%;height:100%;
+  position:absolute;top:0;
+  transition: all 500ms linear;
+  opacity: .5;
+}
+.left{
+	-webkit-clip-path: polygon(0 0, 94% 0, 100% 11%, 94% 22%, 100% 33%, 94% 44%, 100% 55%, 94% 66%, 100% 77%, 94% 88%, 100% 100%, 0 100%);
+	clip-path: polygon(0 0, 94% 0, 100% 11%, 94% 22%, 100% 33%, 94% 44%, 100% 55%, 94% 66%, 100% 77%, 94% 88%, 100% 100%, 0 100%);
+	background-color:rgb(114, 102, 88);left:-100%;color:white;
+	position:absolute;top:0;	
+	width:100%;
+	height:100%;
+}
+.right{
+	-webkit-clip-path: polygon(100% 0, 0 0, 6% 11%, 0 22%, 6% 33%, 0 44%, 6% 55%, 0 66%, 6% 77%, 0 88%, 6% 100%, 100% 100%);
+	clip-path: polygon(100% 0, 0 0, 6% 11%, 0 22%, 6% 33%, 0 44%, 6% 55%, 0 66%, 6% 77%, 0 88%, 6% 100%, 100% 100%);
+	background-color:rgb(209, 210, 212);left:100%;
+	position:absolute;top:0;	
+	width:100%;
+	height:100%;
+}
+.left_drag{width:148%;height:100%;margin-left:-48%;}
+.right_drag{width:148%;height:100%;}
+.summery{width:50%;height:100%;position:absolute;top:0;text-align: center;}
+.summery-best{right:4%;}
+.summery-new{left:4%;}
+.summery h1{margin-top:65px;margin-bottom:0;}
+.summery img{margin-top:16.6px;height:450px;}
+.summery .item_description{font-family: 'Nanum Square';font-weight:bold;font-size:16.4px;line-height:1.3;margin-top:5px;}
+.summery .item_name_en{color:rgb(155,155,155);}
+
+.content h1{
+	font-family:Tayle_B;font-size:68.4px;
+/*	padding-top:65px;*/
+	margin:0;
+	height: 80px;
+}
