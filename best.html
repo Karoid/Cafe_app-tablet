@@ -164,6 +164,13 @@ $(document).ready(function() {
         onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex){}
     });
 });
+
+$('.price').click(function(event) {
+    $(this).children('img').attr('src', 'img/like_2.png');
+    setTimeout(function(){
+        $('.price img').attr('src', 'img/like_1.png');
+    },500)
+});
 </script>
 </body>
 </html>
