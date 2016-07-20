@@ -64,6 +64,9 @@ input, textarea {
 	width:200px;
 	transform: rotate(-15deg);
 }
+.price span{
+	font-family: Tayle_B;
+}
 /*menu bar css*/
 .back{
     z-index: 70;

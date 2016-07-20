@@ -34,6 +34,15 @@ $scope.liked = function(name) {
         $http.post('/get_page_data').
         success(function(data) {
             $scope.blogPosts=data;
+        }).then(function(){
+	        	setTimeout(function () {
+			  $("#section1").prepend($('<div>').append($('.slide').eq($(".slide").length-1).clone()).html())
+			  $("#section1").append($('<div>').append($('.slide').eq(1).clone()).html())
+			  init()
+			  Interval = setInterval(function(){
+				$.fn.fullpage.moveSlideRight();
+			  },3000)
+			}, 10);
         })
     };
     $scope.get_page_data();

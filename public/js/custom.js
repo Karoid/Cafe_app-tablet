@@ -1,37 +1,9 @@
 document.oncontextmenu=function(){return false;}
 document.onselectstart=function(){return false;}
 /****init start******/
-setTimeout(function () {
-  $("#section1").prepend($('<div>').append($('.slide').eq($(".slide").length-1).clone()).html())
-  $("#section1").append($('<div>').append($('.slide').eq(1).clone()).html())
-  init()
-  Interval = setInterval(function(){
-	$.fn.fullpage.moveSlideRight();
-  },3000)
-}, 100);//promise로 ajax call이후에 실행되도록 수정 요망
 
 
 function init(){
-var delay=1000; //1 second
-
-setTimeout(function() {
-  //your code to be executed after 1 second
-}, delay);
-var config = {
-    // How long Waves effect duration
-    // when it's clicked (in milliseconds)
-    duration: 500,
-
-    // Delay showing Waves effect on touch
-    // and hide the effect if user scrolls
-    // (0 to disable delay) (in milliseconds)
-    delay: 200
-};
-
-// Initialise Waves with the config
-Waves.attach('.price-ico-heart', [ 'waves-float', 'waves-light']);
-Waves.init(config);
-
 //Fullpage initialize
 $(document).ready(function() {
     $('#fullpage').fullpage({
