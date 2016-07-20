@@ -86,7 +86,7 @@ app.post('/make_page', upload.single('uploadFile'), function(req,res){
       conn.collection('page_count').update({value:count},{value:count+1});
       }
       catch(err){}
-      res.end();
+      res.redirect("../admin.html#/page");
       })
 
       
@@ -114,9 +114,8 @@ app.post('/make_item', function(req,res){
       conn.collection('item_count').update({value:count},{value:count+1});
       }
       catch(err){}
-      res.end();
       })
-      res.end();
+      res.redirect("../admin.html#/item");
 });
 
 //페이지 삭제
