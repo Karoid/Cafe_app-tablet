@@ -61,18 +61,27 @@ res.end(data); // 로드 html response .
 });
 });
 app.use(express.static(__dirname + '/public'));
-var storage = multer.diskStorage({
-  destination: './public/img',
+var storage_main = multer.diskStorage({
+  destination: './public/img/main_img',
   filename: function (req, file, cb) {
        cb(null, Date.now() + path.extname(file.originalname))
   }
 })
 
-var upload = multer({ storage: storage })
+var upload_main = multer({ storage: storage_main })
 
+app.use(express.static(__dirname + '/public'));
+var storage_today = multer.diskStorage({
+  destination: './public/img/today_img',
+  filename: function (req, file, cb) {
+       cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+var upload_today = multer({ storage: storage_today })
 /* Ajax call */
 //페이지 생성
-app.post('/make_page', upload.single('uploadFile'), function(req,res){
+app.post('/make_page', upload_today.single('uploadFile'), function(req,res){
       //console.log(req.body); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
@@ -124,6 +133,9 @@ app.post('/delete_page', function(req, res) {
     //console.log(req.body.page_index);
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
+                        var filePath = doc[0].img_dir ; 
+                        //console.log(filePath);
+                        fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
                         res.send(200);
                 })
