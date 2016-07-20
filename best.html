@@ -7,11 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Best Rank</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.5/waves.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.css">
 <link rel="stylesheet" href="css/best.css">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.5/waves.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.min.js"></script>
@@ -65,9 +63,10 @@ app.controller('myCtrl', function($scope, $http) {
 			<!--<h1>{{documents[0].item_name}}</h1>-->
 			<img src="{{documents[0].img_dir}}" alt="">
 		 <!-- Angular : ng-bind-html="x"-->
-			<div class="price" style=""> <!-- 금액 부분 -->
-	 	<i class="fa fa-heart price-ico-heart" aria-hidden="true" ng-click="liked(0)"><span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[0].like}}</span></i>
-			</div>
+                                <div class="price"  ng-click="liked(0)"> <!-- 금액 부분 -->
+                                                    <img src="img/like_1.png">
+                                                    <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[0].like}}</span>
+                                </div>
 			</div>
 		</div>
 	</div>
@@ -82,10 +81,10 @@ app.controller('myCtrl', function($scope, $http) {
 			<img src="{{documents[1].img_dir}}" alt="">
 		 <!-- Angular : ng-bind-html="x"-->
 				
-			<div class="price" style=""> <!-- 금액 부분 -->
-		
-				<i class="fa fa-heart price-ico-heart" aria-hidden="true" ng-click="liked(1)"><span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[1].like}}</span></i>
-			</div>
+            <div class="price"  ng-click="liked(1)"> <!-- 금액 부분 -->
+                                <img src="img/like_1.png">
+                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[1].like}}</span>
+            </div>
 			</div>
 		</div>
 	</div>
@@ -95,17 +94,11 @@ app.controller('myCtrl', function($scope, $http) {
 				<h1>금주의 top3</h1>
 				<span id="date">(2016.07.01 기준)</span>
 			</div>
-<div id="box">
-		<!--	<h4>{{documents[2].item_name}}</h4>-->
-
+                    <div id="box">
 			<img src="{{documents[2].img_dir}}" alt="" style="z-index:1">
-
-		 <!-- Angular : ng-bind-html="x"-->
-		
-			<div class="price" style=""> <!-- 금액 부분 -->
-		
-			
-<img src="/img/like_1.png" style="height:100px;width:100px;z-index:100" ng-click="liked(2)"><span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[2].like}}</span></i></img>
+			<div class="price"  ng-click="liked(2)"> <!-- 금액 부분 -->
+                                <img src="img/like_1.png">
+                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[2].like}}</span>
 			</div>
 			</div>
 		</div>
@@ -113,19 +106,8 @@ app.controller('myCtrl', function($scope, $http) {
 </div>
 
 <script type="text/javascript">
-var config = {
-    // How long Waves effect duration 
-    // when it's clicked (in milliseconds)
-    duration: 500,
-    // Delay showing Waves effect on touch
-    // and hide the effect if user scrolls
-    // (0 to disable delay) (in milliseconds)
-    delay: 200
-};
-                
-// Initialise Waves with the config
-Waves.attach('.price-ico-heart', [ 'waves-float', 'waves-light']);
-Waves.init(config);
+document.oncontextmenu=function(){return false;}
+document.onselectstart=function(){return false;}
 //Fullpage initialize
 $(document).ready(function() {
     $('#fullpage').fullpage({

@@ -1,3 +1,5 @@
+document.oncontextmenu=function(){return false;}
+document.onselectstart=function(){return false;}
 /****init start******/
 setTimeout(function () {
   $("#section1").prepend($('<div>').append($('.slide').eq($(".slide").length-1).clone()).html())

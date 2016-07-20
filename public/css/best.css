@@ -42,7 +42,7 @@ input, textarea {
 /*fullPage.css 수정 */
 .content{max-width:860px;margin:0 auto;text-align: center;    height: 768px;
    }
-.content img{width:860px;height:475px;margin-top:5px;}
+.content img{width:860px;height:475px;}
 .fp-controlArrow.fp-next{border-left-color:#000!important}
 .fp-controlArrow.fp-prev{border-right-color:#000!important}
 .fp-slidesNav ul li a.active span{background:rgb(46, 51, 142);width:22.5px;height:22.5px;margin:-11.25px 0 0 -11.25px;}
@@ -53,14 +53,16 @@ input, textarea {
 .price{
 	      margin-right: -14.5px;
     margin-top: -90px;
-   
     float: right;
     width: 100px;
 }
-.price i{
-	margin-right:-14.5px;
-	width:100px;
-	height:100px;
+.price img{
+	position: absolute;
+	right:-15px;
+	bottom:-51px;
+	height:200px;
+	width:200px;
+	transform: rotate(-15deg);
 }
 /*menu bar css*/
 .back{
@@ -110,9 +112,6 @@ input, textarea {
 	color: #fff;
 	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
-#menu li:hover{
-	background: rgba(255,255,255, 0.8);
-}
 #menu li a,
 #menu li.active a{
 	padding: 9px 18px;
@@ -140,7 +139,6 @@ input, textarea {
 	right:0px;
 	width: 200px;
 	z-index: 70;
-	height: 100%;
 	padding: 0;
 	margin-top:0;
 }
