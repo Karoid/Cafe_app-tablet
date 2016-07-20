@@ -6,7 +6,7 @@ var userSchema = new mongoose.Schema({
 	like:{type:Number},
 	item_discount:{type:Boolean},
 	item_discount_price:{type:Number},
-	bestable:{type:Boolean},
+  img_dir:{type:String},
 	created_at:{type:Date}
 });
 userSchema.pre('save', function(next){

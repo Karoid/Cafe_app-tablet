@@ -72,7 +72,7 @@ var upload_main = multer({ storage: storage_main })
 
 app.use(express.static(__dirname + '/public'));
 var storage_today = multer.diskStorage({
-  destination: './public/img/today_img',
+  destination: './public/img/item_img',
   filename: function (req, file, cb) {
        cb(null, Date.now() + path.extname(file.originalname))
   }
@@ -81,7 +81,7 @@ var storage_today = multer.diskStorage({
 var upload_today = multer({ storage: storage_today })
 /* Ajax call */
 //페이지 생성
-app.post('/make_page', upload_today.single('uploadFile'), function(req,res){
+app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
       //console.log(req.body); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
@@ -102,27 +102,20 @@ app.post('/make_page', upload_today.single('uploadFile'), function(req,res){
       
 });
 
-app.post('/make_item', function(req,res){
-    console.log(req.body);
-    var tf
-    if(req.body.bestable=="on")
-    {
-        tf=true;
-    }
-    else
-    {
-    tf=false;
-    }
+app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
+    //console.log(req.body);
       var count;
       Item_count.find().lean().exec(function (err,doc){
-      console.log(doc[0].value)
-      count=doc[0].value;
-      //console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
+      console.log(doc[0])
+      count=doc[0].item_count;
+      console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
-             conn.collection('Item_data').insert({item_index:count,item_name:req.body.item_name,item_price:req.body.item_price,like:req.body.like,item_discount:False,bestable:tf});   
-      conn.collection('item_count').update({value:count},{value:count+1});
+             conn.collection('Item_data').insert({item_index:count,item_name:req.body.item_name,item_price:req.body.item_price,img_dir:req.file.path.split('public')[1],like:req.body.like,item_discount:"False"});   
+      conn.collection('item_count').update({item_count:count},{item_count:count+1});
       }
-      catch(err){}
+      catch(err){
+        console.log(err)
+      }
       })
       res.redirect("../admin.html#/item");
 });
@@ -137,15 +130,15 @@ app.post('/delete_page', function(req, res) {
                         //console.log(filePath);
                         fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
-                        res.send(200);
+                        res.end();
                 })
 });
 
 //제품 삭제
 app.post('/delete_item', function(req, res) {
     Item_data.find({item_index:req.body.item_index}).exec(function (err,doc){
-                        console.log("found deleting item");
-                        console.log(doc[0]);
+                        var filePath = doc[0].img_dir ; 
+                        fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
                         res.end();
                 })
@@ -187,7 +180,7 @@ async.series([
     },
     // 2nd
     function(done){
-        res.end(JSON.stringify(doc));
+      return res.end(JSON.stringify(doc));
         done()
     }
 ]);
@@ -196,19 +189,23 @@ async.series([
 }
 )});
 
+
 //제품 목록 받아오기
 app.post('/get_item_data', function(req, res) { 
-Item_data.find().exec(function (err, documents) {
-            return res.end(JSON.stringify(documents));
-})});
+Item_data.find().lean().exec(function (err,documents){
+  //console.log(JSON.stringify(documents));
+                return res.end(JSON.stringify(documents));
+        })
+});
 
 //제품 목록 like 순으로 소트해서 받아오기 이미지 링크 넣어줘야함
 app.post('/get_item_data_sorted_by_liked', function(req, res) {
-Item_data.find({bestable:true}).sort('-like').lean().exec(function (err, documents) {
+Item_data.find().sort('-like').lean().exec(function (err, documents) {
     for(var i=0;i<3;i++)
     {//에러처리 상위3개 아이템에 관한 이미지를 넣지 않으면 에러뜸 처리 필요, 위의 경우와는 다르게 with사용해서 깔끔하게 처리함 굳!
     with ({ n: i }) {
-        Page_data.find({item_name:documents[i].item_name}, function (err, docs) 
+      console.log(documents[n]);
+        Page_data.find({item_name:documents[n].item_name}, function (err, docs) 
         {
             
                 //console.log(n);

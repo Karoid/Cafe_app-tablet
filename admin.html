@@ -23,12 +23,22 @@ app.controller('itemCtrl',function ($scope, $http) {
             $scope.items=data;
         })
     };
+    $scope.delete_item = function(index) {
+        $http.post('/delete_item',({item_index:$scope.items[index].item_index})).
+        success(function(data) {
+            $scope.get_item_data();
+        })}
     $scope.get_item_data();
   });
+
+
+
+
   app.controller('pageCtrl', function ($scope, $http) {
     $scope.get_item_data = function() {
         $http.post('/get_item_data').
         success(function(data) {
+
             $scope.items=data;
         })}
     $scope.get_page_data = function() {
@@ -41,13 +51,8 @@ app.controller('itemCtrl',function ($scope, $http) {
         $http.post('/delete_page',({page_index:$scope.pages[index].page_index})).
         success(function(data) {
           $scope.get_page_data();
-        })
-    };
-      $scope.delete_item = function(index) {
-        $http.post('/delete_item',({item_index:$scope.items[index].item_index}).
-        success(function() {
-            $scope.get_item_data();
-        }))}
+        })};
+      
     $scope.get_page_data();
   $scope.get_item_data();
   });
@@ -167,7 +172,6 @@ function($stateProvider, $urlRouterProvider) {
   <option value="event">이벤트</option>
 </select><br>
     이미지 업로드 <input type="file" name="uploadFile" />
-    {{selectedValue.item_name}}
     <br>
         <input type=submit>
 </form>
@@ -189,22 +193,25 @@ function($stateProvider, $urlRouterProvider) {
   <div class="page-header">
     <div class="btn-bg"  style="background:#7278e5;">
       <h1 style="text-align:center;color:white">Item 관리</h1>
-        <form action ="/make_item", method="post" enctype="application/json" name="make_item">
+        <form action ="/make_item", method="post" enctype="multipart/form-data" name="make_item">
     제품 이름 <input type="text" name="item_name"><br>
     제품 가격 <input type="number" name="item_price"><br>
     좋아요 수 <input type="number" name="like"><br>
     베스트 메뉴 <input type="checkbox" name="bestable"><br>
+    이미지 업로드 <input type="file" name="uploadFile" />
+    <br>
         <input type=submit>
 </form>
       </div>
     <div ng-repeat="item in items">
-      <div class="btn-bg bg-1" style="height:200px">
+      <div class="btn-bg bg-1" style="height:450px">
         <div class="btn btn-1">
 					<h2>제품명 : {{item.item_name}}</h2>
 					가격 : {{item.item_price}}<br>
 					좋아요 : {{item.like}}<br>
 					할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br>
 					베스트 메뉴 : <input type="checkbox" checked="{{item.bestable}}"><br>
+          이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
 					<button ng-click="delete_item($index)">제품 삭제</button><br>
         </div>
       </div>
