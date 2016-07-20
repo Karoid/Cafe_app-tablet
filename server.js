@@ -6,7 +6,7 @@ var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://52.78.68.136:27017/test');
 var conn = mongoose.connection;
 var User = require('./models/like'); //모듈화 해놓은 like스키마 불러오기
 var Page_data = require('./models/page_data');
@@ -22,7 +22,8 @@ app.use(bodyParser.urlencoded({
 }));
 // 포트 설정
 app.listen(80, function () {
-console.log('Server Start in http://52.78.72.74/test.html');
+console.log('Server Start http://localhost/test.html');
+console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
 
 
