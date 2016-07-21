@@ -210,7 +210,12 @@ async.series([
 
 }
 )});
-
+app.post('/get_testable_page_data', function(req, res) {
+    Page_data.find({testable:"true"}).lean().exec(function (err, documents){
+      //console.log(documents);
+      return res.end(JSON.stringify(documents));
+    })
+});
 
 //제품 목록 받아오기
 app.post('/get_item_data', function(req, res) { 

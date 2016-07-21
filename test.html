@@ -31,7 +31,7 @@ $scope.liked = function(name) {
     };
     
     $scope.get_page_data = function() {
-        $http.post('/get_page_data').
+        $http.post('/get_testable_page_data').
         success(function(data) {
             $scope.blogPosts=data;
         }).then(function(){
