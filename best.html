@@ -31,11 +31,17 @@ app.controller('myCtrl', function($scope, $http) {
         $http.post('/get_item_data_sorted_by_liked').
         success(function(data) {
             $scope.documents=data;
-            
+        }).then(function(){
+            setTimeout(function(){
+                for (var j = 0; j < $('.price').length; j++) {
+                    for (var i = 0; i < Number($('.price').eq(j).children('span').html())/100; i++) {
+                        $('.price').eq(j).append(heartDecoPosition(771,420,20,90,i));
+                    }
+                }
+            },50)
         })
     };
     $scope.get_item_data_sorted_by_liked();
-    
 });
     
 </script>
@@ -64,7 +70,7 @@ app.controller('myCtrl', function($scope, $http) {
 			<img src="{{documents[0].img_dir}}" alt="">
 		 <!-- Angular : ng-bind-html="x"-->
                                 <div class="price"  ng-click="liked(0)"> <!-- 금액 부분 -->
-                                                    <img src="img/like_1.png">
+                                                    <img class="button_img" src="img/like_1.png">
                                                     <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[0].like}}</span>
                                 </div>
 			</div>
@@ -82,7 +88,7 @@ app.controller('myCtrl', function($scope, $http) {
 		 <!-- Angular : ng-bind-html="x"-->
 				
             <div class="price"  ng-click="liked(1)"> <!-- 금액 부분 -->
-                                <img src="img/like_1.png">
+                                <img class="button_img" src="img/like_1.png">
                                 <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[1].like}}</span>
             </div>
 			</div>
@@ -97,7 +103,7 @@ app.controller('myCtrl', function($scope, $http) {
                     <div id="box">
 			<img src="{{documents[2].img_dir}}" alt="" style="z-index:1">
 			<div class="price"  ng-click="liked(2)"> <!-- 금액 부분 -->
-                                <img src="img/like_1.png">
+                                <img class="button_img" src="img/like_1.png">
                                 <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[2].like}}</span>
 			</div>
 			</div>
@@ -165,12 +171,29 @@ $(document).ready(function() {
     });
 });
 
-$('.price').click(function(event) {
-    $(this).children('img').attr('src', 'img/like_2.png');
+$('.price').click(function(event) { 
+    $(this).children('.button_img').attr('src', 'img/like_2.png'); //버튼을 누르면 눌린 하트로 바뀜
     setTimeout(function(){
-        $('.price img').attr('src', 'img/like_1.png');
-    },500)
+        $('.price .button_img').attr('src', 'img/like_1.png');
+    },300)                                                                  //누른후 0.3초만에 돌아감
+    $(this).append('<img class="float_heart" src="img/heart.png" alt="">') //누르면 날아가는 이미지 생성
+    $(this).children('.float_heart').animate({"bottom": "250px"}, 1000,function(){
+        $(this).fadeOut('fast', function() {
+            $(this).remove()
+        });//애니메이션 끝나고 제거
+    }) 
+    $(this).children('.how_many').remove()
+    console.log($(this).children('.button_img').position())
+    for (var i = 0; i < Number($(this).children('span').html())/100; i++) {
+        $(this).append(heartDecoPosition(771,420,20,90,i))
+    }
 });
+
+function heartDecoPosition(a,b,max_num,radius,ith){
+x = radius*Math.cos(2*Math.PI/max_num*ith)+a;
+y = radius*Math.sin(2*Math.PI/max_num*ith)+b;
+return '<img class="how_many" style="left:'+x+'px;top:'+y+'px" src="img/heart.png">'
+}
 </script>
 </body>
 </html>
