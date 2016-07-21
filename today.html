@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Best Rank</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.css">
+<link rel="stylesheet" href="css/best.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.min.js"></script>
+
+<script>
+/************  data interaction start  ************/
+var app = angular.module('myApp', ['ngSanitize']); 
+app.controller('myCtrl', function($scope, $http) {   
+    $scope.liked = function(name) {
+        $http.post('/liked',({asd:$scope.documents[name].item_name})).
+        success(function(data) {
+          $scope.documents[name].like=parseInt(data);
+          if($scope.documents[0].like<$scope.documents[1].like || $scope.documents[1].like<$scope.documents[2].like)
+                 $scope.get_item_data_sorted_by_liked();//역전 일어났음 데이터 다시불러옴
+        })
+    };
+    
+    $scope.get_item_data_sorted_by_liked = function() {
+        $http.post('/get_item_data_sorted_by_liked').
+        success(function(data) {
+            $scope.documents=data;
+        }).then(function(){
+            setTimeout(function(){
+                for (var j = 0; j < $('.price').length; j++) {
+                    for (var i = 0; i < Number($('.price').eq(j).children('span').html())/100; i++) {
+                        $('.price').eq(j).append(heartDecoPosition(771,420,20,90,i));
+                    }
+                }
+            },50)
+        })
+    };
+    $scope.get_item_data_sorted_by_liked();
+});
+    
+</script>
+<!--현재 angularjs, waves.js, jquery, jquery.fullPage.js 적용-->
+<!--CSS와 JS가 난잡하여 public폴더 안에 넣어놨음-->
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" style="margin:0px">
+<a href="./test.html" style="z-index:70;position:fixed"><img src="/img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
+	    <!--<i class="fa fa-times back" aria-hidden="true"></i>--></a> 
+<ul id="menu">
+	<li data-menuanchor="1" class="active"><a href="#1"><image src="/img/tab_1.png"><span>1위</span></image></a></li>
+	<li data-menuanchor="2"><a href="#2"><image src="/img/tab_1.png"><span>2위</span></image></a></li>
+	<li data-menuanchor="3"><a href="#3"><image src="/img/tab_1.png"><span>3위</span></image></a></li>
+</ul>
+<div id="fullpage" >
+	<div class="section" id="section1">
+		<div class="content">
+			<div id="top3">
+				<h1>금주의 top3</h1>
+				<span id="date">(2016.07.01 기준)</span>
+			</div>
+			<div></div>
+			<div id="box">
+			<!--<h1>{{documents[0].item_name}}</h1>-->
+			<img src="{{documents[0].img_dir}}" alt="">
+		 <!-- Angular : ng-bind-html="x"-->
+                                <div class="price"  ng-click="liked(0)"> <!-- 금액 부분 -->
+                                                    <img class="button_img" src="img/like_1.png">
+                                                    <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[0].like}}</span>
+                                </div>
+			</div>
+		</div>
+	</div>
+	<div class="section" id="section2">
+		<div class="content">
+		<div id="top3">
+				<h1>금주의 top3</h1>
+				<span id="date">(2016.07.01 기준)</span>
+			</div>
+			<div id="box">
+		<!--	<h1>{{documents[1].item_name}}</h1>-->
+			<img src="{{documents[1].img_dir}}" alt="">
+		 <!-- Angular : ng-bind-html="x"-->
+				
+            <div class="price"  ng-click="liked(1)"> <!-- 금액 부분 -->
+                                <img class="button_img" src="img/like_1.png">
+                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[1].like}}</span>
+            </div>
+			</div>
+		</div>
+	</div>
+	<div class="section" id="section3">
+		<div class="content">
+			<div id="top3">
+				<h1>금주의 top3</h1>
+				<span id="date">(2016.07.01 기준)</span>
+			</div>
+                    <div id="box">
+			<img src="{{documents[2].img_dir}}" alt="" style="z-index:1">
+			<div class="price"  ng-click="liked(2)"> <!-- 금액 부분 -->
+                                <img class="button_img" src="img/like_1.png">
+                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[2].like}}</span>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+document.oncontextmenu=function(){return false;}
+document.onselectstart=function(){return false;}
+//Fullpage initialize
+$(document).ready(function() {
+    $('#fullpage').fullpage({
+        //Navigation
+        menu: '#menu',
+        lockAnchors: false,
+        anchors:['1', '2','3'],
+        navigation: false,
+        navigationPosition: 'right',
+        navigationTooltips: ['1', '2','3'],
+        showActiveTooltip: false,
+        slidesNavigation: true,
+        slidesNavPosition: 'bottom',
+        //Scrolling
+        css3: true,
+        scrollingSpeed: 700,
+        autoScrolling: true,
+        fitToSection: true,
+        fitToSectionDelay: 1000,
+        scrollBar: false,
+        easing: 'easeInOutCubic',
+        easingcss3: 'ease',
+        loopBottom: false,
+        loopTop: false,
+        loopHorizontal: true,
+        continuousVertical: true,
+        normalScrollElements: '#element1, .element2',
+        scrollOverflow: false,
+        scrollOverflowOptions: null,
+        touchSensitivity: 15,
+        normalScrollElementTouchThreshold: 5,
+        //Accessibility
+        keyboardScrolling: true,
+        animateAnchor: true,
+        recordHistory: true,
+        //Design
+        controlArrows: true,
+        verticalCentered: true,
+        sectionsColor : [],
+        paddingTop: '65px',
+        paddingBottom: '87.5px',
+        fixedElements: '#header, .footer',
+        responsiveWidth: 0,
+        responsiveHeight: 0,
+        //Custom selectors
+        sectionSelector: '.section',
+        slideSelector: '.slide',
+        //events
+        onLeave: function(index, nextIndex, direction){},
+        afterLoad: function(anchorLink, index){$('.section').css("padding-top","0").css('padding-bottom',"0")},
+        afterRender: function(){},
+        afterResize: function(){},
+        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
+        onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex){}
+    });
+});
+
+$('.price').click(function(event) { 
+    $(this).children('.button_img').attr('src', 'img/like_2.png'); //버튼을 누르면 눌린 하트로 바뀜
+    setTimeout(function(){
+        $('.price .button_img').attr('src', 'img/like_1.png');
+    },300)                                                                  //누른후 0.3초만에 돌아감
+    $(this).append('<img class="float_heart" src="img/heart.png" alt="">') //누르면 날아가는 이미지 생성
+    $(this).children('.float_heart').animate({"bottom": "250px"}, 1000,function(){
+        $(this).fadeOut('fast', function() {
+            $(this).remove()
+        });//애니메이션 끝나고 제거
+    }) 
+    $(this).children('.how_many').remove()
+    console.log($(this).children('.button_img').position())
+    for (var i = 0; i < Number($(this).children('span').html())/100; i++) {
+        $(this).append(heartDecoPosition(771,420,20,90,i))
+    }
+});
+
+function heartDecoPosition(a,b,max_num,radius,ith){
+x = radius*Math.cos(2*Math.PI/max_num*ith)+a;
+y = radius*Math.sin(2*Math.PI/max_num*ith)+b;
+return '<img class="how_many" style="left:'+x+'px;top:'+y+'px" src="img/heart.png">'
+}
+</script>
+</body>
+</html>

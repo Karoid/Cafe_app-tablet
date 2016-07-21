@@ -38,7 +38,16 @@ res.end(data); // 로드 html response .
 }
 });
 });
-
+app.get('/today.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
+fs.readFile('today.html', function (error, data) { // index.html 파일 로드 .
+if (error) {
+console.log(error);
+} else {
+res.writeHead(200, { 'Content-Type': 'text/html' }); // Head Type 설정 .
+res.end(data); // 로드 html response .
+}
+});
+});
 app.get('/best.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
 fs.readFile('best.html', function (error, data) { // index.html 파일 로드 .
 if (error) {
@@ -83,7 +92,6 @@ var upload_today = multer({ storage: storage_today })
 //페이지 생성
 app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
       //console.log(req.body); //form fields
-      console.log(req.body.testable); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
       var testable,todayable,bestable;
@@ -120,9 +128,9 @@ app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
     //console.log(req.body);
       var count;
       Item_count.find().lean().exec(function (err,doc){
-      console.log(doc[0])
+      //console.log(doc[0])
       count=doc[0].item_count;
-      console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
+      //console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
              conn.collection('Item_data').insert({item_index:count,item_name:req.body.item_name,item_price:req.body.item_price,img_dir:req.file.path.split('public')[1],like:req.body.like,item_discount:"False"});   
       conn.collection('item_count').update({item_count:count},{item_count:count+1});
@@ -214,28 +222,30 @@ Item_data.find().lean().exec(function (err,documents){
 
 //제품 목록 like 순으로 소트해서 받아오기 이미지 링크 넣어줘야함
 app.post('/get_item_data_sorted_by_liked', function(req, res) {
-Item_data.find().sort('-like').lean().exec(function (err, documents) {
-    for(var i=0;i<3;i++)
-    {//에러처리 상위3개 아이템에 관한 이미지를 넣지 않으면 에러뜸 처리 필요, 위의 경우와는 다르게 with사용해서 깔끔하게 처리함 굳!
-    with ({ n: i }) {
-      console.log(documents[n]);
-        Page_data.find({item_name:documents[n].item_name}, function (err, docs) 
+Page_data.find({bestable:"true"}).lean().exec(function (err, documents) {
+  var itemlist = [];
+  //console.log(documents);
+    documents.forEach(function(doc)
+      {
+        //console.log(doc);
+        itemlist.push(doc.item_name);
+      })
+      console.log(itemlist);
+    
+        Item_data.find({item_name: { $in: itemlist}}).sort('-like').lean().exec(function (err, docs) 
         {
-            
-                //console.log(n);
-                try {
-                documents[n]["img_dir"]=docs[0].img_dir;
-}
-catch(err) {
-    documents[n]["img_dir"]="https://i.ytimg.com/vi/HbdCKo9oa3o/hqdefault.jpg";
-}
+          for(var i=0;i<3;i++)
+          {
+if(i==2)
+{//console.log(JSON.stringify(documents));
+                //console.log(docs);
+            return res.end(JSON.stringify(docs));
+          }}}
                 
       
-            if(n==2)
-              {//console.log(JSON.stringify(documents));
-            return res.end(JSON.stringify(documents));}
-        }
-)}}
+            
+        )
+
 })});
 
 
