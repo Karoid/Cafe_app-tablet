@@ -3,7 +3,10 @@ var userSchema = new mongoose.Schema({
 	page_index: {type:Number},
 	page_info:{type:String},
 	item_name:{type:String},
-	img_dir:{type:String}
+	img_dir:{type:String},
+	bestable:{type:Boolean},
+	testable:{type:Boolean},
+	todayable:{type:Boolean}
 });
 var Page_data = mongoose.model('Page_data', userSchema, "Page_data");
 module.exports = Page_data;

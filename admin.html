@@ -165,24 +165,24 @@ function($stateProvider, $urlRouterProvider) {
   <h1 style="text-align:center;color:white">Page 관리</h1>
 <form action ="/make_page", method="post" enctype="multipart/form-data" name="make_page">
     제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}">{{item.item_name}}</option></select><br>
-    페이지 타입
-<select name="page_info">
-  <option value="today">오늘의 메뉴</option>
-  <option value="just">단순 제품 표시</option>
-  <option value="event">이벤트</option>
-</select><br>
-    이미지 업로드 <input type="file" name="uploadFile" />
-    <br>
+    페이지 정보 <input type="text" name="page_info" placeholder="제품 홍보"><br>
+    이미지 업로드 <input type="file" name="uploadFile" /><br>
+    메인 페이지 <input type="checkbox" checked name="testable">
+    오늘의 메뉴 <input type="checkbox" checked name="todayable">
+    베스트 메뉴 <input type="checkbox" checked name="bestable"><br>
         <input type=submit>
 </form>
   </div>
     <div ng-repeat="page in pages">
-      <div class="btn-bg bg-1" style="height:350px">
+      <div class="btn-bg bg-1" style="height:380px">
         <div class="btn btn-1">
           <h2>{{page.page_info}}</h2>
 					제품명 : {{page.item_name}}<br>
 					좋아요 수 : {{page.like}}<br>
 					이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
+          메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
+          오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
+          베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
 					<button ng-click="delete_page($index)">페이지 삭제</button><br>
         </div>
       </div>

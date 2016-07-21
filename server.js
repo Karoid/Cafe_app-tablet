@@ -83,15 +83,29 @@ var upload_today = multer({ storage: storage_today })
 //페이지 생성
 app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
       //console.log(req.body); //form fields
+      console.log(req.body.testable); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
+      var testable,todayable,bestable;
+      if(req.body.testable=="on")
+        testable = true;
+      else
+        testable = false;
+      if(req.body.todayable=="on")
+        todayable = true;
+      else
+        todayable = false;
+      if(req.body.bestable=="on")
+        bestable = true;
+      else
+        bestable = false;
       var count;
       Page_count.find().lean().exec(function (err,doc){
       //console.log(doc[0].value)
       count=doc[0].value;
       //console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
-             conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1]});   
+             conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1],testable:testable,todayable:todayable,bestable:bestable});   
       conn.collection('page_count').update({value:count},{value:count+1});
       }
       catch(err){}
