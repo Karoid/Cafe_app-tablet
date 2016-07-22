@@ -5,14 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<title>Best Rank</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.css">
+<title>Today Rank</title>
+<link rel="stylesheet" href="css/font-awesome.min.css">
 <link rel="stylesheet" href="css/best.css">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.1/jquery.fullPage.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.fullPage.min.js"></script>
+<script type="text/javascript" src="js/angular-sanitize.min.js"></script>
 
 <script>
 /************  data interaction start  ************/
@@ -22,8 +21,7 @@ app.controller('myCtrl', function($scope, $http) {
         $http.post('/liked',({asd:$scope.documents[name].item_name})).
         success(function(data) {
           $scope.documents[name].like=parseInt(data);
-          if($scope.documents[0].like<$scope.documents[1].like || $scope.documents[1].like<$scope.documents[2].like)
-                 $scope.get_todayable_page_data();//역전 일어났음 데이터 다시불러옴
+
         })
     };
     
@@ -31,7 +29,16 @@ app.controller('myCtrl', function($scope, $http) {
         $http.post('/get_todayable_page_data').
         success(function(data) {
             $scope.documents=data;
-        })};
+        }).then(function(){
+            setTimeout(function(){
+                for (var j = 0; j < $('.price').length; j++) {
+                    for (var i = 0; i < Number($('.price').eq(j).children('span').html())/100; i++) {
+                        $('.price').eq(j).append(heartDecoPosition(771,420,20,90,i));
+                    }
+                }
+            },50)
+        })
+    };
     $scope.get_todayable_page_data();
 });
     
@@ -43,17 +50,11 @@ app.controller('myCtrl', function($scope, $http) {
 <body ng-app="myApp" ng-controller="myCtrl" style="margin:0px">
 <a href="./test.html" style="z-index:70;position:fixed"><img src="/img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
 	    <!--<i class="fa fa-times back" aria-hidden="true"></i>--></a> 
-<ul id="menu">
-	<li data-menuanchor="1" class="active"><a href="#1"><image src="/img/tab_1.png"><span>1위</span></image></a></li>
-	<li data-menuanchor="2"><a href="#2"><image src="/img/tab_1.png"><span>2위</span></image></a></li>
-	<li data-menuanchor="3"><a href="#3"><image src="/img/tab_1.png"><span>3위</span></image></a></li>
-</ul>
 <div id="fullpage" >
 	<div class="section" id="section1">
 		<div class="content">
 			<div id="top3">
-				<h1>Best Menu</h1>
-				<span id="date">(2016.07.01 기준)</span>
+				<h1>오늘의 메뉴</h1>
 			</div>
 			<div></div>
 			<div id="box">
@@ -140,7 +141,6 @@ $('.price').click(function(event) {
         });//애니메이션 끝나고 제거
     }) 
     $(this).children('.how_many').remove()
-    console.log($(this).children('.button_img').position())
     for (var i = 0; i < Number($(this).children('span').html())/100; i++) {
         $(this).append(heartDecoPosition(771,420,20,90,i))
     }
