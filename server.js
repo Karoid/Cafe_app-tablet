@@ -226,6 +226,16 @@ app.post('/get_testable_page_data', function(req, res) {
       return res.end(JSON.stringify(documents));
     })
 });
+app.post('/get_todayable_page_data', function(req, res) {
+    Page_data.find({todayable:"true"}).lean().exec(function (err, documents){
+      Item_data.find({item_name:documents[0].item_name}).exec(function (err, doc){
+        documents[0]["like"]=doc[0].like;
+        return res.end(JSON.stringify(documents));
+      })
+      //console.log(documents);
+      
+    })
+});
 app.post('/get_bestable_page_data', function(req, res) {
     Page_data.find({bestable:"true"}).lean().exec(function (err, documents){
       //console.log(documents);
@@ -250,7 +260,7 @@ Page_data.find({bestable:"true"}).lean().exec(function (err, documents) {
         //console.log(doc);
         itemlist.push(doc.item_name);
       })
-      console.log(itemlist);
+      //console.log(itemlist);
     
         Item_data.find({item_name: { $in: itemlist}}).sort('-like').lean().exec(function (err, docs) 
         {

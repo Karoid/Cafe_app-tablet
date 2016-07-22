@@ -23,25 +23,16 @@ app.controller('myCtrl', function($scope, $http) {
         success(function(data) {
           $scope.documents[name].like=parseInt(data);
           if($scope.documents[0].like<$scope.documents[1].like || $scope.documents[1].like<$scope.documents[2].like)
-                 $scope.get_item_data_sorted_by_liked();//역전 일어났음 데이터 다시불러옴
+                 $scope.get_todayable_page_data();//역전 일어났음 데이터 다시불러옴
         })
     };
     
-    $scope.get_item_data_sorted_by_liked = function() {
-        $http.post('/get_item_data_sorted_by_liked').
+    $scope.get_todayable_page_data = function() {
+        $http.post('/get_todayable_page_data').
         success(function(data) {
             $scope.documents=data;
-        }).then(function(){
-            setTimeout(function(){
-                for (var j = 0; j < $('.price').length; j++) {
-                    for (var i = 0; i < Number($('.price').eq(j).children('span').html())/100; i++) {
-                        $('.price').eq(j).append(heartDecoPosition(771,420,20,90,i));
-                    }
-                }
-            },50)
-        })
-    };
-    $scope.get_item_data_sorted_by_liked();
+        })};
+    $scope.get_todayable_page_data();
 });
     
 </script>
@@ -61,7 +52,7 @@ app.controller('myCtrl', function($scope, $http) {
 	<div class="section" id="section1">
 		<div class="content">
 			<div id="top3">
-				<h1>금주의 top3</h1>
+				<h1>Best Menu</h1>
 				<span id="date">(2016.07.01 기준)</span>
 			</div>
 			<div></div>
@@ -76,41 +67,7 @@ app.controller('myCtrl', function($scope, $http) {
 			</div>
 		</div>
 	</div>
-	<div class="section" id="section2">
-		<div class="content">
-		<div id="top3">
-				<h1>금주의 top3</h1>
-				<span id="date">(2016.07.01 기준)</span>
-			</div>
-			<div id="box">
-		<!--	<h1>{{documents[1].item_name}}</h1>-->
-			<img src="{{documents[1].img_dir}}" alt="">
-		 <!-- Angular : ng-bind-html="x"-->
-				
-            <div class="price"  ng-click="liked(1)"> <!-- 금액 부분 -->
-                                <img class="button_img" src="img/like_1.png">
-                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[1].like}}</span>
-            </div>
-			</div>
-		</div>
-	</div>
-	<div class="section" id="section3">
-		<div class="content">
-			<div id="top3">
-				<h1>금주의 top3</h1>
-				<span id="date">(2016.07.01 기준)</span>
-			</div>
-                    <div id="box">
-			<img src="{{documents[2].img_dir}}" alt="" style="z-index:1">
-			<div class="price"  ng-click="liked(2)"> <!-- 금액 부분 -->
-                                <img class="button_img" src="img/like_1.png">
-                                <span style="margin-left:-74px;margin-top:20px;font-size:30px;position:absolute;color:white" >{{documents[2].like}}</span>
-			</div>
-			</div>
-		</div>
-	</div>
 </div>
-
 <script type="text/javascript">
 document.oncontextmenu=function(){return false;}
 document.onselectstart=function(){return false;}

@@ -112,12 +112,12 @@ $( document ).ready(function() {
     $('.right').draggable({axis: "x", stack: "html .zipper", containment: ".right_drag", scroll: false});
     $('.left').mouseup(function(){
         if ($('.left').css('left') != '-491.516px' && $('.left').css('left') != '-48%' && $('.left').css('z-index') != '-1') {
-            setTimeout(function(){window.location.replace("./best.html");},500)
+            setTimeout(function(){window.location.replace("./today.html");},500)
         }
     })
     $('.right').mouseup(function(){
         if ($('.right').css('left') != '492px' && $('.right').css('left') != '48%' && $('.right').css('z-index') != '-1') {
-            setTimeout(function(){window.location.replace("./today.html");},500)
+            setTimeout(function(){window.location.replace("./best.html");},500)
         }
     })
 });
