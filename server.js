@@ -107,6 +107,16 @@ app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
         bestable = true;
       else
         bestable = false;
+      Page_data.find({todayable:"true"}).exec(function (err,doc){
+        if(todayable==true)
+        {
+          for(var i=0;i<doc.length;i++){
+            console.log(doc[i]);
+            doc[i].todayable="false";
+            doc[i].save();
+          }
+        }
+      })
       var count;
       Page_count.find().lean().exec(function (err,doc){
       //console.log(doc[0].value)
@@ -216,7 +226,12 @@ app.post('/get_testable_page_data', function(req, res) {
       return res.end(JSON.stringify(documents));
     })
 });
-
+app.post('/get_bestable_page_data', function(req, res) {
+    Page_data.find({bestable:"true"}).lean().exec(function (err, documents){
+      //console.log(documents);
+      return res.end(JSON.stringify(documents));
+    })
+});
 //제품 목록 받아오기
 app.post('/get_item_data', function(req, res) { 
 Item_data.find().lean().exec(function (err,documents){
