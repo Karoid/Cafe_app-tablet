@@ -6,7 +6,12 @@ var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
-mongoose.connect('mongodb://52.78.68.136:27017/test');
+mongoose.connect('mongodb://localhost:27017/test',function(err){
+      if (err){ 
+        console.log("connection failed")
+        throw err;
+      }
+});
 var conn = mongoose.connection;
 var User = require('./models/like'); //모듈화 해놓은 like스키마 불러오기
 var Page_data = require('./models/page_data');
@@ -15,7 +20,6 @@ var Page_count = require('./models/page_count');
 var Item_count = require('./models/item_count');
 var multer = require('multer');
 var path = require('path')
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -25,7 +29,6 @@ app.listen(80, function () {
 console.log('Server Start http://localhost/test.html');
 console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
-
 
 // 라우팅 설정
 app.get('/test.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
@@ -89,6 +92,27 @@ var storage_today = multer.diskStorage({
 
 var upload_today = multer({ storage: storage_today })
 /* Ajax call */
+//크로스 오리진 문제 해결
+app.all('/liked', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+app.all('/get_testable_page_data', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+app.all('/get_item_data_sorted_by_liked', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+app.all('/get_todayable_page_data', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 //페이지 생성
 app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
       //console.log(req.body); //form fields
