@@ -14,11 +14,12 @@
 <script type="text/javascript" src="js/angular-sanitize.min.js"></script>
 
 <script>
+var serverip = "http://52.78.68.136"
 /************  data interaction start  ************/
 var app = angular.module('myApp', ['ngSanitize']); 
 app.controller('myCtrl', function($scope, $http) {   
     $scope.liked = function(name) {
-        $http.post('/liked',({asd:$scope.documents[name].item_name})).
+        $http.post(serverip+'/liked',({asd:$scope.documents[name].item_name})).
         success(function(data) {
           $scope.documents[name].like=parseInt(data);
           if($scope.documents[0].like<$scope.documents[1].like || $scope.documents[1].like<$scope.documents[2].like)
@@ -27,7 +28,7 @@ app.controller('myCtrl', function($scope, $http) {
     };
     
     $scope.get_item_data_sorted_by_liked = function() {
-        $http.post('/get_item_data_sorted_by_liked').
+        $http.post(serverip+'/get_item_data_sorted_by_liked').
         success(function(data) {
             $scope.documents=data;
         }).then(function(){
@@ -49,7 +50,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 </head>
 <body ng-app="myApp" ng-controller="myCtrl" style="margin:0px">
-<a href="./test.html" style="z-index:70;position:fixed"><img src="/img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
+<a href="./index.html" style="z-index:70;position:fixed"><img src="/img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
 	    <!--<i class="fa fa-times back" aria-hidden="true"></i>--></a> 
 <ul id="menu">
 	<li data-menuanchor="1" class="active"><a href="#1"><image src="/img/tab_1.png"><span>1위</span></image></a></li>

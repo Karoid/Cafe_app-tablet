@@ -31,8 +31,8 @@ console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
 
 // 라우팅 설정
-app.get('/test.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
-fs.readFile('test.html', function (error, data) { // index.html 파일 로드 .
+app.get('/index.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
+fs.readFile('index.html', function (error, data) { // index.html 파일 로드 .
 if (error) {
 console.log(error);
 } else {
