@@ -45,6 +45,7 @@ $scope.liked = function(name) {
         })
     };
     $scope.get_page_data();
+    $scope.serverip = serverip;
 });
 
 </script>
@@ -60,7 +61,7 @@ $scope.liked = function(name) {
 					<h1>{{blogPost.page_info}}</h1>
 					<!--h4>{{blogPost.item_name}}</h4-->
 				</div>
-				<img src="{{blogPost.img_dir}}" alt="">
+				<img src="{{serverip + blogPost.img_dir}}" alt="">
 			</div>
 		</div>
 	</div>
@@ -69,7 +70,7 @@ $scope.liked = function(name) {
 <div class="zipper left">
 <div class="summery summery-best">
 	<h1>Best</h1>
-	<img src="/img/coffee_portrait_example.jpg"></img>
+	<img src="img/coffee_portrait_example.jpg"></img>
 	<div class="item_description">
 	  <div class="item_name_kr">카페라떼</div>
 	  <div class="item_name_en">Caffee Latte</div>
@@ -80,7 +81,7 @@ $scope.liked = function(name) {
 <div class="zipper right">
 <div class="summery summery-new">
 	<h1>오늘의 메뉴</h1>
-	<img src="/img/coffee_portrait_example.jpg"></img>
+	<img src="img/coffee_portrait_example.jpg"></img>
 	<div class="item_description">
 	  <div class="item_name_kr">카페라떼</div>
 	  <div class="item_name_en">Caffee Latte</div>

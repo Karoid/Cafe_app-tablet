@@ -42,6 +42,7 @@ app.controller('myCtrl', function($scope, $http) {
         })
     };
     $scope.get_todayable_page_data();
+    $scope.serverip = serverip;
 });
     
 </script>
@@ -50,7 +51,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 </head>
 <body ng-app="myApp" ng-controller="myCtrl" style="margin:0px">
-<a href="./index.html" style="z-index:70;position:fixed"><img src="/img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
+<a href="./index.html" style="z-index:70;position:fixed"><img src="img/back.png"style="height: 50px;margin-top:55px;margin-left:60px;position:fixed"/></a>
 	    <!--<i class="fa fa-times back" aria-hidden="true"></i>--></a> 
 <div id="fullpage" >
 	<div class="section" id="section1">
@@ -61,7 +62,7 @@ app.controller('myCtrl', function($scope, $http) {
 			<div></div>
 			<div id="box">
 			<!--<h1>{{documents[0].item_name}}</h1>-->
-			<img src="{{documents[0].img_dir}}" alt="">
+			<img src="{{serverip + documents[0].img_dir}}" alt="">
 		 <!-- Angular : ng-bind-html="x"-->
                                 <div class="price"  ng-click="liked(0)"> <!-- 금액 부분 -->
                                                     <img class="button_img" src="img/like_1.png">
