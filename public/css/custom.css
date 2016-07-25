@@ -1,7 +1,7 @@
 @font-face {
 font-family:Tayle_B;
-src: url(/fonts/Tayle_B.eot);
-src: local("Tayle_B"), url(/fonts/Tayle_B.woff) format("woff");
+src: url(fonts/Tayle_B.eot);
+src: local("Tayle_B"), url(fonts/Tayle_B.woff) format("woff");
 }
 h1{font-family:Tayle_B;font-size:68.4px;}
 input, textarea { 

@@ -195,6 +195,17 @@ x = radius*Math.cos(2*Math.PI/max_num*ith)+a;
 y = radius*Math.sin(2*Math.PI/max_num*ith)+b;
 return '<img class="how_many" style="left:'+x+'px;top:'+y+'px" src="img/heart.png">'
 }
+
+var timer = 0
+$('body').mousedown(function(event) {
+    timer = 0
+});
+setInterval(function(){
+    timer++
+    if (timer >15) {
+        location.replace("index.html");
+    }
+},1000)
 </script>
 </body>
 </html>
