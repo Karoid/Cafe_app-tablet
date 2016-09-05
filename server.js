@@ -21,9 +21,17 @@ var Item_count = require('./models/item_count');
 var multer = require('multer');
 var path = require('path')
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  console.log("came");
+  next();
+});
 // 포트 설정
 app.listen(80, function () {
 console.log('Server Start http://localhost/test.html');
@@ -119,41 +127,21 @@ app.use(function(req, res, next) {
         next();
     }
 });
-app.all('/liked', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-app.all('/get_testable_page_data', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-app.all('/get_item_data_sorted_by_liked', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-app.all('/get_todayable_page_data', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
 //페이지 생성
-app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
+app.post('/make_page', upload_main.single('file'), function(req,res){
       //console.log(req.body); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
       var testable,todayable,bestable;
-      if(req.body.testable=="on")
+      if(req.body.testable=="true")
         testable = true;
       else
         testable = false;
-      if(req.body.todayable=="on")
+      if(req.body.todayable=="true")
         todayable = true;
       else
         todayable = false;
-      if(req.body.bestable=="on")
+      if(req.body.bestable=="true")
         bestable = true;
       else
         bestable = false;
@@ -161,7 +149,7 @@ app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
         if(todayable==true)
         {
           for(var i=0;i<doc.length;i++){
-            console.log(doc[i]);
+            //console.log(doc[i]);
             doc[i].todayable="false";
             doc[i].save();
           }
@@ -171,21 +159,22 @@ app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
       Page_count.find().lean().exec(function (err,doc){
       //console.log(doc[0].value)
       count=doc[0].value;
-      //console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
+      //console.log("testable:"+testable+"todayable:"+todayable+"bestable"+bestable+"page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
              conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1],testable:testable,todayable:todayable,bestable:bestable});   
       conn.collection('page_count').update({value:count},{value:count+1});
       }
       catch(err){}
-      res.redirect("../admin.html#/page");
+      res.end("done");
       })
 
       
       
 });
 
-app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
-    //console.log(req.body);
+app.post('/make_item', upload_today.single('file'), function(req,res){
+      //console.log(req);
+      //console.log(req.body);
       var count;
       Item_count.find().lean().exec(function (err,doc){
       //console.log(doc[0])
@@ -199,7 +188,8 @@ app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
         console.log(err)
       }
       })
-      res.redirect("../admin.html#/item");
+      res.end("good");
+      //res.redirect("../admin.html#/item");
 });
 
 //페이지 삭제
@@ -208,14 +198,14 @@ app.post('/delete_page', function(req, res) {
     //console.log(req.body.page_index);
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
-                        var filePath = doc[0].img_dir ; 
+                        var filePath = doc[0].img_dir; 
                         //console.log(filePath);
+                        
                         fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
                         res.end();
                 })
 });
-
 //제품 삭제
 app.post('/delete_item', function(req, res) {
     Item_data.find({item_index:req.body.item_index}).exec(function (err,doc){
@@ -278,10 +268,15 @@ app.post('/get_testable_page_data', function(req, res) {
 });
 app.post('/get_todayable_page_data', function(req, res) {
     Page_data.find({todayable:"true"}).lean().exec(function (err, documents){
+      try{
       Item_data.find({item_name:documents[0].item_name}).exec(function (err, doc){
         documents[0]["like"]=doc[0].like;
         return res.end(JSON.stringify(documents));
-      })
+      })}
+      catch(err)
+      {
+        console.log(err);
+      }
       //console.log(documents);
       
     })
@@ -327,6 +322,3 @@ if(i==2)
         )
 
 })});
-
-
-//{item_name:documents[i].item_index}

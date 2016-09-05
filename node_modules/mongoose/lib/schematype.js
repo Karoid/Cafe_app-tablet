@@ -91,9 +91,7 @@ SchemaType.prototype.default = function(val) {
       this.defaultValue = void 0;
       return void 0;
     }
-    this.defaultValue = typeof val === 'function'
-        ? val
-        : this.cast(val);
+    this.defaultValue = val;
     return this.defaultValue;
   } else if (arguments.length > 1) {
     this.defaultValue = utils.args(arguments);
@@ -148,8 +146,14 @@ SchemaType.prototype.index = function(options) {
  */
 
 SchemaType.prototype.unique = function(bool) {
-  if (this._index === null || this._index === undefined ||
-    typeof this._index === 'boolean') {
+  if (this._index === false) {
+    if (!bool) {
+      return;
+    }
+    throw new Error('Path "' + this.path + '" may not have `index` set to ' +
+      'false and `unique` set to true');
+  }
+  if (this._index == null || this._index === true) {
     this._index = {};
   } else if (typeof this._index === 'string') {
     this._index = {type: this._index};
@@ -166,7 +170,7 @@ SchemaType.prototype.unique = function(bool) {
  *
  *      var s = new Schema({name : {type: String, text : true })
  *      Schema.path('name').index({text : true});
- * @param bool
+ * @param {Boolean} bool
  * @return {SchemaType} this
  * @api public
  */
@@ -722,12 +726,18 @@ SchemaType.prototype.doValidate = function(value, fn, scope) {
         return;
       }
       if (validator.length === 2) {
-        validator.call(scope, value, function(ok, customMsg) {
+        var returnVal = validator.call(scope, value, function(ok, customMsg) {
+          if (typeof returnVal === 'boolean') {
+            return;
+          }
           if (customMsg) {
             validatorProperties.message = customMsg;
           }
           validate(ok, validatorProperties);
         });
+        if (typeof returnVal === 'boolean') {
+          validate(returnVal, validatorProperties);
+        }
       } else {
         validate(validator.call(scope, value), validatorProperties);
       }

@@ -9,6 +9,7 @@ var CastError = require('../error/cast');
 var MongooseDocumentArray = require('../types/documentarray');
 var SchemaType = require('../schematype');
 var Subdocument = require('../types/embedded');
+var util = require('util');
 
 /**
  * SubdocsArray SchemaType constructor
@@ -45,7 +46,7 @@ function DocumentArray(key, schema, options) {
   ArrayType.call(this, key, EmbeddedDocument, options);
 
   this.schema = schema;
-  var path = this.path;
+  this.$isMongooseDocumentArray = true;
   var fn = this.defaultValue;
 
   if (!('defaultValue' in this) || fn !== void 0) {
@@ -54,7 +55,8 @@ function DocumentArray(key, schema, options) {
       if (!Array.isArray(arr)) {
         arr = [arr];
       }
-      return new MongooseDocumentArray(arr, path, this);
+      // Leave it up to `cast()` to convert this to a documentarray
+      return arr;
     });
   }
 }
@@ -212,6 +214,10 @@ DocumentArray.prototype.cast = function(value, doc, init, prev, options) {
         doc.removeListener(key, prev._handlers[key]);
       }
     }
+  } else if (value && value.isMongooseDocumentArray) {
+    // We need to create a new array, otherwise change tracking will
+    // update the old doc (gh-4449)
+    value = new MongooseDocumentArray(value, this.path, doc);
   }
 
   i = value.length;
@@ -251,7 +257,9 @@ DocumentArray.prototype.cast = function(value, doc, init, prev, options) {
             // see gh-746
             value[i] = subdoc;
           } catch (error) {
-            throw new CastError('embedded', value[i], value._path, error);
+            var valueInErrorMessage = util.inspect(value[i]);
+            throw new CastError('embedded', valueInErrorMessage,
+              value._path, error);
           }
         }
       }

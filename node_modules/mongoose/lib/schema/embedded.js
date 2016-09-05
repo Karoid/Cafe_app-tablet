@@ -30,6 +30,11 @@ function Embedded(schema, path, options) {
       parent.on('save', function() {
         _this.emit('save', _this);
       });
+
+      parent.on('isNew', function(val) {
+        _this.isNew = val;
+        _this.emit('isNew', val);
+      });
     }
   };
   _embedded.prototype = Object.create(Subdocument.prototype);
@@ -37,6 +42,9 @@ function Embedded(schema, path, options) {
   _embedded.schema = schema;
   _embedded.$isSingleNested = true;
   _embedded.prototype.$basePath = path;
+  _embedded.prototype.toBSON = function() {
+    return this.toObject({ virtuals: false });
+  };
 
   // apply methods
   for (var i in schema.methods) {
@@ -123,7 +131,11 @@ Embedded.prototype.castForQuery = function($conditional, val) {
     return handler.call(this, val);
   }
   val = $conditional;
-  return new this.caster(val).toObject({virtuals: false});
+  if (val == null) {
+    return val;
+  }
+
+  return new this.caster(val);
 };
 
 /**

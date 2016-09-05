@@ -4,17 +4,18 @@ try {
 } catch(err) {
 }
 
-[ './binary_parser'
-  , './binary'
+[ './binary'
   , './code'
   , './map'
   , './db_ref'
   , './double'
+  , './int_32'
   , './max_key'
   , './min_key'
   , './objectid'
   , './regexp'
   , './symbol'
+  , './decimal128'
   , './timestamp'
   , './long'].forEach(function (path) {
   	var module = require(path);
@@ -27,17 +28,18 @@ try {
 exports.pure = function() {
   var classes = {};
   // Map all the classes
-  [ './binary_parser'
-    , './binary'
+  [ './binary'
     , './code'
     , './map'
     , './db_ref'
     , './double'
+    , './int_32'
     , './max_key'
     , './min_key'
     , './objectid'
     , './regexp'
     , './symbol'
+    , './decimal128'
     , './timestamp'
     , './long'
     , './bson'].forEach(function (path) {
@@ -54,17 +56,18 @@ exports.pure = function() {
 exports.native = function() {
   var classes = {};
   // Map all the classes
-  [ './binary_parser'
-    , './binary'
+  [ './binary'
     , './code'
     , './map'
     , './db_ref'
     , './double'
+    , './int_32'
     , './max_key'
     , './min_key'
     , './objectid'
     , './regexp'
     , './symbol'
+    , './decimal128'
     , './timestamp'
     , './long'
   ].forEach(function (path) {

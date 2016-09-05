@@ -30,6 +30,10 @@ build/Release
 # Optional npm cache directory
 .npm
 
+# Dependency directories
+node_modules
+jspm_packages
+
 # Optional REPL history
 .node_repl_history
 #c9
@@ -207,3 +211,7 @@ compile_commands.json
 *.1
 *.2
 data/
+
+#img files
+public/img/item_img
+public/img/main_img
