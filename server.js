@@ -5,9 +5,11 @@ var http = require('http');
 var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var ejs = require('ejs')
 async = require("async");
 mongoose.connect('mongodb://localhost:27017/test',function(err){
-      if (err){ 
+  mongoose.Promise = global.Promise;
+      if (err){
         console.log("connection failed")
         throw err;
       }
@@ -18,6 +20,7 @@ var Page_data = require('./models/page_data');
 var Item_data = require('./models/item_data');
 var Page_count = require('./models/page_count');
 var Item_count = require('./models/item_count');
+var User = require('./models/user');
 var multer = require('multer');
 var path = require('path')
 app.use(bodyParser.json());
@@ -25,11 +28,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+ var session_count = 0
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  console.log("came");
+  session_count++
+  console.log("access count:"+session_count);
   next();
 });
 // 포트 설정
@@ -39,6 +43,16 @@ console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
 
 // 라우팅 설정
+app.get('/',function(req,res){
+  fs.readFile('view/index.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    }else {
+      res.end(ejs.render(data,{data:null}))
+    }
+  })
+})
+//이전 테블릿 라우팅
 app.get('/index.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
 fs.readFile('index.html', function (error, data) { // index.html 파일 로드 .
 if (error) {
@@ -99,7 +113,7 @@ var storage_today = multer.diskStorage({
 })
 
 var upload_today = multer({ storage: storage_today })
-/* Ajax call */
+/* Ajax middleware */
 //크로스 오리진 문제 해결
 app.use(function(req, res, next) {
     var oneof = false;
@@ -161,15 +175,15 @@ app.post('/make_page', upload_main.single('file'), function(req,res){
       count=doc[0].value;
       //console.log("testable:"+testable+"todayable:"+todayable+"bestable"+bestable+"page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
-             conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1],testable:testable,todayable:todayable,bestable:bestable});   
+             conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1],testable:testable,todayable:todayable,bestable:bestable});
       conn.collection('page_count').update({value:count},{value:count+1});
       }
       catch(err){}
       res.end("done");
       })
 
-      
-      
+
+
 });
 
 app.post('/make_item', upload_today.single('file'), function(req,res){
@@ -181,7 +195,7 @@ app.post('/make_item', upload_today.single('file'), function(req,res){
       count=doc[0].item_count;
       //console.log("page_index:"+count+"page_info:"+req.body.page_info+"item_name:"+req.body.item_name+"img_dir:"+req.file.path.split('public')[1]);
       try{
-             conn.collection('Item_data').insert({item_index:count,item_name:req.body.item_name,item_price:req.body.item_price,img_dir:req.file.path.split('public')[1],like:req.body.like,item_discount:"False"});   
+             conn.collection('Item_data').insert({item_index:count,item_name:req.body.item_name,item_price:req.body.item_price,img_dir:req.file.path.split('public')[1],like:req.body.like,item_discount:"False"});
       conn.collection('item_count').update({item_count:count},{item_count:count+1});
       }
       catch(err){
@@ -198,9 +212,9 @@ app.post('/delete_page', function(req, res) {
     //console.log(req.body.page_index);
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
-                        var filePath = doc[0].img_dir; 
+                        var filePath = doc[0].img_dir;
                         //console.log(filePath);
-                        
+
                         fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
                         res.end();
@@ -209,7 +223,7 @@ app.post('/delete_page', function(req, res) {
 //제품 삭제
 app.post('/delete_item', function(req, res) {
     Item_data.find({item_index:req.body.item_index}).exec(function (err,doc){
-                        var filePath = doc[0].img_dir ; 
+                        var filePath = doc[0].img_dir ;
                         fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
                         res.end();
@@ -234,14 +248,14 @@ app.post('/get_page_data', function(req, res) {
         Item_data.find({item_name:documents[i].item_name}).exec(function (err,asd){
                 documents[i]["like"]=asd[0].like;
                 if(i==documents.length-1) cb();
-                    
-        
+
+
         })
-        
+
     }
 Page_data.find().lean().exec(function (err, documents) {
     var doc=documents;
-    
+
 async.series([
     // 1st
     function(done){
@@ -278,7 +292,7 @@ app.post('/get_todayable_page_data', function(req, res) {
         console.log(err);
       }
       //console.log(documents);
-      
+
     })
 });
 app.post('/get_bestable_page_data', function(req, res) {
@@ -288,7 +302,7 @@ app.post('/get_bestable_page_data', function(req, res) {
     })
 });
 //제품 목록 받아오기
-app.post('/get_item_data', function(req, res) { 
+app.post('/get_item_data', function(req, res) {
 Item_data.find().lean().exec(function (err,documents){
   //console.log(JSON.stringify(documents));
                 return res.end(JSON.stringify(documents));
@@ -306,8 +320,8 @@ Page_data.find({bestable:"true"}).lean().exec(function (err, documents) {
         itemlist.push(doc.item_name);
       })
       //console.log(itemlist);
-    
-        Item_data.find({item_name: { $in: itemlist}}).sort('-like').lean().exec(function (err, docs) 
+
+        Item_data.find({item_name: { $in: itemlist}}).sort('-like').lean().exec(function (err, docs)
         {
           for(var i=0;i<3;i++)
           {
@@ -316,9 +330,55 @@ if(i==2)
                 //console.log(docs);
             return res.end(JSON.stringify(docs));
           }}}
-                
-      
-            
         )
 
 })});
+
+//User
+//User 로그인
+// create a user a new user
+app.post("/login",function(req,res){
+  console.log(req.body+"login attempt");
+  // attempt to authenticate user
+  User.getAuthenticated(req.body.username ,req.body.password , function(err, user, reason) {
+    if (err) return res.end(JSON.stringify(err))
+      // login was successful if we have a user
+    if (user) {
+      // handle login success
+      console.log(user.username+'login success');
+      return res.end(JSON.stringify(user));
+    }
+    // otherwise we can determine why we failed
+    var reasons = User.failedLogin;
+    switch (reason) {
+      case reasons.NOT_FOUND:
+      return res.end('{"err":"아이디가 없습니다"}')
+      break;
+      case reasons.PASSWORD_INCORRECT:
+      return res.end('{"err":"비밀번호가 틀립니다"}')
+      break;
+      case reasons.MAX_ATTEMPTS:
+      return res.end('{"err":"로그인 요청 횟수를 초과하였습니다."}')
+      break;
+    }
+  });
+});
+//User 회원가입
+app.post("/sign_up",function(req,res){
+  console.log(req.body+"sign_up attempt");
+  var testUser = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
+  // save user to database
+  return testUser.save(function(err) {
+    if (err) {
+      console.log(req.body.username+"log on failed");
+      if (err.code == 11000) return res.end('{"err":"'+testUser.username+'은 이미 사용중입니다"}')
+      return res.end(JSON.stringify(err))
+    }else {
+      return res.end(JSON.stringify(testUser.username))
+    }
+
+  })
+})
