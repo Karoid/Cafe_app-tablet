@@ -12,12 +12,16 @@
 <body>
   <div class="wrapper">
   	<div class="container">
-  		<h1 class="notification">Welcome</h1>
+  		<h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%>Welcome<%}%></h1>
       <div class="form">
+        <%if(data){%>
+        <button type="submit" id="logout-button">Logout</button>
+        <%}else{%>
         <input type="text" name="username" id="username" placeholder="Username">
         <input type="password" name="password" id="password" placeholder="Password">
         <button type="submit" id="login-button">Login</button>
         <button type="submit" id="signup-button">Sign up</button>
+        <%}%>
       </div>
   	</div>
 

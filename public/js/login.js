@@ -10,7 +10,7 @@ $(document).ready(function(){
         var login = eval("("+data+")")
         if (login.username) {
           $(".notification").html(login.username+"님이 로그인하셨습니다")
-          empty_form()
+          window.location = "/"
         }else {
           $(".notification").html(login.err)
         }
@@ -34,6 +34,23 @@ $(document).ready(function(){
       }
     })
   });
+  $("#logout-button").click(function(){
+    $.ajax({
+      url: "logout",
+      method:"get",
+      data: null,
+      success: function(data){
+        console.log("logged out");
+        var login = eval("("+data+")")
+        if (data) {
+          $(".notification").html(login.err)
+        }else {
+          $(".notification").html("logout successful")
+        }
+      }
+    })
+    window.location = "/"
+  })
 })
 function empty_form(){
   $('input').val("")

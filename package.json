@@ -13,8 +13,9 @@
     "path": "*",
     "multer": "~1.1.0",
     "passport": "~0.3.2",
-    "bycriptjs": "~2.3.0",
-    "ejs": "~2.5.1"
+    "bcryptjs": "^2.3.0",
+    "ejs": "^2.5.1",
+    "express-session":"^1.14.1"
   },
   "devDependencies": {
     "nodemon": "^1.9.2"

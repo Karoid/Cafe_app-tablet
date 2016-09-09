@@ -6,6 +6,7 @@ var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var ejs = require('ejs')
+var session = require('express-session')
 async = require("async");
 mongoose.connect('mongodb://localhost:27017/test',function(err){
   mongoose.Promise = global.Promise;
@@ -23,8 +24,9 @@ var Item_count = require('./models/item_count');
 var User = require('./models/user');
 var multer = require('multer');
 var path = require('path')
-app.use(bodyParser.json());
 
+//미들웨어
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -36,6 +38,14 @@ app.use(function(req, res, next) {
   console.log("access count:"+session_count);
   next();
 });
+app.use(express.cookieParser());
+app.use(express.session({
+  key: 'sid', // 세션키
+  secret: 'secret', // 비밀키
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
+  }
+}));
 // 포트 설정
 app.listen(80, function () {
 console.log('Server Start http://localhost/test.html');
@@ -48,7 +58,12 @@ app.get('/',function(req,res){
     if (err) {
       console.log(err);
     }else {
-      res.end(ejs.render(data,{data:null}))
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 })
@@ -346,6 +361,7 @@ app.post("/login",function(req,res){
     if (user) {
       // handle login success
       console.log(user.username+'login success');
+      req.session.username = req.body.username
       return res.end(JSON.stringify(user));
     }
     // otherwise we can determine why we failed
@@ -363,6 +379,12 @@ app.post("/login",function(req,res){
     }
   });
 });
+app.get("/logout",function(req,res){
+  console.log(req.session.username+" is logged out");
+  req.session.destroy();  // 세션 삭제
+  res.clearCookie('sid'); // 세션 쿠키 삭제
+  return res.end()
+})
 //User 회원가입
 app.post("/sign_up",function(req,res){
   console.log(req.body+"sign_up attempt");
