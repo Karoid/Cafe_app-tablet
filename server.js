@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  console.log("came");
+  console.log(req.body);
   next();
 });
 // 포트 설정
@@ -194,16 +194,20 @@ app.post('/make_item', upload_today.single('file'), function(req,res){
 
 //페이지 삭제
 app.post('/delete_page', function(req, res) {
-    //console.log("get");
-    //console.log(req.body.page_index);
+    console.log("get");
+    console.log(req.body.page_index);
+    
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
+                        
                         var filePath = doc[0].img_dir; 
-                        //console.log(filePath);
+                        console.log(filePath);
+                        console.log(doc[0].img_dir);
                         
                         fs.unlinkSync("./public"+filePath);
                         doc[0].remove();
-                        res.end();
+                        res.end("asd");
+                        
                 })
 });
 //제품 삭제
@@ -218,11 +222,20 @@ app.post('/delete_item', function(req, res) {
 
 //좋아요 기능
 app.post('/liked', function(req, res) {
+  console.log("liked 받음")
     Item_data.find({item_name:req.body.asd}).exec(function (err,doc){
+      try
+      {
+        console.log(doc[0].like);
                         doc[0].like+=1;
                         doc[0].save();
                         //console.log(doc[0].like);
                         return res.end(doc[0].like+"");
+      }
+      catch(err){
+        
+      }
+      
                 })
 });
 
