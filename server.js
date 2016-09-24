@@ -49,7 +49,6 @@ console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
 
 // 라우팅 설정
-// 라우팅 설정
 app.get('/',function(req,res){
   fs.readFile('view/index.html','utf8',function(err,data){
     if (err) {
