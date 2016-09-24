@@ -9,9 +9,10 @@
     "async": "~0.2.8",
     "body-parser": "^1.15.2",
     "express": "~3.2.4",
-    "mongoose": "*",
-    "path": "*",
-    "multer": "~1.1.0"
+    "mongoose": "~4.6.0",
+    "path": "~0.12.7",
+    "multer": "~1.1.0",
+    "ejs": "~2.5.1"
   },
   "devDependencies": {
     "nodemon": "^1.9.2"
