@@ -68,11 +68,7 @@ console.log('Server Start http://localhost/test.html');
 console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
 
-<<<<<<< HEAD
-// 라우팅 설정
-=======
 //***** 라우팅 설정 *****//
->>>>>>> 464054fafec26fc67fae8aee259e90af6492f707
 app.get('/',function(req,res){
   res.writeHead(200, { 'Content-Type': 'text/html' }); // Head Type 설정 .
   res.end('<html>'+
