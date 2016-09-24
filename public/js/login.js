@@ -1,8 +1,10 @@
+var serverip = "http://52.78.68.136/"
+var loginLocation = "/user"
 $(document).ready(function(){
   console.log("js loaded");
   $("#login-button").click(function(event){
     $.ajax({
-      url: "login",
+      url: serverip+"login",
       method:"post",
       data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
@@ -10,7 +12,7 @@ $(document).ready(function(){
         var login = eval("("+data+")")
         if (login.username) {
           $(".notification").html(login.username+"님이 로그인하셨습니다")
-          window.location = "/"
+          window.location = loginLocation
         }else {
           $(".notification").html(login.err)
         }
@@ -19,7 +21,7 @@ $(document).ready(function(){
   });
   $("#signup-button").click(function(event){
     $.ajax({
-      url: "sign_up",
+      url: serverip+"sign_up",
       method:"post",
       data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
@@ -36,7 +38,7 @@ $(document).ready(function(){
   });
   $("#logout-button").click(function(){
     $.ajax({
-      url: "logout",
+      url: serverip+"logout",
       method:"get",
       data: null,
       success: function(data){
@@ -49,7 +51,7 @@ $(document).ready(function(){
         }
       }
     })
-    window.location = "/"
+    window.location = loginLocation
   })
 })
 function empty_form(){
