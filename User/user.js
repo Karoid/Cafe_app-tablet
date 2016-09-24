@@ -5,7 +5,7 @@ var User = require('../models/user');
 var router = express.Router();
 // define the home page route
 router.get('/',function(req,res){
-  fs.readFile('./user/index.html','utf8',function(err,data){
+  fs.readFile('./User/index.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     }else {

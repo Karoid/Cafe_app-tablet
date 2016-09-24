@@ -1,10 +1,10 @@
-var serverip = "http://52.78.68.136/"
-var loginLocation = "/user"
+var serverip = "http://52.78.68.136"
+var loginLocation = "/user/"
 $(document).ready(function(){
   console.log("js loaded");
   $("#login-button").click(function(event){
     $.ajax({
-      url: serverip+"login",
+      url: serverip+loginLocation+"login",
       method:"post",
       data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
@@ -21,7 +21,7 @@ $(document).ready(function(){
   });
   $("#signup-button").click(function(event){
     $.ajax({
-      url: serverip+"sign_up",
+      url: serverip+loginLocation+"sign_up",
       method:"post",
       data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
@@ -38,7 +38,7 @@ $(document).ready(function(){
   });
   $("#logout-button").click(function(){
     $.ajax({
-      url: serverip+"logout",
+      url: serverip+loginLocation+"logout",
       method:"get",
       data: null,
       success: function(data){
