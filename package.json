@@ -1,7 +1,7 @@
 {
-  "name": "chat-example",
+  "name": "cafe-site",
   "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
+  "description": "server for cafe site",
   "main": "server.js",
   "repository": "",
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
@@ -12,7 +12,10 @@
     "mongoose": "~4.6.0",
     "path": "~0.12.7",
     "multer": "~1.1.0",
-    "ejs": "~2.5.1"
+    "passport": "~0.3.2",
+    "bcryptjs": "^2.3.0",
+    "ejs": "^2.5.1",
+    "express-session":"^1.14.1"
   },
   "devDependencies": {
     "nodemon": "^1.9.2"

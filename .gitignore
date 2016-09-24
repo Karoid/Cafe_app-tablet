@@ -57,10 +57,10 @@ jspm_packages
 *.tar.gz
 *.suo
 *.ncb
-*.idb 
-*.obj 
-*.opt 
-*.pch 
+*.idb
+*.obj
+*.opt
+*.pch
 *.jsh
 *.jsall
 *.pyc
@@ -213,5 +213,5 @@ compile_commands.json
 data/
 
 #img files
-public/img/item_img
-public/img/main_img
+#public/img/item_img
+#public/img/main_img
