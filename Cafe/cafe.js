@@ -1,8 +1,21 @@
 var express = require('express');
 var fs = require('fs');
+var ejs = require('ejs');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var router = express.Router();
 
 // middleware that is specific to this router
+router.use(cookieParser());
+router.use(session({
+  key: 'sid', // 세션키
+  secret: 'secret', // 비밀키
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
+  },
+  resave: false,
+  saveUninitialized: true
+}));
 //router.use(function timeLog(req, res, next) {});
 // define the home page route
 router.get('/index', function(req, res) {
@@ -10,7 +23,12 @@ router.get('/index', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -19,7 +37,12 @@ router.get('/introduce.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -28,7 +51,12 @@ router.get('/main.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -37,7 +65,12 @@ router.get('/menu_page.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -46,7 +79,12 @@ router.get('/order_check.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -55,7 +93,12 @@ router.get('/order_page.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
@@ -64,7 +107,12 @@ router.get('/QnA.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      res.end(data)
+      console.log(req.session);
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
     }
   })
 });
