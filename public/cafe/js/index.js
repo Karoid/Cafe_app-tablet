@@ -1,7 +1,7 @@
 /**
  * Created by AJH322 on 2016-09-16.
  */
-function expand_pre()
+/*function expand_pre()
 {
     console.log("on!");
     $("div#top").animate({height:"10%"});
@@ -19,4 +19,4 @@ function contract_pre()
     $("div#bot").animate({height:"25%"} ,function() {
         $("div#bot").css("overflow","hidden");
     });
-}
+}*/
