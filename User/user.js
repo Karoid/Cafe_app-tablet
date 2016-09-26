@@ -12,7 +12,9 @@ router.use(session({
   secret: 'secret', // 비밀키
   cookie: {
     maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
-  }
+  },
+  resave: false,
+  saveUninitialized: true
 }));
 // define the home page route
 router.get('/',function(req,res){
@@ -79,7 +81,8 @@ router.post("/sign_up",function(req,res){
       if (err.code == 11000) return res.end('{"err":"'+testUser.username+'은 이미 사용중입니다"}')
       return res.end(JSON.stringify(err))
     }else {
-      return res.end(JSON.stringify(testUser.username))
+      console.log(req.body+"sign_up success");
+      return res.end('{"err":"'+testUser.username+' 가입완료"}')
     }
 
   })
