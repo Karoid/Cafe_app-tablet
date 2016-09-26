@@ -24,7 +24,6 @@ router.get('/index', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -38,7 +37,6 @@ router.get('/introduce.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -52,7 +50,6 @@ router.get('/main.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -66,7 +63,6 @@ router.get('/menu_page.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -80,7 +76,6 @@ router.get('/order_check.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -94,7 +89,6 @@ router.get('/order_page.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -108,7 +102,6 @@ router.get('/QnA.html', function(req, res) {
     if (err) {
       console.log(err);
     }else {
-      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -117,7 +110,22 @@ router.get('/QnA.html', function(req, res) {
     }
   })
 });
+router.get('/QnA_cu', function(req, res) {
+  fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    }else {
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
+    }
+  })
+});
+router.get('/QnA_d', function(req, res) {
 
+});
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
