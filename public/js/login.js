@@ -1,5 +1,5 @@
 var serverip = ""
-var loginLocation = "/user/"
+var loginLocation = "/cafe/"
 $(document).ready(function(){
   console.log("js loaded");
   $("#login-button").click(function(event){
@@ -12,7 +12,7 @@ $(document).ready(function(){
         var login = eval("("+data+")")
         if (login.username) {
           $(".notification").html(login.username+"님이 로그인하셨습니다")
-          window.location = loginLocation
+          window.location = "/cafe/main.html"
         }else {
           $(".notification").html(login.err)
         }
@@ -51,7 +51,7 @@ $(document).ready(function(){
         }
       }
     })
-    window.location = loginLocation
+    window.location = "/cafe/main.html"
   })
 })
 function empty_form(){
