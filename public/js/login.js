@@ -1,4 +1,4 @@
-var serverip = "http://52.78.68.136"
+var serverip = ""
 var loginLocation = "/user/"
 $(document).ready(function(){
   console.log("js loaded");

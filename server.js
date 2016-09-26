@@ -4,9 +4,8 @@ var fs = require('fs'); // 파일 로드 사용.
 var http = require('http');
 var server = http.createServer(app);
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser')
-var session = require('express-session')
 async = require("async");
 var os  = require("os")
 if (os.type == "Linux") {
@@ -24,7 +23,7 @@ if (os.type == "Linux") {
   mongoose.connect('mongodb://52.78.68.136:27017/test',function(err){
     console.log("server is on LOCAL");
     if (err){
-      console.log("connection failed")
+      console.log("connection failed");
       console.log(os.hostname());
       console.log(os.type());
       console.log(os.platform());
@@ -52,14 +51,6 @@ app.use(function(req, res, next) {
   console.log(req.body);
   next();
 });
-app.use(cookieParser());
-app.use(session({
-  key: 'sid', // 세션키
-  secret: 'secret', // 비밀키
-  cookie: {
-    maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
-  }
-}));
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe',require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정

@@ -1,14 +1,26 @@
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var User = require('../models/user');
 var router = express.Router();
+//middleware
+router.use(cookieParser());
+router.use(session({
+  key: 'sid', // 세션키
+  secret: 'secret', // 비밀키
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
+  }
+}));
 // define the home page route
 router.get('/',function(req,res){
   fs.readFile('./User/index.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     }else {
+      console.log(req.session);
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -18,7 +30,6 @@ router.get('/',function(req,res){
     }
   })
 })
-// define the about route
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
