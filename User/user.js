@@ -26,7 +26,6 @@ router.get('/',function(req,res){
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
-
       }
       res.end(ejs.render(data,{data:user}))
     }
