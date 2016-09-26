@@ -12,8 +12,9 @@ ul{
 ul#up{
     background-color: black;
     width: 100%;
-    height: 50%;
+    height: 100vh;
 }
+/* 돌아가는 이미지들 좁아서 없앰.
 ul#down{
     border:blue solid 2px;
     margin: 0 auto;
@@ -34,6 +35,7 @@ ul#down div#today div.item{
     height: 30px;
     display: flex;
 }
+*/
 ul#up div{
     margin: 2px;
     border:red solid 1px;
