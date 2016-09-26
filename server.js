@@ -4,13 +4,13 @@ var fs = require('fs'); // 파일 로드 사용.
 var http = require('http');
 var server = http.createServer(app);
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 var bodyParser = require('body-parser');
 async = require("async");
 var os  = require("os")
-if (os.type == "Linux") {
+if (os.type() == "Linux") {
   console.log("server is on AWS");
   mongoose.connect('mongodb://localhost:27017/test',function(err){
+    mongoose.Promise = global.Promise;
     if (err){
       console.log("connection failed")
       console.log(os.hostname());
@@ -21,6 +21,7 @@ if (os.type == "Linux") {
   });
 }else {
   mongoose.connect('mongodb://52.78.68.136:27017/test',function(err){
+    mongoose.Promise = global.Promise;
     console.log("server is on LOCAL");
     if (err){
       console.log("connection failed");
