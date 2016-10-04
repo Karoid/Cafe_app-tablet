@@ -6,54 +6,46 @@
 body{
     margin:0 auto;
     overflow: hidden;
-    max-width: 1000px;
     border:solid black 2px;
 }
-div {}
 
-
-#약관 > p {
-    margin: auto;
-    width: 80%;
-    white-space: pre-line;
-}
 div.main {
     color: black;
     background-color: gold;
-    height:30vh;
+    height:60vh;
 }
 div.main iframe {
-    height: 40vh;
+  height:100%;
     width: 100%;
 }
 div#top {
     overflow: hidden;
-    height:40vh;  }
-div#bot {
-    overflow: hidden;
-    height:30%;  }
-div#top{
-    background-color: gainsboro;
+    background-color: green;
     text-align: center;
+    }
+div#top h1{
+  font-size:10vh;
+  margin: 3vh 0 4vh 0;
 }
-div#top img
+.navbar{
+  margin:3vh 0 4vh 0;
+}
+.navbar img
 {
     padding: 0;
     border-right: 3px solid black;
 }
-div#top a:last-of-type img
+.navbar a:last-of-type img
 {
     border:none;
     margin-right: 0vh;
 }
-div#top h1{
-    font-size:10vh;
-    margin: 7vh 0 4vh 0;
-}
-div#top img{
-    padding: 3vh 7vh 3vh 5vh;
-    margin-right: 2vh;
+.navbar img{
+    padding: 3vh;
     margin-bottom: 0vh;
-    width: 7vh;
-    height: 7vh;
+    width: 11vh;
+}
+div#bot {
+  overflow: hidden;
+  height:30%;
 }

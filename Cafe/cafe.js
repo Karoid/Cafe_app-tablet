@@ -4,6 +4,7 @@ var ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var User = require('../models/user');
+var Qna = require('../models/qna');
 var router = express.Router();
 
 // middleware that is specific to this router
@@ -110,8 +111,10 @@ router.get('/QnA.html', function(req, res) {
     }
   })
 });
+
+//Qna CRUD 라우팅
 router.get('/QnA_cu', function(req, res) {
-  fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
+  fs.readFile('./Cafe/QnA_cu.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     }else {
@@ -123,9 +126,15 @@ router.get('/QnA_cu', function(req, res) {
     }
   })
 });
+router.post('/QnA_write', function(req, res) {
+  Qna.insert({username:req.body.username,
+    title:req.body.title,
+    content:req.body.content});
+});
 router.get('/QnA_d', function(req, res) {
 
 });
+
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
