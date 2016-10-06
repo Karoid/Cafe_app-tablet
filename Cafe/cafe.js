@@ -6,7 +6,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var User = require('../models/user');
-var Qna = require('../models/Qna');
+var Qna = require('../models/qna');
 var router = express.Router();
 // middleware that is specific to this router
 router.use(cookieParser());
