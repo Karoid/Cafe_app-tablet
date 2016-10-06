@@ -3,9 +3,11 @@ var fs = require('fs');
 var ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var mongoose = require('mongoose');
+var conn = mongoose.connection;
 var User = require('../models/user');
+var Qna = require('../models/Qna');
 var router = express.Router();
-
 // middleware that is specific to this router
 router.use(cookieParser());
 router.use(session({
@@ -99,6 +101,26 @@ router.get('/order_page.html', function(req, res) {
 });
 router.get('/QnA.html', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
+      try {
+        if (true) { //req.session.username
+          //var user = req.session.username
+          //console.log(user + "is logged on");
+          Qna.find({}, function (err, documents){
+            return res.end(ejs.render(data,{data:documents})) //왜 안되는 거지?
+          })
+          //res.end(ejs.render(data,{data}))
+        }else {
+          res.end("로그인 해주세요")
+        }
+      } catch (e){
+        console.log(e);
+      }
+  })
+});
+
+//Qna CRUD 라우팅
+router.get('/QnA_cu', function(req, res) {
+  fs.readFile('./Cafe/QnA_cu.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     }else {
@@ -110,22 +132,21 @@ router.get('/QnA.html', function(req, res) {
     }
   })
 });
-router.get('/QnA_cu', function(req, res) {
-  fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    }else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
-      }
-      res.end(ejs.render(data,{data:user}))
-    }
-  })
+router.post('/QnA_write', function(req, res) {
+  try {
+    conn.collection('Qna').insert({username:req.body.username,
+      title:req.body.title,
+      content:req.body.content});
+    res.redirect("Qna.html")
+  } catch (e) {
+    console.log(e);
+    res.end(e)
+  }
 });
 router.get('/QnA_d', function(req, res) {
 
 });
+
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
