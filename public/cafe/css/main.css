@@ -48,12 +48,6 @@ ul#up div{
 ul#up div#left
 {
     float: left;
-    width: 50%;
-    height: 100%;
-}
-ul#up div#right
-{
-
-    width: 50%;
+    width: 100%;
     height: 100%;
 }

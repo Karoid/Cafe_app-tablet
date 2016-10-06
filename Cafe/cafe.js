@@ -47,7 +47,7 @@ router.get('/introduce.html', function(req, res) {
     }
   })
 });
-router.get('/main.html', function(req, res) {
+router.get('/main.html/:redirect_url?', function(req, res) {
   fs.readFile('./Cafe/main.html','utf8',function(err,data){
     if (err) {
       console.log(err);
@@ -56,7 +56,7 @@ router.get('/main.html', function(req, res) {
         var user = req.session.username
         console.log(user + "is logged on");
       }
-      res.end(ejs.render(data,{data:user}))
+      res.end(ejs.render(data,{data:user, redirect:req.params.redirect_url}))
     }
   })
 });
@@ -102,16 +102,13 @@ router.get('/order_page.html', function(req, res) {
 router.get('/QnA.html', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {
-        if (true) { //req.session.username
-          //var user = req.session.username
-          //console.log(user + "is logged on");
-          Qna.find({}, function (err, documents){
-            return res.end(ejs.render(data,{data:documents})) //왜 안되는 거지?
-          })
-          //res.end(ejs.render(data,{data}))
-        }else {
-          res.end("로그인 해주세요")
-        }
+        needtologin(res,req,"QnA.html")
+        //var user = req.session.username
+        //console.log(user + "is logged on");
+        Qna.find({}, function (err, documents){
+          return res.end(ejs.render(data,{data:documents})) //왜 안되는 거지?
+        })
+        //res.end(ejs.render(data,{data}))
       } catch (e){
         console.log(e);
       }
@@ -119,21 +116,26 @@ router.get('/QnA.html', function(req, res) {
 });
 
 //Qna CRUD 라우팅
-router.get('/QnA_cu', function(req, res) {
+router.get('/QnA_cu/:id?', function(req, res) {
   fs.readFile('./Cafe/QnA_cu.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     }else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
+      needtologin(res,req,"QnA.html")
+      var user = req.session.username
+      console.log(user + "is logged on");
+      if (req.params.id) {
+        //업데이트 하러 왔을때
+        Qna.find({_id:req.params.id }, function (err, documents){
+          return res.end(ejs.render(data,{data:documents[0]})) //왜 안되는 거지?
+        })
       }
-      res.end(ejs.render(data,{data:user}))
     }
   })
 });
 router.post('/QnA_write', function(req, res) {
   try {
+    needtologin(res,req,"QnA.html")
     conn.collection('Qna').insert({username:req.body.username,
       title:req.body.title,
       content:req.body.content});
@@ -143,8 +145,15 @@ router.post('/QnA_write', function(req, res) {
     res.end(e)
   }
 });
-router.get('/QnA_d', function(req, res) {
-
+router.get('/QnA_d/:id', function(req, res) {
+  try {
+    needtologin(res,req,"QnA.html")
+    Qna.find({_id:req.params.id }).remove().exec();
+    res.redirect("back")
+  } catch (e) {
+    console.log(e);
+    res.end(e)
+  }
 });
 
 //User 로그인
@@ -205,3 +214,10 @@ router.post("/sign_up",function(req,res){
 
 
 module.exports = router;
+
+
+function needtologin(res,req,redirect_url){
+  if (!req.session.username) {
+    res.redirect("main.html/"+redirect_url)
+  }
+}

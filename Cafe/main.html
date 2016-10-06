@@ -1,29 +1,35 @@
 <html>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <head>
-    <script src="libs/jquery-1.11.0.min.js"></script>
-    <script src="/js/login.js" type="text/javascript" charset="utf-8"></script>
-    <link rel = "stylesheet" type = "text/css" href = "css/main.css">
+    <script src="/cafe/libs/jquery-1.11.0.min.js"></script>
+    <script src="/cafe/js/login.js" type="text/javascript" charset="utf-8"></script>
+    <link rel = "stylesheet" type = "text/css" href = "/cafe/css/main.css">
 <title>메인페이지</title>
 </head>
 <body>
 <ul>
     <ul id="up">
         <div align="center" id="left">
-          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%>Welcome<%}%></h1>
+          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%>Login!<%}%></h1>
           <div class="form">
             <%if(data){%>
             <button type="submit" id="logout-button">Logout</button>
+              <%if(redirect){%>
+                <script>
+                  $(document).ready(function() {
+                    console.log("move to <%=redirect%>")
+                    window.location = "../<%=redirect%>"
+                  });
+                </script>
+              <%}%>
             <%}else{%>
             <input type="text" name="username" id="username" placeholder="Username"><br>
             <input type="password" name="password" id="password" placeholder="Password"><br>
             <button type="submit" id="login-button">Login</button><br>
-            <button type="submit" id="signup-button">Sign up</button><br>
+            <button type="submit" id="signup-button">Sign up</button><br><br>
+            <button type="submit" id="nonuser-button">비회원 주문하기</button> <!--로그인상태인지 아닌지 확인하고 로그인상태면 이동, 비로그인상태면 경고창 구현 -->
             <%}%>
           </div>
-        </div>
-        <div id="right">
-            <button>비회원 주문하기</button> <!--로그인상태인지 아닌지 확인하고 로그인상태면 이동, 비로그인상태면 경고창 구현 -->
         </div>
     </ul>
 </ul>
