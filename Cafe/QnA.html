@@ -10,7 +10,12 @@
     </h1>
 </div>
 <div id="board"></div>
-<div>사장님 전화번호, 카톡 아이디</div>
+<%console.log(data)%>
+<%for (var i = 0; i < data.length; i++) {%>
+  <%=data[i][username]%><br>
+  <%=data[i][title]%><br>
+  <%=data[i][content]%>
+<%}%>
 <a href="QnA_cu">글쓰기</a>
 </body>
 </html>

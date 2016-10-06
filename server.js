@@ -6,7 +6,7 @@ var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
-var os  = require("os")
+var os  = require("os");
 if (os.type() == "Linux") {
   console.log("server is on AWS");
   mongoose.connect('mongodb://localhost:27017/test',function(err){
