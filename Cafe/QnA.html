@@ -10,12 +10,27 @@
     </h1>
 </div>
 <div id="board"></div>
-<%console.log(data)%>
-<%for (var i = 0; i < data.length; i++) {%>
-  <%=data[i][username]%><br>
-  <%=data[i][title]%><br>
-  <%=data[i][content]%>
-<%}%>
+<table class="table table-hover article_list">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>제목</th>
+      <th>글쓴이</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%for (var i = 0; i < data.length; i++) {%>
+    <tr>
+      <th scope="row"><%=i+1%></th>
+      <td><a href=""><%=data[i].title%></a></td>
+      <td><%=data[i].username%></td>
+      <td><%=data[i].content%></td>
+    </tr>
+    <%}%>
+  </tbody>
+</table>
+
 <a href="QnA_cu">글쓰기</a>
 </body>
 </html>

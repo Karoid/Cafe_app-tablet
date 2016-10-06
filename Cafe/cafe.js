@@ -103,13 +103,12 @@ router.get('/QnA.html', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {
         if (true) { //req.session.username
-          var user = req.session.username
-          var list = new Array()
-          console.log(user + "is logged on");
-          Qna.find().lean().exec(function (err, documents){
+          //var user = req.session.username
+          //console.log(user + "is logged on");
+          Qna.find({}, function (err, documents){
             return res.end(ejs.render(data,{data:documents})) //왜 안되는 거지?
           })
-          res.end(ejs.render(data))
+          //res.end(ejs.render(data,{data}))
         }else {
           res.end("로그인 해주세요")
         }
