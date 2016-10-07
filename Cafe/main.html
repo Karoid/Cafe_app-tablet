@@ -10,7 +10,7 @@
 <ul>
     <ul id="up">
         <div align="center" id="left">
-          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%>Login!<%}%></h1>
+          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%><%if(redirect){%><%=redirect%>에 접속하기 위해 <%}%>Login!<%}%></h1>
           <div class="form">
             <%if(data){%>
             <button type="submit" id="logout-button">Logout</button>

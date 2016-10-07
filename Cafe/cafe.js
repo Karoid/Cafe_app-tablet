@@ -129,8 +129,9 @@ router.get('/QnA_cu/:id?', function(req, res) {
         Qna.find({_id:req.params.id}, function (err, documents){
           return res.end(ejs.render(data,{data:documents[0]})) //왜 안되는 거지?
         })
-      }
+      }else{
       res.end(ejs.render(data,{data:{}}))
+      }
     }
   })
 });
