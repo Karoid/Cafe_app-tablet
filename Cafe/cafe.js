@@ -25,7 +25,7 @@ router.get('/index', function(req, res) {
   fs.readFile('./Cafe/index.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -38,7 +38,7 @@ router.get('/introduce.html', function(req, res) {
   fs.readFile('./Cafe/introduce.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -51,7 +51,7 @@ router.get('/main.html/:redirect_url?', function(req, res) {
   fs.readFile('./Cafe/main.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -64,7 +64,7 @@ router.get('/menu_page.html', function(req, res) {
   fs.readFile('./Cafe/menu_page.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -77,7 +77,7 @@ router.get('/order_check.html', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -90,7 +90,7 @@ router.get('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -120,16 +120,17 @@ router.get('/QnA_cu/:id?', function(req, res) {
   fs.readFile('./Cafe/QnA_cu.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       needtologin(res,req,"QnA.html")
       var user = req.session.username
       console.log(user + "is logged on");
       if (req.params.id) {
         //업데이트 하러 왔을때
-        Qna.find({_id:req.params.id }, function (err, documents){
+        Qna.find({_id:req.params.id}, function (err, documents){
           return res.end(ejs.render(data,{data:documents[0]})) //왜 안되는 거지?
         })
       }
+      res.end(ejs.render(data,{data:{}}))
     }
   })
 });
