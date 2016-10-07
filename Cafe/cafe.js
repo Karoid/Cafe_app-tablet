@@ -213,7 +213,11 @@ router.post("/sign_up",function(req,res){
 
   })
 })
-
+router.post("/nonuserlogin",function(req,res){
+  req.session.username = "non_user"
+  console.log(req.session.username+"login attempt");
+  res.end('{"err":"nonuser 로그인."}')
+});
 
 module.exports = router;
 

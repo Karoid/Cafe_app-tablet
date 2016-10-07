@@ -38,17 +38,17 @@ $(document).ready(function(){
   });
   $("#nonuser-button").click(function(event){
     $.ajax({
-      url: serverip+loginLocation+"sign_up",
+      url: serverip+loginLocation+"nonuserlogin",
       method:"post",
-      data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
-        console.log("sign_up server accessed");
+        console.log("nonuser logging");
         var login = eval("("+data+")")
-        if (data) {
-          $(".notification").html(login.err)
-        }else {
-          $(".notification").html("sign_up successful")
+        try {
+          $(".notification").html("nonuser login successful")
+          location.reload();
           empty_form()
+        } catch (e) {
+          $(".notification").html(login.err)
         }
       }
     })
