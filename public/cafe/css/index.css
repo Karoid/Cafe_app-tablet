@@ -33,9 +33,11 @@ div#top {
     height:25vh;  }
 div#bot {
     overflow: hidden;
+    background-image: url("../img/하단 칠판사진.jpg");
+    background-size: 100% 100%;
     height:25vh;  }
 div#top{
-    background-color: gainsboro;
+
     text-align: center;
 }
 div#top img
