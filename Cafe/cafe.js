@@ -3,9 +3,11 @@ var fs = require('fs');
 var ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var mongoose = require('mongoose');
+var conn = mongoose.connection;
 var User = require('../models/user');
+var Qna = require('../models/qna');
 var router = express.Router();
-
 // middleware that is specific to this router
 router.use(cookieParser());
 router.use(session({
@@ -23,7 +25,7 @@ router.get('/index', function(req, res) {
   fs.readFile('./Cafe/index.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -36,7 +38,7 @@ router.get('/introduce.html', function(req, res) {
   fs.readFile('./Cafe/introduce.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -45,16 +47,16 @@ router.get('/introduce.html', function(req, res) {
     }
   })
 });
-router.get('/main.html', function(req, res) {
+router.get('/main.html/:redirect_url?', function(req, res) {
   fs.readFile('./Cafe/main.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
       }
-      res.end(ejs.render(data,{data:user}))
+      res.end(ejs.render(data,{data:user, redirect:req.params.redirect_url}))
     }
   })
 });
@@ -62,7 +64,7 @@ router.get('/menu_page.html', function(req, res) {
   fs.readFile('./Cafe/menu_page.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -75,7 +77,7 @@ router.get('/order_check.html', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -88,7 +90,7 @@ router.get('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
     if (err) {
       console.log(err);
-    }else {
+    } else {
       if (req.session.username) {
         var user = req.session.username
         console.log(user + "is logged on");
@@ -99,33 +101,63 @@ router.get('/order_page.html', function(req, res) {
 });
 router.get('/QnA.html', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    }else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
+      try {
+        needtologin(res,req,"QnA.html")
+        //var user = req.session.username
+        //console.log(user + "is logged on");
+        Qna.find({}, function (err, documents){
+          return res.end(ejs.render(data,{data:documents})) //왜 안되는 거지?
+        })
+        //res.end(ejs.render(data,{data}))
+      } catch (e){
+        console.log(e);
       }
-      res.end(ejs.render(data,{data:user}))
-    }
   })
 });
-router.get('/QnA_cu', function(req, res) {
-  fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    }else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
-      }
-      res.end(ejs.render(data,{data:user}))
-    }
-  })
-});
-router.get('/QnA_d', function(req, res) {
 
+//Qna CRUD 라우팅
+router.get('/QnA_cu/:id?', function(req, res) {
+  fs.readFile('./Cafe/QnA_cu.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      needtologin(res,req,"QnA.html")
+      var user = req.session.username
+      console.log(user + "is logged on");
+      if (req.params.id) {
+        //업데이트 하러 왔을때
+        Qna.find({_id:req.params.id}, function (err, documents){
+          return res.end(ejs.render(data,{data:documents[0]})) //왜 안되는 거지?
+        })
+      }else{
+      res.end(ejs.render(data,{data:{}}))
+      }
+    }
+  })
 });
+router.post('/QnA_write', function(req, res) {
+  try {
+    needtologin(res,req,"QnA.html")
+    conn.collection('Qna').insert({username:req.body.username,
+      title:req.body.title,
+      content:req.body.content});
+    res.redirect("Qna.html")
+  } catch (e) {
+    console.log(e);
+    res.end(e)
+  }
+});
+router.get('/QnA_d/:id', function(req, res) {
+  try {
+    needtologin(res,req,"QnA.html")
+    Qna.find({_id:req.params.id }).remove().exec();
+    res.redirect("back")
+  } catch (e) {
+    console.log(e);
+    res.end(e)
+  }
+});
+
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
@@ -181,6 +213,17 @@ router.post("/sign_up",function(req,res){
 
   })
 })
-
+router.post("/nonuserlogin",function(req,res){
+  req.session.username = "non_user"
+  console.log(req.session.username+"login attempt");
+  res.end('{"err":"nonuser 로그인."}')
+});
 
 module.exports = router;
+
+
+function needtologin(res,req,redirect_url){
+  if (!req.session.username) {
+    res.redirect("main.html/"+redirect_url)
+  }
+}

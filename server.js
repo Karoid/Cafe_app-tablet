@@ -6,7 +6,7 @@ var server = http.createServer(app);
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
-var os  = require("os")
+var os  = require("os");
 if (os.type() == "Linux") {
   console.log("server is on AWS");
   mongoose.connect('mongodb://localhost:27017/test',function(err){
@@ -261,7 +261,7 @@ app.post('/liked', function(req, res) {
         console.log(doc[0].like);
                         doc[0].like+=1;
                         doc[0].save();
-                        //console.log(doc[0].like);
+                        console.log(doc[0].like);
                         return res.end(doc[0].like+"");
       }
       catch(err){
@@ -328,6 +328,7 @@ app.post('/get_todayable_page_data', function(req, res) {
 });
 app.post('/get_bestable_page_data', function(req, res) {
     Page_data.find({bestable:"true"}).lean().exec(function (err, documents){
+      //console.log("test");
       //console.log(documents);
       return res.end(JSON.stringify(documents));
     })

@@ -1,15 +1,39 @@
 <html>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <head>
 <title>메인페이지</title>
 </head>
 <body>
-<div>
+<div class="container">
     <h1>
         게시판
     </h1>
-</div>
+
 <div id="board"></div>
-<div>사장님 전화번호, 카톡 아이디</div>
+<table class="table table-hover article_list">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>제목</th>
+      <th>글쓴이</th>
+      <th>내용</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%for (var i = 0; i < data.length; i++) {%>
+    <tr>
+      <th scope="row"><%=i+1%></th>
+      <td><a href=""><%=data[i].title%></a></td>
+      <td><%=data[i].username%></td>
+      <td><%=data[i].content%></td>
+      <td><a href="Qna_cu/<%=data[i]._id%>">수정</a> <a href="Qna_d/<%=data[i]._id%>">삭제</a></td>
+    </tr>
+    <%}%>
+  </tbody>
+</table>
+<a href="QnA_cu">글쓰기</a>
+</div>
 </body>
 </html>
