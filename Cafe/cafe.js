@@ -127,21 +127,31 @@ router.get('/QnA_cu/:id?', function(req, res) {
       if (req.params.id) {
         //업데이트 하러 왔을때
         Qna.find({_id:req.params.id}, function (err, documents){
-          return res.end(ejs.render(data,{data:documents[0]})) //왜 안되는 거지?
+          return res.end(ejs.render(data,{data:documents[0], user:req.session.username})) //왜 안되는 거지?
         })
       }else{
-      res.end(ejs.render(data,{data:{}}))
+      res.end(ejs.render(data,{data:{}, user:req.session.username}))
       }
     }
   })
 });
-router.post('/QnA_write', function(req, res) {
+router.post('/QnA_write/:id?', function(req, res) {
   try {
     needtologin(res,req,"QnA.html")
-    conn.collection('Qna').insert({username:req.body.username,
-      title:req.body.title,
-      content:req.body.content});
-    res.redirect("Qna.html")
+    if (req.params.id) {
+      Qna.findOne({ _id: req.params.id }, function (err, doc){
+        doc.username = req.body.username;
+        doc.title = req.body.title;
+        doc.content = req.body.content;
+        doc.save();
+      });
+      res.redirect("/cafe/Qna.html")
+    }else{
+      conn.collection('Qna').insert({username:req.body.username,
+        title:req.body.title,
+        content:req.body.content});
+        res.redirect("/cafe/Qna.html")
+    }
   } catch (e) {
     console.log(e);
     res.end(e)
@@ -150,8 +160,15 @@ router.post('/QnA_write', function(req, res) {
 router.get('/QnA_d/:id', function(req, res) {
   try {
     needtologin(res,req,"QnA.html")
-    Qna.find({_id:req.params.id }).remove().exec();
-    res.redirect("back")
+    Qna.find({_id:req.params.id }, function(err, documents){
+      console.log(documents[0].username,req.session.username,req.session.username != documents[0].username);
+      if (req.session.username != documents[0].username) {
+        return res.end("글쓴이와 로그인 정보가 다릅니다")
+      }else{
+        Qna.find({_id:req.params.id }).remove().exec();
+        res.redirect("back")
+      }
+    })
   } catch (e) {
     console.log(e);
     res.end(e)
@@ -225,5 +242,11 @@ module.exports = router;
 function needtologin(res,req,redirect_url){
   if (!req.session.username) {
     res.redirect("main.html/"+redirect_url)
+  }
+}
+function usernameMustMatch(err,req,res, documents){
+  console.log(documents);
+  if (req.params.username != documents[0].username) {
+    return res.end("글쓴이와 로그인 정보가 다릅니다")
   }
 }

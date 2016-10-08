@@ -1,10 +1,10 @@
-<%console.log(data)%>
 <div id="form-main">
   <div id="form-div">
-    <form class="form" method="post" action="QnA_write<%if(data.title){%>/<%=data._id%><%}%>">
+    <form class="form" method="post" action="/cafe/QnA_write<%if(data.title){%>/<%=data._id%><%}%>">
 
       <p class="name">
-        <input name="username" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" value="<%=data.username%>" placeholder="username" id="name" />
+        <input type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" value="<%=user%>" id="name" disabled/>
+        <input name="username" type="hidden" value="<%=user%>"/>
       </p>
 
       <p class="email">
