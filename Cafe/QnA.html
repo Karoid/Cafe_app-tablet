@@ -28,7 +28,9 @@
       <td><a href=""><%=data[i].title%></a></td>
       <td><%=data[i].username%></td>
       <td><%=data[i].content%></td>
+      <%if(seen_button[i]){%>
       <td><a href="Qna_cu/<%=data[i]._id%>">수정</a> <a href="Qna_d/<%=data[i]._id%>">삭제</a></td>
+      <%}%>
     </tr>
     <%}%>
   </tbody>

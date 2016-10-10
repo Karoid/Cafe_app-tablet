@@ -6,70 +6,99 @@
 body{
     margin:0 auto;
     overflow: hidden;
-    max-width: 1000px;
-
 }
-div {}
-
-
-#약관 > p {
-    margin: auto;
-    width: 80%;
-    white-space: pre-line;
+iframe{
+  border:0;
+}
+div.container{
+  padding:0;
+  margin:0;
+  width:100%
+}
+div.background{
+  width:100%;
+  height:100vh
 }
 div.main {
     color: black;
     background-color: gold;
-    height:50vh;
+    height:60vh;
 }
 div.main iframe {
-    height: 50vh;
+  height:100%;
     width: 100%;
 }
-div#top {
-    background-image: url("../img/상단 칠판사진.jpg");
-    background-size: 100% 100%;
-    overflow: hidden;
-    height:25vh;  }
-div#bot {
-    overflow: hidden;
-    height:25vh;  }
-div#top{
-    background-color: gainsboro;
-    text-align: center;
+div.header {
+  background-image: url("../img/상단 칠판사진.jpg");
+  background-size: 100% 100%;
+  overflow: hidden;
 }
-div#top img
+div.header h1{
+      font-size:8vh;
+      margin: 6vh 0;
+      color:white;
+}
+.navbar{
+  margin:3vh 0 4vh 0;
+  text-align: center;
+}
+.navbar img
 {
     padding: 0;
-    border-right: 2px solid gray;
+    border-right: 3px solid black;
 }
-div#top a:last-of-type img
+.navbar a:last-of-type img
 {
     border:none;
     margin-right: 0vh;
 }
-div#top h1{
-    color: white;
-    font-size:8vh;
-    margin: 7vh 10vh 4vh 20vh;
-    display:inline-block;
+.navbar img{
+    padding: 3vh;
+    margin-bottom: 0vh;
+    width: 11vh;
 }
-div#name {
+div#bot {
+  overflow: hidden;
+  height:100%;
+  background-image: url("../img/상단 칠판사진.jpg");
+  background-size: 100% 100%;
+  overflow: hidden;
+}
+
+div#name ,#non-main {
     display: inline-block;
     float: left;
     width: 47.5%;
     height: 100%;
-}
-div#imgs {
-    width: 47.5%;
-    height: 100%;
-    padding: 0vh 0vh 0vh 0vh;
-    margin:8vh 2vh 0 0vh;
-    display: inline-block;
 }
 div#top img{
     padding: 2vh 4vh 0vh 2vh;
     margin-left: 2vh;
     width: 7vh;
     height: 9vh;
+}
+
+@media screen and (max-aspect-ratio: 1/1){
+  div.main {
+      color: black;
+      background-color: gold;
+      height:55vh;
+  }
+  div.header h1{
+        margin: 6vw 0 3vw;
+        font-size:12vw;
+  }
+  .navbar{
+    margin:4.5vw 0 6vw 0;
+  }
+  .navbar img{
+      padding: 3vw;
+      width: 16.5vw;
+  }
+  div#top img{
+      padding: 3vw 6vw 0vw 3vw;
+      margin-left: 3vw;
+      width: 10.5vw;
+      height: 13.5vw;
+  }
 }

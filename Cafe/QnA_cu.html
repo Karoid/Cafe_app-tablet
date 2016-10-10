@@ -1,12 +1,23 @@
 <%console.log(data)%>
 <div id="form-main">
   <div id="form-div">
-    <form class="form" method="post" action="QnA_write<%if(data.title){%>/<%=data._id%><%}%>">
-
+    <%if(data[0] != "del"){ %>
+    <form class="form" method="post" action="/cafe/QnA_write<%if(data.title){%>/<%=data._id%><%}%>">
+    <%}else{%>
+    <form class="form" method="get" action="/cafe/QnA_d/<%=data[1]%>">
+    <%}%>
+      <%if(user){%>
       <p class="name">
-        <input name="username" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" value="<%=data.username%>" placeholder="username" id="name" />
+        <input type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" value="<%=user%>" id="name" disabled/>
+        <input name="username" type="hidden" value="<%=user%>"/>
       </p>
-
+      <%}else{ %>
+      <input name="username" type="hidden" value="nonuser"/>
+      <p class="password">
+        <input type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" name="password" id="name" placeholder="password"/>
+      </p>
+      <%}%>
+      <%if(data[0] != "del"){ //글쓰기, 수정하기 일때%>
       <p class="email">
         <input name="title" type="text" class="validate[required,custom[email]] feedback-input" id="email" value="<%=data.title%>" placeholder="title" />
       </p>
@@ -14,7 +25,7 @@
       <p class="text">
         <textarea name="content" class="validate[required,length[6,300]] feedback-input" id="comment" placeholder="글쓰기"><%=data.content%></textarea>
       </p>
-
+      <%}%>
 
       <div class="submit">
         <input type="submit" value="SEND" id="button-blue"/>
