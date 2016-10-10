@@ -1,0 +1,20 @@
+.col-md-4{
+    width: 30%;
+    height: 900px;
+    float:left;
+    display: block;
+    border: 1px solid #444444;
+    margin: 1em;
+} 
+h2{
+    text-align: center;
+}
+
+h5{
+    text-align: center;
+}
+
+#finish{
+    width: inherit;
+    height: 100px;
+}
