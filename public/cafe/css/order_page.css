@@ -17,4 +17,11 @@ h5{
 #finish{
     width: inherit;
     height: 100px;
+
+}
+
+.menu-list{
+    cursor: pointer;
+    width: 20%;
+    margin: 10px;
 }
