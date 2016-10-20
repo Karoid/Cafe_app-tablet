@@ -160,20 +160,20 @@ app.use(function(req, res, next) {
     }
 });
 //페이지 생성
-app.post('/make_page', upload_main.single('file'), function(req,res){
-      //console.log(req.body); //form fields
-      //console.log(req.file); //form files
+app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
+      console.log(req.body); //form fields
+      console.log(req.file); //form files
       //path.extname(req.file)
       var testable,todayable,bestable;
-      if(req.body.testable=="true")
+      if(req.body.testable=="true" || req.body.testable=="on")
         testable = true;
       else
         testable = false;
-      if(req.body.todayable=="true")
+      if(req.body.todayable=="true" || req.body.todayable=="on")
         todayable = true;
       else
         todayable = false;
-      if(req.body.bestable=="true")
+      if(req.body.bestable=="true" || req.body.bestable=="on")
         bestable = true;
       else
         bestable = false;
@@ -204,7 +204,7 @@ app.post('/make_page', upload_main.single('file'), function(req,res){
 
 });
 
-app.post('/make_item', upload_today.single('file'), function(req,res){
+app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
       //console.log(req);
       //console.log(req.body);
       var count;
