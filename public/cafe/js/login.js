@@ -38,14 +38,14 @@ $(document).ready(function(){
   });
   $("#nonuser-button").click(function(event){
     $.ajax({
-      url: serverip+loginLocation+"nonuserlogin",
+      url: serverip+loginLocation+"nonusersign_up",
       method:"post",
+      data: {'password':$("#nonuser_password").val() },
       success: function(data){
         console.log("nonuser logging");
         var login = eval("("+data+")")
         try {
-          $(".notification").html("nonuser login successful")
-          location.reload();
+          $(".notification").html(login.err)
           empty_form()
         } catch (e) {
           $(".notification").html(login.err)

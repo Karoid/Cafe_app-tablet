@@ -262,14 +262,29 @@ router.post("/sign_up",function(req,res){
       console.log(req.body+"sign_up success");
       return res.end('{"err":"'+testUser.username+' 가입완료"}')
     }
-
   })
 })
-router.post("/nonuserlogin",function(req,res){
-  req.session.username = "nonuser"
-  console.log(req.session.username+"login attempt");
-  res.end('{"err":"nonuser 로그인."}')
-});
+router.post("/nonusersign_up",function(req,res){
+  //NONUser 회원가입
+  User.find({},function(err,documents){
+    global.username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
+    var testUser = new User({
+      username: global.username,
+      password: req.body.password
+    });
+    // save user to database
+    return testUser.save(function(err) {
+      if (err) {
+        console.log(req.body.username+"log on failed");
+        if (err.code == 11000) return res.end('{"err":"'+testUser.username+'은 이미 사용중입니다"}')
+        return res.end(JSON.stringify(err))
+      }else {
+        console.log(req.body+"sign_up success");
+        return res.end('{"err":"id값이 '+testUser.username+'로 비회원 가입되었습니다!"}')
+      }
+    })
+  })
+})
 
 module.exports = router;
 
