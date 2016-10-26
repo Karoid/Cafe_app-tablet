@@ -21,8 +21,14 @@ div.background{
 }
 div.main {
     color: black;
-    background-color: gold;
     height:60vh;
+    -webkit-transition: height 1s;
+    transition: height 1s;
+}
+div.main.expand{
+  height:80vh;
+  -webkit-transition: height 1s;
+  transition: height 1s;
 }
 div.main iframe {
   height:100%;
@@ -32,6 +38,7 @@ div.header {
   background-image: url("../img/상단 칠판사진.jpg");
   background-size: 100% 100%;
   overflow: hidden;
+  height:20vh;
 }
 div.header h1{
       font-size:8vh;
@@ -81,8 +88,13 @@ div#top img{
 @media screen and (max-aspect-ratio: 1/1){
   div.main {
       color: black;
-      background-color: gold;
       height:55vh;
+  }
+  div.main.expand{
+    height: calc(100vh - 53vw);
+  }
+  div.header{
+    height: 53vw;
   }
   div.header h1{
         margin: 6vw 0 3vw;

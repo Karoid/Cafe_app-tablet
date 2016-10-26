@@ -8,13 +8,26 @@
   margin: 0.15%;
 }
 .border{
-    height: 900px;
+    height: 97vh;
     float:left;
     display: block;
     border: 1px solid #444444;
     -webkit-box-sizing: border-box;
    -moz-box-sizing: border-box;
         box-sizing: border-box;
+  overflow-y:scroll;
+}
+.border::-webkit-scrollbar {
+    width: 0.4em;
+}
+
+.border::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+
+.border::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 .private-check{
   margin:20px;

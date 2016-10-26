@@ -99,13 +99,18 @@ router.get('/order_page.html', function(req, res) {
     }
   })
 });
-router.get('/QnA.html', function(req, res) {
+router.get('/QnA.html/:page?', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {
-        Qna.find({}, function (err, documents){
+        if (req.params.page) {
+          var page_num = req.params.page;
+        }else {
+          var page_num = 1;
+        }
+        Qna.paginate({},{page:page_num,limit:5}, function (err, documents){
           var seen_button = new Array()
-          for (var i = 0; i < documents.length; i++) {
-            var saved_user               = documents[i].username;
+          for (var i = 0; i < documents.docs.length; i++) {
+            var saved_user               = documents.docs[i].username;
             var logged_in_user           = req.session.username
             var not_logged_in            = saved_user == "nonuser" && !logged_in_user;
             var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";

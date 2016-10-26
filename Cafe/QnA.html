@@ -22,19 +22,46 @@
     </tr>
   </thead>
   <tbody>
-    <%for (var i = 0; i < data.length; i++) {%>
+    <%for (var i = 0; i < data.docs.length; i++) {%>
     <tr>
-      <th scope="row"><%=i+1%></th>
-      <td><a href=""><%=data[i].title%></a></td>
-      <td><%=data[i].username%></td>
-      <td><%=data[i].content%></td>
+      <th scope="row"><%=(data.page-1)*5+i+1%></th>
+      <td><a href=""><%=data.docs[i].title%></a></td>
+      <td><%=data.docs[i].username%></td>
+      <td><%=data.docs[i].content%></td>
       <%if(seen_button[i]){%>
-      <td><a href="Qna_cu/<%=data[i]._id%>">수정</a> <a href="Qna_d/<%=data[i]._id%>">삭제</a></td>
+      <td><a href="Qna_cu/<%=data.docs[i]._id%>">수정</a> <a href="Qna_d/<%=data.docs[i]._id%>">삭제</a></td>
       <%}%>
     </tr>
     <%}%>
   </tbody>
 </table>
+<center>
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <%if(data.page != 1){ %>
+    <li>
+      <a href="/cafe/QnA.html/<%=parseInt(data.page)-1%>" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <%}%>
+    <%for (var i = 1; i <= data.pages; i++) { if(data.page == i){ %>
+      <li class="active"><a href="/cafe/qna.html/<%=i%>"><%=i%></a></li>
+    <%}else{%>
+      <li><a href="/cafe/QnA.html/<%=i%>"><%=i%></a></li>
+    <%}%>
+    <%}%>
+
+    <%if(data.page != data.pages){ %>
+    <li>
+      <a href="/cafe/QnA.html/<%=(parseInt(data.page)+1)%>" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <%}%>
+  </ul>
+</nav>
+</center>
 <a href="QnA_cu">글쓰기</a>
 </div>
 </body>
