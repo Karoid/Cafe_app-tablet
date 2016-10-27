@@ -12,6 +12,7 @@
     "express": "~4.13.1",
     "express-session":"^1.14.1",
     "mongoose": "~4.6.0",
+    "mongoose-paginate":"*",
     "path": "~0.12.7",
     "multer": "~1.1.0",
     "passport": "~0.3.2",

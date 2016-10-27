@@ -49,7 +49,6 @@ app.use(bodyParser.urlencoded({
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //console.log(req.body);
   next();
 });
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
@@ -145,22 +144,20 @@ app.use(function(req, res, next) {
     }
 });
 //페이지 생성
-app.post('/make_page', upload_main.single('uploadFile'), function(req,res,next){
-    //console.log(req.body); //form fields
-      //console.log(req.file); //form files
+app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
+      console.log(req.body); //form fields
+      console.log(req.file); //form files
       //path.extname(req.file)
       var testable,todayable,bestable;
-      if(req.body.testable=="on") {
-          testable = true;
-          //console.log("true");
-      }
+      if(req.body.testable=="true" || req.body.testable=="on")
+        testable = true;
       else
         testable = false;
-      if(req.body.todayable=="on")
+      if(req.body.todayable=="true" || req.body.todayable=="on")
         todayable = true;
       else
         todayable = false;
-      if(req.body.bestable=="on")
+      if(req.body.bestable=="true" || req.body.bestable=="on")
         bestable = true;
       else
         bestable = false;
