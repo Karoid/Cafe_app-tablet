@@ -23,6 +23,13 @@ app.controller('itemCtrl',function ($scope, $http) {
             $scope.items=data;
         })
     };
+    $scope.test = function() {
+        console.log("test");
+        $http.post('/get_face_page_data').
+        success(function(data) {
+            console.log(data);
+        })
+    };
     $scope.delete_item = function(index) {
         $http.post('/delete_item',({item_index:$scope.items[index].item_index})).
         success(function(data) {
@@ -191,6 +198,7 @@ function($stateProvider, $urlRouterProvider) {
 </script>
 <script type="text/ng-template" id="/item.html">
   <div class="page-header">
+      <button ng-click="test()">ㅁㄴㅇ</button>
     <div class="btn-bg"  style="background:#7278e5;">
       <h1 style="text-align:center;color:white">Item 관리</h1>
         <form action ="/make_item", method="post" enctype="multipart/form-data" name="make_item">
@@ -208,8 +216,7 @@ function($stateProvider, $urlRouterProvider) {
 					<h2>제품명 : {{item.item_name}}</h2>
 					가격 : {{item.item_price}}<br>
 					좋아요 : {{item.like}}<br>
-					할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br>
-					베스트 메뉴 : <input type="checkbox" checked="{{item.bestable}}"><br>
+					할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
           이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
 					<button ng-click="delete_item($index)">제품 삭제</button><br>
         </div>
