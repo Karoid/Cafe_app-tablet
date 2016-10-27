@@ -41,7 +41,7 @@ app.controller('itemCtrl',function ($scope, $http) {
 
 
 
-  app.controller('pageCtrl', function ($scope, $http) {
+  app.controller('pageCtrl', function ($scope, $http, $state) {
     $scope.get_item_data = function() {
         $http.post('/get_item_data').
         success(function(data) {
@@ -55,30 +55,44 @@ app.controller('itemCtrl',function ($scope, $http) {
     })
     }
     $scope.delete_page = function(index) {
-        $http.post('/delete_page',({page_index:$scope.pages[index].page_index})).
-        success(function(data) {
-          $scope.get_page_data();
-        })};
-      
+          $http.post('/delete_page',({page_index:$scope.pages[index].page_index})).
+          success(function(data) {
+              $scope.get_page_data();
+          })};
+      $scope.edit_page = function(index) {
+          console.log($scope.pages[index].page_index)
+          $state.go("edit_page", { id: $scope.pages[index].page_index });
+      };
+
     $scope.get_page_data();
   $scope.get_item_data();
   });
   
   app.controller('bestCtrl', function ($scope, $http) {
-    
-        $scope.get_item_data = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
-            $scope.items=data;
-        })}
-        $scope.delete_item = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
-            $scope.items=data;
-        })}
-    $scope.get_item_data();
-  })
-  
+
+         $scope.get_item_data = function() {
+             $http.post('/get_item_data').
+             success(function(data) {
+                 $scope.items=data;
+             })}
+         $scope.delete_item = function() {
+             $http.post('/get_item_data').
+             success(function(data) {
+                 $scope.items=data;
+             })}
+         $scope.get_item_data();
+     })
+     app.controller('editCtrl', function ($scope, $http, $stateParams) {
+         $scope.get_page_data = function() {
+             //console.log($stateParams.id);
+             $http.post('/get_page_data_by_page_index',({page_index:$stateParams.id})).
+             success(function(data) {
+                 $scope.page=data[0];
+                 console.log(data[0]);
+             });
+         }
+         $scope.get_page_data();
+     })
 app.config([
 '$stateProvider',
 '$urlRouterProvider',
@@ -108,6 +122,12 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/best.html'
       ,controller: 'bestCtrl'
     });
+    $stateProvider
+            .state('edit_page', {
+                url: '/edit_page/:id',
+                templateUrl: '/edit_page.html'
+                ,controller: 'editCtrl'
+            });
   
   $urlRouterProvider.otherwise('home');
 }]);
@@ -190,7 +210,8 @@ function($stateProvider, $urlRouterProvider) {
           메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
           오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
           베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
-					<button ng-click="delete_page($index)">페이지 삭제</button><br>
+					<button ng-click="delete_page($index)">페이지 삭제</button>
+            <button ng-click="edit_page($index)">페이지 수정</button><br>
         </div>
       </div>
   </div>
@@ -198,7 +219,6 @@ function($stateProvider, $urlRouterProvider) {
 </script>
 <script type="text/ng-template" id="/item.html">
   <div class="page-header">
-      <button ng-click="test()">ㅁㄴㅇ</button>
     <div class="btn-bg"  style="background:#7278e5;">
       <h1 style="text-align:center;color:white">Item 관리</h1>
         <form action ="/make_item", method="post" enctype="multipart/form-data" name="make_item">
@@ -217,12 +237,22 @@ function($stateProvider, $urlRouterProvider) {
 					가격 : {{item.item_price}}<br>
 					좋아요 : {{item.like}}<br>
 					할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
-          이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
+            이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
 					<button ng-click="delete_item($index)">제품 삭제</button><br>
         </div>
       </div>
   </div>
   </div>
 </script>
+  <script type="text/ng-template" id="/edit_page.html">
+      <h2>{{page.page_info}}</h2>
+      제품명 : {{page.item_name}}<br>
+      좋아요 수 : {{page.like}}<br>
+      이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
+      메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
+      오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
+      베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
+      <button ng-click="get_page_data()">페이지 수정</button>
+  </script>
 </body>
 </html>

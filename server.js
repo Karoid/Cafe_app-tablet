@@ -224,10 +224,21 @@ app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
     //res.redirect("../admin.html#/item");
 });
 
+app.post('/get_page_data_by_page_index', function(req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    //console.log("get");
+    //console.log(req.body.page_index);
+
+    //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
+    Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
+
+        res.end(JSON.stringify(doc));
+
+    })
+});
 //페이지 삭제
 app.post('/delete_page', function(req, res) {
-    console.log("get");
-    console.log(req.body.page_index);
+    //console.log("get");
+    //console.log(req.body.page_index);
 
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
