@@ -82,7 +82,7 @@ res.end(data); // 로드 html response .
 }
 });
 });
-app.get('/today.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
+app.get('/today.html', function (req, res) { // 웹서ㅇ버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
 fs.readFile('today.html', function (error, data) { // index.html 파일 로드 .
 if (error) {
 console.log(error);
@@ -231,12 +231,19 @@ app.post('/delete_page', function(req, res) {
     console.log(req.body.page_index);
 
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
+
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
 
                         var filePath = doc[0].img_dir;
                         console.log(filePath);
                         console.log(doc[0].img_dir);
+        try{
                         fs.unlinkSync("./public"+filePath);
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
                         doc[0].remove();
                         res.end("asd");
 
@@ -246,7 +253,13 @@ app.post('/delete_page', function(req, res) {
 app.post('/delete_item', function(req, res) {
     Item_data.find({item_index:req.body.item_index}).exec(function (err,doc){
                         var filePath = doc[0].img_dir ;
-                        fs.unlinkSync("./public"+filePath);
+        try {
+            fs.unlinkSync("./public" + filePath);
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
                         doc[0].remove();
                         res.end();
                 })
