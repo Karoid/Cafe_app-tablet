@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  console.log(req.body);
+  //console.log(req.body);
   next();
 });
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
@@ -114,24 +114,8 @@ res.end(data); // 로드 html response .
 });
 });
 app.use(express.static(__dirname + '/public'));
-var storage_main = multer.diskStorage({
-  destination: './public/img/main_img',
-  filename: function (req, file, cb) {
-       cb(null, Date.now() + path.extname(file.originalname))
-  }
-})
-
-var upload_main = multer({ storage: storage_main })
-
-app.use(express.static(__dirname + '/public'));
-var storage_today = multer.diskStorage({
-  destination: './public/img/item_img',
-  filename: function (req, file, cb) {
-       cb(null, Date.now() + path.extname(file.originalname))
-  }
-})
-
-var upload_today = multer({ storage: storage_today })
+var upload_main = multer({ dest: './public/img/main_img/' });
+var upload_today = multer({ dest: './public/img/item_img/' });
 /* Ajax call */
 //크로스 오리진 문제 해결
 app.use(function(req, res, next) {
@@ -161,20 +145,22 @@ app.use(function(req, res, next) {
     }
 });
 //페이지 생성
-app.post('/make_page', upload_main.single('file'), function(req,res){
-      //console.log(req.body); //form fields
+app.post('/make_page', upload_main.single('uploadFile'), function(req,res,next){
+    //console.log(req.body); //form fields
       //console.log(req.file); //form files
       //path.extname(req.file)
       var testable,todayable,bestable;
-      if(req.body.testable=="true")
-        testable = true;
+      if(req.body.testable=="on") {
+          testable = true;
+          //console.log("true");
+      }
       else
         testable = false;
-      if(req.body.todayable=="true")
+      if(req.body.todayable=="on")
         todayable = true;
       else
         todayable = false;
-      if(req.body.bestable=="true")
+      if(req.body.bestable=="on")
         bestable = true;
       else
         bestable = false;
@@ -197,15 +183,17 @@ app.post('/make_page', upload_main.single('file'), function(req,res){
              conn.collection('Page_data').insert({page_index:count,page_info:req.body.page_info,item_name:req.body.item_name,img_dir:req.file.path.split('public')[1],testable:testable,todayable:todayable,bestable:bestable});
       conn.collection('page_count').update({value:count},{value:count+1});
       }
-      catch(err){}
-      res.end("done");
+      catch(err){
+          console.log(err);
+      }
+          res.redirect("../admin.html#/page");
       })
 
 
 
 });
 
-app.post('/make_item', upload_today.single('file'), function(req,res){
+app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
       //console.log(req);
       //console.log(req.body);
       var count;
@@ -221,8 +209,8 @@ app.post('/make_item', upload_today.single('file'), function(req,res){
         console.log(err)
       }
       })
-      res.end("good");
-      //res.redirect("../admin.html#/item");
+      //res.end("good");
+      res.redirect("../admin.html#/item");
 });
 
 //페이지 삭제
