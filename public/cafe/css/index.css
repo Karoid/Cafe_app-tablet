@@ -52,14 +52,17 @@ div#top a:last-of-type img
 }
 div#top h1{
     color: white;
-    font-size:8vh;
-    margin: 7vh 10vh 4vh 20vh;
+    font-size:7vh;
     display:inline-block;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0 ;
+    padding-top: 7vh;
 }
 div#name {
     display: inline-block;
     float: left;
-    width: 47.5%;
+    width: 50%;
     height: 100%;
 }
 div#imgs {
@@ -72,6 +75,6 @@ div#imgs {
 div#top img{
     padding: 2vh 4vh 0vh 2vh;
     margin-left: 2vh;
-    width: 7vh;
-    height: 9vh;
+    width: 3vw;
+    height: 7vh;
 }

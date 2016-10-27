@@ -66,7 +66,7 @@ app.get('/',function(req,res){
   res.end('<html>'+
       '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head>'+
       '<body>'+
-      '<a href="/cafe/index">카페 사이트</a><br><a href="/index.html">테블릿 사이트</a><br><a href="/user">로그인 사이트</a>'+
+      '<a href="/cafe/index">카페 사이트</a><br><a href="/index.html">테블릿 사이트</a><br><a href="/user">로그인 사이트</a><br><a href="/admin.html">어드민 사이트</a>'+
       '</body>'+
       '</html>'
     )
