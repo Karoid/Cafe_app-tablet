@@ -71,6 +71,3 @@ $(document).ready(function(){
     location.reload();
   })
 })
-function empty_form(){
-  $('input').val("")
-}

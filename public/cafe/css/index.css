@@ -1,8 +1,12 @@
-/*body{
-    margin:0;
-    overflow: hidden;
-    width: 100%;
-}*/
+@font-face {
+  font-family: pencilsketch;
+  src: url(/cafe/fonts/210pencilsketchR.ttf);
+}
+@font-face{
+  font-family: pencilsketch;
+  src: url(/cafe/fonts/210pencilsketchR.eot);
+  src:local(※), url(/cafe/fonts/210pencilsketchR.woff) format(‘woff’)
+}
 body{
     margin:0 auto;
     overflow: hidden;
@@ -10,14 +14,18 @@ body{
 iframe{
   border:0;
 }
+.cafe_title{
+   text-align:center;
+   font-family:pencilsketch;
+}
 div.container{
   padding:0;
   margin:0;
-  width:100%
+  width:100%;
 }
 div.background{
   width:100%;
-  height:100vh
+  height:100vh;
 }
 div.main {
     color: black;
@@ -42,7 +50,7 @@ div.header {
 }
 div.header h1{
       font-size:8vh;
-      margin: 6vh 0;
+      margin: 4vh 0;
       color:white;
 }
 .navbar{
@@ -52,7 +60,7 @@ div.header h1{
 .navbar img
 {
     padding: 0;
-    border-right: 3px solid black;
+    border-right: 3px solid white;
 }
 .navbar a:last-of-type img
 {
@@ -60,7 +68,7 @@ div.header h1{
     margin-right: 0vh;
 }
 .navbar img{
-    padding: 3vh;
+    padding: 1.5vh;
     margin-bottom: 0vh;
     width: 11vh;
 }
@@ -75,7 +83,7 @@ div#bot {
 div#name ,#non-main {
     display: inline-block;
     float: left;
-    width: 50%;
+    width: 47.5%;
     height: 100%;
 }
 div#top img{
@@ -84,7 +92,12 @@ div#top img{
     width: 7vh;
     height: 9vh;
 }
-
+div.wood{
+    width: 100%;
+    height: 3vh;
+    background-image: url("../img/나무사진.jpg");
+    background-size: 100% 100%;
+}
 @media screen and (max-aspect-ratio: 1/1){
   div.main {
       color: black;
@@ -98,13 +111,13 @@ div#top img{
   }
   div.header h1{
         margin: 6vw 0 3vw;
-        font-size:12vw;
+        font-size:15vw;
   }
   .navbar{
     margin:4.5vw 0 6vw 0;
   }
   .navbar img{
-      padding: 3vw;
+      padding: 1.5vw;
       width: 16.5vw;
   }
   div#top img{
