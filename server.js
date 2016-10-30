@@ -38,6 +38,7 @@ var Page_data = require('./models/page_data');
 var Item_data = require('./models/item_data');
 var Page_count = require('./models/page_count');
 var Item_count = require('./models/item_count');
+var Item_count = require('./models/order_data');
 var multer = require('multer');
 var path = require('path');
 app.use(bodyParser.json());
@@ -336,6 +337,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
                 item_price: req.body.item_price,
                 img_dir: req.file.path.split('public')[1],
                 like: req.body.like,
+                order_count: 0,
                 item_discount: "False"
             });
             conn.collection('item_count').update({item_count: count}, {item_count: count + 1});
