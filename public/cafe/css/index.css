@@ -1,15 +1,17 @@
-@font-face {
-  font-family: pencilsketch;
-  src: url(/cafe/fonts/210pencilsketchR.ttf);
-}
 @font-face{
   font-family: pencilsketch;
   src: url(/cafe/fonts/210pencilsketchR.eot);
   src:local(※), url(/cafe/fonts/210pencilsketchR.woff) format(‘woff’)
 }
+@font-face {
+  font-family: pencilsketch;
+  src: url(/cafe/fonts/210pencilsketchR.ttf);
+}
 body{
     margin:0 auto;
     overflow: hidden;
+    font-family:'Malgun Gothic';
+    font-size:16px;
 }
 iframe{
   border:0;
@@ -101,7 +103,7 @@ div.wood{
 @media screen and (max-aspect-ratio: 1/1){
   div.main {
       color: black;
-      height:55vh;
+      height:250px;
   }
   div.main.expand{
     height: calc(100vh - 53vw);

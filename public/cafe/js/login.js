@@ -70,4 +70,13 @@ $(document).ready(function(){
     })
     location.reload();
   })
+  /*모바일 UX*/
+  $('.nonuserlogin-change').click(function() {
+    $('.userbox').addClass('inactive')
+    $('.nonuserbox').addClass('active')
+  });
+  $('.userlogin-change').click(function() {
+    $('.userbox').removeClass('inactive')
+    $('.nonuserbox').removeClass('active')
+  });
 })
