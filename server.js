@@ -421,8 +421,12 @@ app.post('/liked', function (req, res) {
 //페이지 받아오기
 app.post('/get_page_data', function (req, res) {
     function find(i, documents, cb) {
-        Item_data.find({item_name: documents[i].item_name}).exec(function (err, asd) {
-            documents[i]["like"] = asd[0].like;
+        Item_data.find({item_name: documents[i].item_name}).exec(function (err, doc) {
+            console.log(doc);
+            try {
+                documents[i]["like"] = doc[0].like;
+            } catch (e) {
+            }
             if (i == documents.length - 1) cb();
 
 
