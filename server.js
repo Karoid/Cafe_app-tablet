@@ -304,6 +304,7 @@ async.series([
 
 }
 )});
+
 app.post('/get_testable_page_data', function(req, res) {
     Page_data.find({testable:"true"}).lean().exec(function (err, documents){
       //console.log(documents);
@@ -339,7 +340,18 @@ Item_data.find().lean().exec(function (err,documents){
                 return res.end(JSON.stringify(documents));
         })
 });
-
+app.post('/get_face_page_data', function(req,res){
+  var itemlist = [];
+  Page_data.find({bestable:"true"}).lean().sort('like').exec(function (err, documents) {
+      itemlist.push(documents[0].item_name);
+  })
+  Page_data.find({todayable:"true"}).lean().exec((function(err, documents) {
+      itemlist.push(documents[0].item_name);
+  }))
+  Item_data.find({item_name:{$in:itemlist}}).lean().exec(function(err, documents) {
+      return res.end(JSON.stringify(documents));
+  })
+})
 //제품 목록 like 순으로 소트해서 받아오기 이미지 링크 넣어줘야함
 app.post('/get_item_data_sorted_by_liked', function(req, res) {
 Page_data.find({bestable:"true"}).lean().exec(function (err, documents) {
