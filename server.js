@@ -12,7 +12,7 @@ if (os.type() == "Linux") {
     mongoose.connect('mongodb://localhost:27017/test',function(err){
         mongoose.Promise = global.Promise;
         if (err){
-            console.log("connection failed")
+            console.log("connection failed");
             console.log(os.hostname());
             console.log(os.type());
             console.log(os.platform());
@@ -39,7 +39,7 @@ var Item_data = require('./models/item_data');
 var Page_count = require('./models/page_count');
 var Item_count = require('./models/item_count');
 var multer = require('multer');
-var path = require('path')
+var path = require('path');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
@@ -69,7 +69,7 @@ app.get('/',function(req,res){
         '</body>'+
         '</html>'
     )
-})
+});
 //테블릿 라우팅
 app.get('/index.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
     fs.readFile('index.html', function (error, data) { // index.html 파일 로드 .
@@ -118,9 +118,9 @@ var storage_main = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname))
     }
-})
+});
 
-var upload_main = multer({ storage: storage_main })
+var upload_main = multer({ storage: storage_main });
 
 app.use(express.static(__dirname + '/public'));
 var storage_today = multer.diskStorage({
@@ -128,9 +128,9 @@ var storage_today = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname))
     }
-})
+});
 
-var upload_today = multer({ storage: storage_today })
+var upload_today = multer({ storage: storage_today });
 /* Ajax call */
 //크로스 오리진 문제 해결
 app.use(function(req, res, next) {
@@ -161,8 +161,8 @@ app.use(function(req, res, next) {
 });
 //페이지 생성
 app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
-    console.log(req.body); //form fields
-    console.log(req.file); //form files
+    //console.log(req.body); //form fields
+    //console.log(req.file); //form files
     //path.extname(req.file)
     var testable,todayable,bestable;
     if(req.body.testable=="true" || req.body.testable=="on")
@@ -186,7 +186,7 @@ app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
                 doc[i].save();
             }
         }
-    })
+    });
     var count;
     Page_count.find().lean().exec(function (err,doc){
         //console.log(doc[0].value)
@@ -197,13 +197,78 @@ app.post('/make_page', upload_main.single('uploadFile'), function(req,res){
             conn.collection('page_count').update({value:count},{value:count+1});
         }
         catch(err){}
-        res.end("done");
+        //res.end("done");
+        res.redirect("../admin.html#/page");
     })
 
 
 
 });
+app.post('/edit_page', upload_main.single('uploadFile'), function(req,res){
+    //console.log(req.body); //form fields
+    //console.log(req.file); //form files
+    //path.extname(req.file)
+    var testable,todayable,bestable;
+    if(req.body.testable=="true" || req.body.testable=="on")
+        testable = true;
+    else
+        testable = false;
+    if(req.body.todayable=="true" || req.body.todayable=="on")
+        todayable = true;
+    else
+        todayable = false;
+    if(req.body.bestable=="true" || req.body.bestable=="on")
+        bestable = true;
+    else
+        bestable = false;
+    Page_data.find({todayable:"true"}).exec(function (err,doc){
+        if(todayable==true)
+        {
+            for(var i=0;i<doc.length;i++){
+                //console.log(doc[i]);
+                doc[i].todayable="false";
+                doc[i].save();
+            }
+        }
+    });
+    var dir;
+    if(req.file!=null)
+    { //이미지 새로 업로드 했을때임.
+        console.log("이미지"+req.file);
+        Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
+            var filePath = doc[0].img_dir;
+            console.log(doc[0].img_dir);
+            fs.unlinkSync("./public"+filePath);
+            dir=req.file.path.split('public')[1];
+            console.log(dir);
+            return edit();
+        });
+    }
+    else {
+        Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
+            dir = doc[0].img_dir;
+            //console.log(doc[0].img_dir);
+            return edit();
+        });
+    }
+    function edit() {
+        //console.log(req.body.page_index);
+        Page_data.update(
+            {page_index:req.body.page_index},
+            {$set:{page_info:req.body.page_info,
+                item_name:req.body.item_name,
+                img_dir:dir,
+                testable:testable,
+                todayable:todayable,
+                bestable:bestable}},
+            function(err, numberAffected, rawResponse) {
+                //console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
+                res.redirect("../admin.html#/page");
+            })
+    }
 
+
+});
 app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
     //console.log(req);
     //console.log(req.body);
@@ -219,9 +284,9 @@ app.post('/make_item', upload_today.single('uploadFile'), function(req,res){
         catch(err){
             console.log(err)
         }
-    })
-    res.end("good");
-    //res.redirect("../admin.html#/item");
+    });
+    //res.end("good");
+    res.redirect("../admin.html#/item");
 });
 
 app.post('/get_page_data_by_page_index', function(req, res) { //페이지 인덱스로 페이지 데이터 검색하기
@@ -230,7 +295,7 @@ app.post('/get_page_data_by_page_index', function(req, res) { //페이지 인덱
 
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index:req.body.page_index}).exec(function (err,doc){
-
+        //console.log(doc);
         res.end(JSON.stringify(doc));
 
     })
@@ -246,7 +311,8 @@ app.post('/delete_page', function(req, res) {
         var filePath = doc[0].img_dir;
         console.log(filePath);
         console.log(doc[0].img_dir);
-        fs.unlinkSync("./public"+filePath);
+        try{fs.unlinkSync("./public"+filePath);}
+        catch(err){}
         doc[0].remove();
         res.end("asd");
 
@@ -264,7 +330,7 @@ app.post('/delete_item', function(req, res) {
 
 //좋아요 기능
 app.post('/liked', function(req, res) {
-    console.log("liked 받음")
+    console.log("liked 받음");
     Item_data.find({item_name:req.body.asd}).exec(function (err,doc){
         try
         {
@@ -380,7 +446,7 @@ app.post('/get_face_page_data', function(req,res){
         }
     }));
 
-})
+});
 //제품 목록 like 순으로 소트해서 받아오기 이미지 링크 넣어줘야함
 app.post('/get_item_data_sorted_by_liked', function(req, res) {
     Page_data.find({bestable:"true"}).lean().exec(function (err, documents) {
@@ -390,7 +456,7 @@ app.post('/get_item_data_sorted_by_liked', function(req, res) {
         {
             //console.log(doc);
             itemlist.push(doc.item_name);
-        })
+        });
         //console.log(itemlist);
 
         Item_data.find({item_name: { $in: itemlist}}).sort('-like').lean().exec(function (err, docs)

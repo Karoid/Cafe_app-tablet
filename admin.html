@@ -60,7 +60,7 @@ app.controller('itemCtrl',function ($scope, $http) {
               $scope.get_page_data();
           })};
       $scope.edit_page = function(index) {
-          console.log($scope.pages[index].page_index)
+          //console.log($scope.pages[index].page_index)
           $state.go("edit_page", { id: $scope.pages[index].page_index });
       };
 
@@ -83,15 +83,43 @@ app.controller('itemCtrl',function ($scope, $http) {
          $scope.get_item_data();
      })
      app.controller('editCtrl', function ($scope, $http, $stateParams) {
+         var preset;
+         $scope.get_item_data = function() {
+             $http.post('/get_item_data').
+             success(function(data) {
+                 $scope.items=data;
+                 try{
+                 return $scope.preset();
+                 }
+                 catch(err)
+                 {}
+             })
+         };
          $scope.get_page_data = function() {
              //console.log($stateParams.id);
              $http.post('/get_page_data_by_page_index',({page_index:$stateParams.id})).
              success(function(data) {
                  $scope.page=data[0];
-                 console.log(data[0]);
+                 preset = data[0];
+                 return $scope.preset();
+                 //$scope.selected = data[0].item_name;
+                 //$scope.selected = data[0];
+
              });
          }
+         $scope.preset = function() {
+             //console.log($scope.items.length)
+             for(var i=0;i<$scope.items.length;i++)
+             {
+                 if($scope.items[i].item_name==$scope.page.item_name)
+                     $scope.selected = $scope.items[i];
+             }
+             $scope.page_index=preset.page_index;
+         };
+         $scope.get_item_data();
          $scope.get_page_data();
+
+
      })
 app.config([
 '$stateProvider',
@@ -245,14 +273,20 @@ function($stateProvider, $urlRouterProvider) {
   </div>
 </script>
   <script type="text/ng-template" id="/edit_page.html">
-      <h2>{{page.page_info}}</h2>
-      제품명 : {{page.item_name}}<br>
-      좋아요 수 : {{page.like}}<br>
-      이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
-      메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
-      오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
-      베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
-      <button ng-click="get_page_data()">페이지 수정</button>
+      <br><br><br>
+      <form action ="/edit_page", method="post" enctype="multipart/form-data" name="edit_page">
+          <!--제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}" ng-model="selected">{{item.item_name}}</option></select><br>-->
+          제품 이름 <select name="item_name" ng-options="item as item.item_name for item in items track by item.item_name" value=item.item_name ng-model="selected"></select><br>
+          <input type="text" name="page_info" value="{{page.page_info}}"><br>
+          <input type="hidden" name="page_index" value="{{page_index}}"><br>
+          <img height="250" width="250" src="{{page.img_dir}}"><br>
+          이미지 수정 <input type="file" name="uploadFile" /><br>
+          메인 페이지 <input type="checkbox" name="testable" ng-checked=page.testable>
+          오늘의 메뉴 <input type="checkbox" name="todayable" ng-checked=page.todayble>
+          베스트 메뉴 <input type="checkbox" name="bestable" ng-checked=page.bestable><br>
+          <input type=submit text="수정하기">
+      </form>
+
   </script>
 </body>
 </html>
