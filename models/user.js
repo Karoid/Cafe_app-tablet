@@ -13,6 +13,7 @@ var userSchema = new mongoose.Schema({
     loginAttempts: {type: Number, required: true, default: 0},
     lockUntil: {type: Number}
     //마지막 접속날짜
+    //동의여부, 번호, 
 });
 
 userSchema.virtual('isLocked').get(function () {
