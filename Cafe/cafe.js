@@ -99,6 +99,15 @@ router.get('/order_page.html', function(req, res) {
     }
   })
 });
+router.get('/sign_up.html', function(req, res) {
+  fs.readFile('./Cafe/sign_up.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data))
+    }
+  })
+});
 router.get('/QnA.html/:page?', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {

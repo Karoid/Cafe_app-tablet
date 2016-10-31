@@ -1,22 +1,57 @@
 <html>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="/cafe/libs/jquery-1.11.0.min.js"></script>
+<script src="/cafe/js/login.js" type="text/javascript" charset="utf-8"></script>
+<script src="/cafe/js/sign_up.js" type="text/javascript" charset="utf-8"></script>
+<link rel = "stylesheet" type = "text/css" href = "/cafe/css/sign_up.css">
 <head>
-<title>메인페이지</title>
+  <title>메인페이지</title>
 </head>
 <body>
 <div id="sign_in">
-<form>
-    <h1>회원가입</h1>
-    *이름<input required name="name" type="text"><br>
-    *아이디<input required type="text" name="ID"><br>
-    *패스워드<input required type="password" name="PASS"><br>
-    *전화번호<input required type="tel" name="TEL"><br>
-    주소번호<input type="text" name="address_1"><br>
-    주소번호<input type="text" name="address_2"><br>
-    *표시는 필수 입력입니다.<br>
-    <p>asddaddsaddssdaddaasddsa</p>개인정보 이용동의<input type="checkbox" name="check">
-    <input type="submit"> <!-- 성공적으로 가입하면 메인페이지로 돌아가고 아니면 남아있기 -->
-</form>
+  <div class="userbox">
+    <form>
+      <h1>회원가입</h1>
+      <div class="input">
+        <div class="input-label">
+          *이름<br>
+          *전화번호<br>
+          *패스워드<br>
+          주소번호<br>
+        </div>
+
+        <div class="input-box">
+          <input required name="name" type="text" id="name"><br>
+          <input required type="tel" name="id" id="tel"><br>
+          <input required type="password" name="PASS" id="password"><br>
+          <input type="text" name="address" id="address"><br>
+        </div>
+        <div class="input-check">
+          <input type="checkbox" name="name_check" id="name_check">
+          <div for='name_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="tel_check" id="tel_check">
+          <div for='tel_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="pass_check" id="pass_check">
+          <div for='pass_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="address_check" id="address_check">
+          <div for='address_check' class="check-box_auth">
+          </div>
+        </div>
+      </div>
+      *표시는 필수 입력입니다.<br>
+      <iframe src="/cafe/agreement.txt" width="" height=""></iframe><br>
+      <input type="checkbox" name="check" id="check">
+      <label for='check' class="check-box">
+      </label>
+      <label for='check' class="right-border">
+        위 약관에 동의합니다
+      </label>
+      <input type="submit"> <!-- 성공적으로 가입하면 메인페이지로 돌아가고 아니면 남아있기 -->
+    </form>
+  </div>
 </div>
 </body>
 </html>
