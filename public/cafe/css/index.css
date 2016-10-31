@@ -1,16 +1,9 @@
-@font-face{
-  font-family: pencilsketch;
-  src: url(/cafe/fonts/210pencilsketchR.eot);
-  src:local(※), url(/cafe/fonts/210pencilsketchR.woff) format(‘woff’)
-}
-@font-face {
-  font-family: pencilsketch;
-  src: url(/cafe/fonts/210pencilsketchR.ttf);
-}
 body{
     margin:0 auto;
     overflow: hidden;
-    height: 100vh;
+    position: fixed;
+    width:100vw;
+    height:100vh;
     font-family:'Malgun Gothic';
     font-size:16px;
 }
@@ -18,8 +11,12 @@ iframe{
   border:0;
 }
 .cafe_title{
-   text-align:center;
-   font-family:pencilsketch;
+  margin:0 auto;
+ display: block;
+ max-height:17vh;
+ width: auto;
+ height: auto;
+ cursor: pointer;
 }
 div.container{
   padding:0;
@@ -50,11 +47,6 @@ div.header {
   background-size: 100% 100%;
   overflow: hidden;
   height:20vh;
-}
-div.header h1{
-      font-size:8vh;
-      margin: 4vh 0;
-      color:white;
 }
 .navbar{
   margin:3vh 0 4vh 0;
@@ -112,9 +104,8 @@ div.wood{
   div.header{
     height: 53vw;
   }
-  div.header h1{
-        margin: 6vw 0 3vw;
-        font-size:15vw;
+  div.header img{
+        max-height:25vw;
   }
   .navbar{
     margin:4.5vw 0 6vw 0;
