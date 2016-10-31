@@ -1,221 +1,335 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#7278e5">
-<meta name="theme-color" content="#7278e5">
-<link rel="stylesheet" href="/css/admin.css" type="text/css" />
-  <title>Admin</title>
-  <script src="/js/angular.min.js"></script>
-  <script src="/js/angular-ui-router.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#7278e5">
+    <meta name="theme-color" content="#7278e5">
+    <link rel="stylesheet" href="/css/admin.css" type="text/css"/>
+    <title>Admin</title>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/angular-ui-router.js"></script>
     <script>
-     var app = angular.module('flapperNews', ['ui.router'])
-app.controller('MainCtrl',
-  function($scope) {
-    $scope.test="관리자 페이지";
-  });
-app.controller('itemCtrl',function ($scope, $http) {
-   
-           $scope.get_item_data = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
-            $scope.items=data;
-        })
-    };
-    $scope.delete_item = function(index) {
-        $http.post('/delete_item',({item_index:$scope.items[index].item_index})).
-        success(function(data) {
+        var app = angular.module('flapperNews', ['ui.router'])
+        app.controller('MainCtrl',
+                function ($scope) {
+                    $scope.test = "관리자 페이지";
+                });
+        app.controller('itemCtrl', function ($scope, $http, $state) {
+
+            $scope.get_item_data = function () {
+                $http.post('/get_item_data').success(function (data) {
+                    $scope.items = data;
+                })
+            };
+            $scope.test = function () {
+                console.log("test");
+                $http.post('/get_face_page_data').success(function (data) {
+                    //console.log(data);
+                })
+            };
+            $scope.delete_item = function (index) {
+                $http.post('/delete_item', ({item_index: $scope.items[index].item_index})).success(function (data) {
+                    $scope.get_item_data();
+                })
+            }
+            $scope.edit_item = function (index) {
+//                console.log($scope.items[index].item_index)
+                $state.go("edit_item", {id: $scope.items[index].item_index});
+            };
             $scope.get_item_data();
-        })}
-    $scope.get_item_data();
-  });
+        });
 
 
+        app.controller('pageCtrl', function ($scope, $http, $state) {
+            $scope.get_item_data = function () {
+                $http.post('/get_item_data').success(function (data) {
+
+                    $scope.items = data;
+                })
+            }
+            $scope.get_page_data = function () {
+                $http.post('/get_page_data').success(function (data) {
+                    $scope.pages = data;
+                })
+            }
+            $scope.delete_page = function (index) {
+                $http.post('/delete_page', ({page_index: $scope.pages[index].page_index})).success(function (data) {
+                    $scope.get_page_data();
+                })
+            };
+
+            $scope.edit_page = function (index) {
+                //console.log($scope.pages[index].page_index);
+                $state.go("edit_page", {id: $scope.pages[index].page_index});
+            };
+
+            $scope.get_page_data();
+            $scope.get_item_data();
+        });
+
+        app.controller('bestCtrl', function ($scope, $http) {
+
+            $scope.get_item_data = function () {
+                $http.post('/get_item_data').success(function (data) {
+                    $scope.items = data;
+                })
+            }
+            $scope.delete_item = function () {
+                $http.post('/get_item_data').success(function (data) {
+                    $scope.items = data;
+                })
+            }
+            $scope.get_item_data();
+        })
+        app.controller('editCtrl', function ($scope, $http, $stateParams) {
+            var preset;
+            $scope.get_item_data = function () {
+                $http.post('/get_item_data').success(function (data) {
+                    $scope.items = data;
+                    try {
+                        return $scope.preset();
+                    }
+                    catch (err) {
+                    }
+                })
+            };
+            $scope.get_page_data = function () {
+                //console.log($stateParams.id);
+                $http.post('/get_page_data_by_page_index', ({page_index: $stateParams.id})).success(function (data) {
+                    $scope.page = data[0];
+                    preset = data[0];
+                    return $scope.preset();
+                    //$scope.selected = data[0].item_name;
+                    //$scope.selected = data[0];
+
+                });
+            }
+            $scope.preset = function () {
+                //console.log($scope.items.length)
+                for (var i = 0; i < $scope.items.length; i++) {
+                    if ($scope.items[i].item_name == $scope.page.item_name)
+                        $scope.selected = $scope.items[i];
+                }
+                $scope.page_index = preset.page_index;
+            };
+            $scope.get_item_data();
+            $scope.get_page_data();
 
 
-  app.controller('pageCtrl', function ($scope, $http) {
-    $scope.get_item_data = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
+        })
+        app.controller('editCtrl2', function ($scope, $http, $stateParams) {
+            var preset;
+            $scope.get_item_data = function () {
+                $http.post('/get_item_data_by_item_index', ({item_index: $stateParams.id})).success(function (data) {
+                    $scope.item = data[0];
+                    $scope.item_index = data[0].item_index;
+                })
+            };
 
-            $scope.items=data;
-        })}
-    $scope.get_page_data = function() {
-    $http.post('/get_page_data').
-    success(function(data) {
-        $scope.pages=data;
-    })
-    }
-    $scope.delete_page = function(index) {
-        $http.post('/delete_page',({page_index:$scope.pages[index].page_index})).
-        success(function(data) {
-          $scope.get_page_data();
-        })};
-      
-    $scope.get_page_data();
-  $scope.get_item_data();
-  });
-  
-  app.controller('bestCtrl', function ($scope, $http) {
-    
-        $scope.get_item_data = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
-            $scope.items=data;
-        })}
-        $scope.delete_item = function() {
-        $http.post('/get_item_data').
-        success(function(data) {
-            $scope.items=data;
-        })}
-    $scope.get_item_data();
-  })
-  
-app.config([
-'$stateProvider',
-'$urlRouterProvider',
-function($stateProvider, $urlRouterProvider) {
-  $stateProvider
-    .state('home', {
-      url: '/home',
-      templateUrl: '/home.html'
-      ,controller: 'MainCtrl'
-    });
-    
-    $stateProvider
-    .state('item', {
-      url: '/item',
-      templateUrl: '/item.html'
-      ,controller: 'itemCtrl'
-    });
-    $stateProvider
-    .state('page', {
-      url: '/page',
-      templateUrl: '/page.html'
-      ,controller: 'pageCtrl'
-    });
-    $stateProvider
-    .state('best', {
-      url: '/best',
-      templateUrl: '/best.html'
-      ,controller: 'bestCtrl'
-    });
-  
-  $urlRouterProvider.otherwise('home');
-}]);
+            $scope.get_item_data();
+
+
+        })
+        app.config([
+            '$stateProvider',
+            '$urlRouterProvider',
+            function ($stateProvider, $urlRouterProvider) {
+                $stateProvider
+                        .state('home', {
+                            url: '/home',
+                            templateUrl: '/home.html'
+                            , controller: 'MainCtrl'
+                        });
+
+
+                $stateProvider
+                        .state('item', {
+                            url: '/item',
+                            templateUrl: '/item.html'
+                            , controller: 'itemCtrl'
+                        });
+                $stateProvider
+                        .state('page', {
+                            url: '/page',
+                            templateUrl: '/page.html'
+                            , controller: 'pageCtrl'
+                        });
+                $stateProvider
+                        .state('best', {
+                            url: '/best',
+                            templateUrl: '/best.html'
+                            , controller: 'bestCtrl'
+                        });
+                $stateProvider
+                        .state('edit_page', {
+                            url: '/edit_page/:id',
+                            templateUrl: '/edit_page.html'
+                            , controller: 'editCtrl'
+                        });
+                $stateProvider
+                        .state('edit_item', {
+                            url: '/edit_item/:id',
+                            templateUrl: '/edit_item.html'
+                            , controller: 'editCtrl2'
+                        });
+
+                $urlRouterProvider.otherwise('home');
+            }]);
     </script>
-<input id="test" type="checkbox" />
-<label for="test">
-    <svg class="burger" width="86" height="60" viewbox="0 0 150 150">
-        <g stroke-width="12">   
-            <line x1="6" y1="6" x2="80" y2="6"></line>
-            <line x1="6" y1="28" x2="80" y2="28"></line>
-            <line x1="6" y1="50" x2="80" y2="50"> </line>
-        </g>
-    </svg>
-    <svg class="close" width="86" height="60" viewbox="0 0 150 150">
-        <g stroke-width="12">   
-            <line x1="42" y1="6" x2="42" y2="80"></line>
-            <line x1="6" y1="42" x2="80" y2="42"></line>
-        </g>
-    </svg>
-</label>
-<div class="menu">
-    <div><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
-    <div><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
-    <div><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
-    <div><a href="#/best" onclick="document.getElementById('test').checked = false">Best Menu 관리</a></div>
-</div>
+    <input id="test" type="checkbox"/>
+    <label for="test">
+        <svg class="burger" width="86" height="60" viewbox="0 0 150 150">
+            <g stroke-width="12">
+                <line x1="6" y1="6" x2="80" y2="6"></line>
+                <line x1="6" y1="28" x2="80" y2="28"></line>
+                <line x1="6" y1="50" x2="80" y2="50"></line>
+            </g>
+        </svg>
+        <svg class="close" width="86" height="60" viewbox="0 0 150 150">
+            <g stroke-width="12">
+                <line x1="42" y1="6" x2="42" y2="80"></line>
+                <line x1="6" y1="42" x2="80" y2="42"></line>
+            </g>
+        </svg>
+    </label>
+    <div class="menu">
+        <div><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
+        <div><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
+        <div><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
+        <div><a href="#/best" onclick="document.getElementById('test').checked = false">Best Menu 관리</a></div>
+    </div>
 
 
 <body ng-app="flapperNews">
-  <div class="row">
+<div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <ui-view></ui-view>
+        <ui-view></ui-view>
     </div>
-  </div>
-  
-  
+</div>
+
+
 <script type="text/ng-template" id="/home.html">
-<div class="page-header">
-<div class="btn-bg"  style="background:#7278e5;">
-<h1 style="text-align:center;color:white">{{test}}</h1>
-</div>
-  <div class="btn-bg bg-1">
-    <div class="btn btn-1">
-      <a href="#/page"><button>Page 관리</button></a>
+    <div class="page-header">
+        <div class="btn-bg" style="background:#7278e5;">
+            <h1 style="text-align:center;color:white">{{test}}</h1>
+        </div>
+        <div class="btn-bg bg-1">
+            <div class="btn btn-1">
+                <a href="#/page">
+                    <button>Page 관리</button>
+                </a>
+            </div>
+        </div>
+        <div class="btn-bg bg-1" style="background:#78c98d;">
+            <div class="btn btn-1">
+                <a href="#/item">
+                    <button>Item 관리</button>
+                </a>
+            </div>
+        </div>
+        <div class="btn-bg bg-1" style="background:#e5d272;">
+            <div class="btn btn-1">
+                <a href="#/best">
+                    <button>Best Menu 관리</button>
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="btn-bg bg-1" style="background:#78c98d;">
-    <div class="btn btn-1">
-      <a href="#/item"><button>Item 관리</button></a>
-    </div>
-  </div>
-  <div class="btn-bg bg-1" style="background:#e5d272;">
-    <div class="btn btn-1">
-      <a href="#/best"><button>Best Menu 관리</button></a>
-    </div>
-  </div>
-</div>
 </script>
 <script type="text/ng-template" id="/page.html">
-  <div class="page-header">
-  <div class="btn-bg"  style="background:#7278e5;">
-  <h1 style="text-align:center;color:white">Page 관리</h1>
-<form action ="/make_page", method="post" enctype="multipart/form-data" name="make_page">
-    제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}">{{item.item_name}}</option></select><br>
-    페이지 정보 <input type="text" name="page_info" placeholder="제품 홍보"><br>
-    이미지 업로드 <input type="file" name="uploadFile" /><br>
-    메인 페이지 <input type="checkbox" checked name="testable">
-    오늘의 메뉴 <input type="checkbox" checked name="todayable">
-    베스트 메뉴 <input type="checkbox" checked name="bestable"><br>
-        <input type=submit>
-</form>
-  </div>
-    <div ng-repeat="page in pages">
-      <div class="btn-bg bg-1" style="height:380px">
-        <div class="btn btn-1">
-          <h2>{{page.page_info}}</h2>
-					제품명 : {{page.item_name}}<br>
-					좋아요 수 : {{page.like}}<br>
-					이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
-          메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
-          오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
-          베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
-					<button ng-click="delete_page($index)">페이지 삭제</button><br>
+    <div class="page-header">
+        <div class="btn-bg" style="background:#7278e5;">
+            <h1 style="text-align:center;color:white">Page 관리</h1>
+            <form action="/make_page" , method="post" enctype="multipart/form-data" name="make_page">
+                제품 이름 <select name="item_name">
+                <option ng-repeat="item in items" value="{{item.item_name}}">{{item.item_name}}</option>
+            </select><br>
+                페이지 정보 <input type="text" name="page_info" placeholder="제품 홍보"><br>
+                이미지 업로드 <input type="file" name="uploadFile"/><br>
+                메인 페이지 <input type="checkbox" checked name="testable">
+                오늘의 메뉴 <input type="checkbox" checked name="todayable">
+                베스트 메뉴 <input type="checkbox" checked name="bestable"><br>
+                <input type=submit>
+            </form>
         </div>
-      </div>
-  </div>
-  </div>
+        <div ng-repeat="page in pages">
+            <div class="btn-bg bg-1" style="height:380px">
+                <div class="btn btn-1">
+                    <h2>{{page.page_info}}</h2>
+                    제품명 : {{page.item_name}}<br>
+                    좋아요 수 : {{page.like}}<br>
+                    이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
+                    메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
+                    오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
+                    베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
+                    <button ng-click="delete_page($index)">페이지 삭제</button>
+                    <button ng-click="edit_page($index)">페이지 수정</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 <script type="text/ng-template" id="/item.html">
-  <div class="page-header">
-    <div class="btn-bg"  style="background:#7278e5;">
-      <h1 style="text-align:center;color:white">Item 관리</h1>
-        <form action ="/make_item", method="post" enctype="multipart/form-data" name="make_item">
-    제품 이름 <input type="text" name="item_name"><br>
-    제품 가격 <input type="number" name="item_price"><br>
-    좋아요 수 <input type="number" name="like"><br>
-    이미지 업로드 <input type="file" name="uploadFile" />
-    <br>
-        <input type=submit>
-</form>
-      </div>
-    <div ng-repeat="item in items">
-      <div class="btn-bg bg-1" style="height:450px">
-        <div class="btn btn-1">
-					<h2>제품명 : {{item.item_name}}</h2>
-					가격 : {{item.item_price}}<br>
-					좋아요 : {{item.like}}<br>
-					할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br>
-					베스트 메뉴 : <input type="checkbox" checked="{{item.bestable}}"><br>
-          이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
-					<button ng-click="delete_item($index)">제품 삭제</button><br>
+    <div class="page-header">
+        <div class="btn-bg" style="background:#7278e5;">
+            <h1 style="text-align:center;color:white">Item 관리</h1>
+            <form action="/make_item" , method="post" enctype="multipart/form-data" name="make_item">
+                제품 이름 <input type="text" name="item_name"><br>
+                제품 가격 <input type="number" name="item_price"><br>
+                좋아요 수 <input type="number" name="like"><br>
+                이미지 업로드 <input type="file" name="uploadFile"/>
+                <br>
+                <input type=submit>
+            </form>
         </div>
-      </div>
-  </div>
-  </div>
+        <div ng-repeat="item in items">
+            <div class="btn-bg bg-1" style="height:450px">
+                <div class="btn btn-1">
+                    <h2>제품명 : {{item.item_name}}</h2>
+                    가격 : {{item.item_price}}<br>
+                    좋아요 : {{item.like}}<br>
+                    할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
+                    이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
+                    <button ng-click="delete_item($index)">제품 삭제</button>
+                    <button ng-click="edit_item($index)">제품 수정</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="/edit_page.html">
+    <br><br><br>
+    <form action="/edit_page" , method="post" enctype="multipart/form-data" name="edit_page">
+        <!--제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}" ng-model="selected">{{item.item_name}}</option></select><br>-->
+        제품 이름 <select name="item_name" ng-options="item as item.item_name for item in items track by item.item_name"
+                      value=item.item_name ng-model="selected"></select><br>
+        <input type="text" name="page_info" value="{{page.page_info}}"><br>
+        <input type="hidden" name="page_index" value="{{page_index}}"><br>
+        <img height="250" width="250" src="{{page.img_dir}}"><br>
+        이미지 수정 <input type="file" name="uploadFile"/><br>
+        메인 페이지 <input type="checkbox" name="testable" ng-checked=page.testable>
+        오늘의 메뉴 <input type="checkbox" name="todayable" ng-checked=page.todayble>
+        베스트 메뉴 <input type="checkbox" name="bestable" ng-checked=page.bestable><br>
+        <input type=submit value="수정하기">
+    </form>
+
+</script>
+<script type="text/ng-template" id="/edit_item.html">
+    <br><br><br><br><br>
+    <form action="/edit_item" , method="post" enctype="multipart/form-data" name="edit_item">
+        제품명<input type="text" name="item_name" value="{{item.item_name}}"><br>
+        가격<input type="text" name="item_price" value="{{item.item_price}}"><br>
+        좋아요 수 <input type="number" name="like" value="{{item.like}}"><br>
+        <input type="hidden" name="item_index" value="{{item_index}}"><br>
+        <img height="250" width="250" src="{{item.img_dir}}"><br>
+        이미지 수정 <input type="file" name="uploadFile"/><br>
+        <input type=submit value="수정하기">
+    </form>
+
 </script>
 </body>
 </html>
