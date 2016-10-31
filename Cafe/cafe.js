@@ -257,7 +257,7 @@ router.post("/sign_up",function(req,res){
     username: req.body.username,
     password: req.body.password
   });
-  // save user to database
+  // save user to database 회원가입 부분 최초저장부분
   return testUser.save(function(err) {
     if (err) {
       console.log(req.body.username+"log on failed");

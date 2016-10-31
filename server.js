@@ -41,8 +41,8 @@ var Item_count = require('./models/item_count');
 var Item_count = require('./models/order_data');
 var multer = require('multer');
 var path = require('path');
-app.use(bodyParser.json());
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
