@@ -99,6 +99,15 @@ router.get('/order_page.html', function(req, res) {
     }
   })
 });
+router.get('/sign_up.html', function(req, res) {
+  fs.readFile('./Cafe/sign_up.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data))
+    }
+  })
+});
 router.get('/QnA.html/:page?', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {
@@ -257,7 +266,7 @@ router.post("/sign_up",function(req,res){
     username: req.body.username,
     password: req.body.password
   });
-  // save user to database
+  // save user to database 회원가입 부분 최초저장부분
   return testUser.save(function(err) {
     if (err) {
       console.log(req.body.username+"log on failed");

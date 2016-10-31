@@ -20,21 +20,7 @@ $(document).ready(function(){
     })
   });
   $("#signup-button").click(function(event){
-    $.ajax({
-      url: serverip+loginLocation+"sign_up",
-      method:"post",
-      data: {'username':$("#username").val(),'password':$("#password").val() },
-      success: function(data){
-        console.log("sign_up server accessed");
-        var login = eval("("+data+")")
-        if (data) {
-          $(".notification").html(login.err)
-        }else {
-          $(".notification").html("sign_up successful")
-          empty_form()
-        }
-      }
-    })
+    window.location = '/cafe/sign_up.html'
   });
   $("#nonuser-button").click(function(event){
     $.ajax({

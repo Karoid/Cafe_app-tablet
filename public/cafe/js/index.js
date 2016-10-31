@@ -5,9 +5,7 @@ $(document).ready(function(){
   })
   var css = setInterval(function(){
     var url = $('#mid_frame').contents().get(0).location.pathname
-    var Regexr = /(order\w+|[Qq]n[Aa]).html(\/\d*)*/g
-    var whether_qna = (url == '/cafe/QnA.html')
-    var whether_order = (url == '/cafe/order_page.html')
+    var Regexr = /(order\w+|[Qq]n[Aa]\w+|sign_up).html(\/\d*)*/g
     var change_boolean = Regexr.test(url)
     if (change_boolean) {
       $('#mid').addClass('expand')

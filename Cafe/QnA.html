@@ -29,7 +29,7 @@
       <td><%=data.docs[i].username%></td>
       <td><%=data.docs[i].content%></td>
       <%if(seen_button[i]){%>
-      <td><a href="Qna_cu/<%=data.docs[i]._id%>">수정</a> <a href="Qna_d/<%=data.docs[i]._id%>">삭제</a></td>
+      <td><a href="/cafe/Qna_cu/<%=data.docs[i]._id%>">수정</a> <a href="/cafe/Qna_d/<%=data.docs[i]._id%>">삭제</a></td>
       <%}%>
     </tr>
     <%}%>
@@ -62,7 +62,7 @@
   </ul>
 </nav>
 </center>
-<a href="QnA_cu">글쓰기</a>
+<a href="/cafe/QnA_cu">글쓰기</a>
 </div>
 </body>
 </html>
