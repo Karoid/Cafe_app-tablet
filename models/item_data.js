@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     item_index: {type: Number},
     item_name: {type: String},
+    item_name_eng: {type: String},
     item_price: {type: Number},
     like: {type: Number},
     order_count: {type: Number},
@@ -10,7 +11,8 @@ var userSchema = new mongoose.Schema({
     img_dir: {type: String},
     created_at: {type: Date}
 });
-userSchema.pre('save', function (next) {
+userSchema.pre('find', function (next) {
+    //console.log("pre save!");
     now = new Date();
     this.updated_at = now;
     if (!this.created_at) {
@@ -21,6 +23,10 @@ userSchema.pre('save', function (next) {
     }
     if (!this.bestable) {
         this.bestable = true;
+    }
+    if (!this.item_name_eng) {
+        //console.log("없다!");
+        this["item_name_eng"] = "??";
     }
     next();
 });

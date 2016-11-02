@@ -341,6 +341,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
             {
                 $set: {
                     item_name: req.body.item_name,
+                    item_name_eng: req.body.item_name_eng,
                     item_price: req.body.item_price,
                     img_dir: dir,
                     like: req.body.like
@@ -366,6 +367,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
             conn.collection('Item_data').insert({
                 item_index: count,
                 item_name: req.body.item_name,
+                item_name_eng: req.body.item_name_eng,
                 item_price: req.body.item_price,
                 img_dir: req.file.path.split('public')[1].replace(/\\/g, "/"),
                 like: req.body.like,
@@ -439,17 +441,17 @@ app.post('/delete_item', function (req, res) {
 
 //좋아요 기능
 app.post('/liked', function (req, res) {
-    console.log("liked 받음");
+    console.log("liked 받음"); //이거 asd좀 바꾸자!!
     Item_data.find({item_name: req.body.asd}).exec(function (err, doc) {
         try {
-            console.log(doc[0].like);
+            //console.log(doc[0].like);
             doc[0].like += 1;
             doc[0].save();
-            console.log(doc[0].like);
+            //console.log(doc[0].like);
             return res.end(doc[0].like + "");
         }
         catch (err) {
-
+            console.log(err);
         }
 
     })
@@ -460,7 +462,7 @@ app.post('/liked', function (req, res) {
 app.post('/get_page_data', function (req, res) {
     function find(i, documents, cb) {
         Item_data.find({item_name: documents[i].item_name}).exec(function (err, doc) {
-            console.log(doc);
+            //console.log(doc);
             try {
                 documents[i]["like"] = doc[0].like;
             } catch (e) {
@@ -532,22 +534,28 @@ app.post('/get_face_page_data', function (req, res) {
     var itemlist = [];
     var itemlist2 = [];
     //console.log("test");
-    Page_data.find({bestable: "true"}).lean().sort("-like").exec((function (err, documents) {
+    Page_data.find({bestable: "true"}).lean().exec((function (err, documents) {
         documents.forEach(function (doc) {
-            //console.log(doc);
+            console.log("-a " + itemlist);
             itemlist.push(doc.item_name);
         });
-        Item_data.find({item_name: {$in: itemlist}}).sort('-like').lean().exec(function (err, docs) {
-            itemlist2.push(docs[0].item_name);
-        })
-        return last();
+        return mid();
     }))
+    function mid() {
+        Item_data.find({item_name: {$in: itemlist}}).sort('-like').lean().exec(function (err, docs) {
+            console.log("-b " + itemlist);
+            itemlist2.push(docs[0].item_name);
+            return last();
+        })
+    }
+
     function last() {
         Page_data.find({todayable: "true"}).lean().exec((function (err, documents) {
             itemlist2.push(documents[0].item_name);
-            //console.log("a" + itemlist);
+            console.log("a " + itemlist);
             Item_data.find({item_name: {$in: itemlist2}}).lean().exec(function (err, documents) {
                 //console.log("b" + documents[0].item_name);
+                console.log("b " + itemlist);
                 return res.end(JSON.stringify(documents));
             })
         }));
@@ -559,19 +567,20 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
         var itemlist = [];
         //console.log(documents);
         documents.forEach(function (doc) {
-            //console.log(doc);
             itemlist.push(doc.item_name);
+            console.log("a");
         });
         //console.log(itemlist);
 
-        Item_data.find({item_name: {$in: itemlist}}).sort('-like').lean().exec(function (err, docs) {
-            var stringArray = []
-                for (var i = 0; i < 3; i++) {
-                    stringArray += JSON.stringify(docs[i]);
+        Item_data.find({item_name: {$in: itemlist}}).lean().exec(function (err, docs) {
 
+            console.log("b ");
+            var stringArray = []
+            for (var i = 0; i < 6; i++) {
+                stringArray += JSON.stringify(docs[i]);
+                //console.log("stringArray:" + i + stringArray);
                 }
-            console.log(itemlist);
-            console.log(stringArray);
+            console.log("b " + itemlist);
             return res.end(JSON.stringify(docs));
             }
         )
