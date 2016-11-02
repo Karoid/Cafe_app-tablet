@@ -335,7 +335,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
                 item_index: count,
                 item_name: req.body.item_name,
                 item_price: req.body.item_price,
-                img_dir: req.file.path.split('public')[1],
+                img_dir: req.file.path.split('public')[1].replace(/\\/g, "/"),
                 like: req.body.like,
                 order_count: 0,
                 item_discount: "False"
@@ -395,7 +395,10 @@ app.post('/delete_page', function (req, res) {
 app.post('/delete_item', function (req, res) {
     Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
         var filePath = doc[0].img_dir;
+        try {
         fs.unlinkSync("./public" + filePath);
+        } catch (e) {}
+
         doc[0].remove();
         res.end();
     })
