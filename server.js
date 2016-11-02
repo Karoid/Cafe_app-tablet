@@ -441,17 +441,17 @@ app.post('/delete_item', function (req, res) {
 
 //좋아요 기능
 app.post('/liked', function (req, res) {
-    console.log("liked 받음");
+    console.log("liked 받음"); //이거 asd좀 바꾸자!!
     Item_data.find({item_name: req.body.asd}).exec(function (err, doc) {
         try {
-            console.log(doc[0].like);
+            //console.log(doc[0].like);
             doc[0].like += 1;
             doc[0].save();
-            console.log(doc[0].like);
+            //console.log(doc[0].like);
             return res.end(doc[0].like + "");
         }
         catch (err) {
-
+            console.log(err);
         }
 
     })
@@ -462,7 +462,7 @@ app.post('/liked', function (req, res) {
 app.post('/get_page_data', function (req, res) {
     function find(i, documents, cb) {
         Item_data.find({item_name: documents[i].item_name}).exec(function (err, doc) {
-            console.log(doc);
+            //console.log(doc);
             try {
                 documents[i]["like"] = doc[0].like;
             } catch (e) {

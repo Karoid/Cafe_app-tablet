@@ -11,7 +11,8 @@ var userSchema = new mongoose.Schema({
     img_dir: {type: String},
     created_at: {type: Date}
 });
-userSchema.pre('save', function (next) {
+userSchema.pre('find', function (next) {
+    //console.log("pre save!");
     now = new Date();
     this.updated_at = now;
     if (!this.created_at) {
@@ -23,11 +24,9 @@ userSchema.pre('save', function (next) {
     if (!this.bestable) {
         this.bestable = true;
     }
-    next();
-});
-userSchema.pre('find', function (next) {
     if (!this.item_name_eng) {
-        this.item_name_eng = "test";
+        //console.log("없다!");
+        this["item_name_eng"] = "??";
     }
     next();
 });

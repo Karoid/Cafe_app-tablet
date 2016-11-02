@@ -11,23 +11,6 @@
     <script src="/js/angular.min.js"></script>
     <script src="/js/angular-ui-router.js"></script>
 
-    <script type="text/javascript">
-        $(function () {
-            var slides = $('#slider div div').length;
-            console.log(slides);
-            var slideWidth = $('#slider').width();
-            var min = 0;
-            var max = -((slides - 1) * slideWidth);
-
-            $("#slider ul").width(slides * slideWidth).draggable({
-                axis: 'x',
-                drag: function (event, ui) {
-                    if (ui.position.left > min) ui.position.left = min;
-                    if (ui.position.left < max) ui.position.left = max;
-                }
-            });
-        });
-    </script>
     <script>
         var app = angular.module('flapperNews', ['ui.router'])
         app.controller('MainCtrl',
@@ -71,6 +54,7 @@
             }
             $scope.get_page_data = function () {
                 $http.post('/get_page_data').success(function (data) {
+                    console.log(data);
                     $scope.pages = data;
                 })
             }
@@ -275,7 +259,7 @@
                     <h2>{{page.page_info}}</h2>
                     제품명 : {{page.item_name}}<br>
                     좋아요 수 : {{page.like}}<br>
-                    이미지 : <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
+                    이미지 : <img height="250" width="250" ng-src="{{page.img_dir}}"><br>
                     메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
                     오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
                     베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
