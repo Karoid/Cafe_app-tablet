@@ -422,8 +422,9 @@ app.post('/delete_item', function (req, res) {
     Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
         var filePath = doc[0].img_dir;
         try {
-        fs.unlinkSync("./public" + filePath);
-        } catch (e) {}
+            fs.unlinkSync("./public" + filePath);
+        } catch (e) {
+        }
 
         doc[0].remove();
         res.end();
@@ -524,30 +525,22 @@ app.post('/get_item_data', function (req, res) {
 app.post('/get_face_page_data', function (req, res) {
     var itemlist = [];
     var a = 0;
-    console.log("test");
-    Page_data.find({testable: "true"}).lean().exec((function (err, documents) {
+    //console.log("test");
+    Page_data.find({bestable: "true"}).lean().sort("-like").exec((function (err, documents) {
         itemlist.push(documents[0].item_name);
-        console.log("a" + documents[0].item_name);
-        a++;
-        if (a == 1) {
+        //console.log("리스트" + itemlist);
+        return last();
+    }))
+    function last() {
+        Page_data.find({todayable: "true"}).lean().exec((function (err, documents) {
+            itemlist.push(documents[0].item_name);
+            //console.log("a" + itemlist);
             Item_data.find({item_name: {$in: itemlist}}).lean().exec(function (err, documents) {
-                console.log("c" + documents[0].item_name);
+                //console.log("b" + documents[0].item_name);
                 return res.end(JSON.stringify(documents));
             })
-        }
-    }));
-    Page_data.find({todayable: "true"}).lean().exec((function (err, documents) {
-        itemlist.push(documents[0].item_name);
-        console.log("b" + documents[0].item_name);
-        a++;
-        if (a == 1) {
-            Item_data.find({item_name: {$in: itemlist}}).lean().exec(function (err, documents) {
-                console.log("c" + documents[0].item_name);
-                return res.end(JSON.stringify(documents));
-            })
-        }
-    }));
-
+        }));
+    }
 });
 //제품 목록 like 순으로 소트해서 받아오기 이미지 링크 넣어줘야함
 app.post('/get_item_data_sorted_by_liked', function (req, res) {
