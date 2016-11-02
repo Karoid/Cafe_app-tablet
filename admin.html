@@ -10,6 +10,24 @@
     <title>Admin</title>
     <script src="/js/angular.min.js"></script>
     <script src="/js/angular-ui-router.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var slides = $('#slider div div').length;
+            console.log(slides);
+            var slideWidth = $('#slider').width();
+            var min = 0;
+            var max = -((slides - 1) * slideWidth);
+
+            $("#slider ul").width(slides * slideWidth).draggable({
+                axis: 'x',
+                drag: function (event, ui) {
+                    if (ui.position.left > min) ui.position.left = min;
+                    if (ui.position.left < max) ui.position.left = max;
+                }
+            });
+        });
+    </script>
     <script>
         var app = angular.module('flapperNews', ['ui.router'])
         app.controller('MainCtrl',
@@ -25,8 +43,8 @@
             };
             $scope.test = function () {
                 console.log("test");
-                $http.post('/get_face_page_data').success(function (data) {
-                    //console.log(data);
+                $http.post('/get_item_data_sorted_by_liked').success(function (data) {
+                    console.log(data);
                 })
             };
             $scope.delete_item = function (index) {
@@ -39,6 +57,7 @@
                 $state.go("edit_item", {id: $scope.items[index].item_index});
             };
             $scope.get_item_data();
+            $scope.test();
         });
 
 
@@ -268,14 +287,15 @@
     </div>
 </script>
 <script type="text/ng-template" id="/order.html">
-    <div class="page-header">
+    <div class="page-header" id="slider">
         <div ng-repeat="order in orders">
             <div class="btn-bg bg-2">
+                <h3>{{model}}</h3>
                 폰번호 : {{order.order_id}}<br><br>
                 주문번호 : {{order.order_count}}<br><br>
-                </div>
             </div>
         </div>
+    </div>
     </div>
 </script>
 <script type="text/ng-template" id="/item.html">
