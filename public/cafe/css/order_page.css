@@ -14,7 +14,7 @@ body{
 .col-md-4{
   width:29.3%;
   padding: 2vh 2%;
-  transition: .2s;
+  transition: 1s;
 }
 .container:hover > .col-md-4{
   width:21.3%;
@@ -68,7 +68,55 @@ h2{
 h5{
     text-align: center;
 }
-
+.item{
+  width:110px;
+  height:160px;
+  margin:0 10px;
+  float: left;
+  text-align: center;
+}
+.item .item_frame{
+  width:110px;
+  height:110px;
+  padding:5px;
+  border: 1px solid darkgrey;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position:absolute;
+}
+.item .item_frame:hover{
+  border: 2px solid black;
+  padding:4px;
+}
+.item.active .item_frame:after{
+  position: absolute;
+  background: red;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
+  content: "∧";
+  left: 90px;
+  top: -15px;
+  transform: rotate(180deg);
+  color: white;
+  font-size: 27px;
+  line-height: 25px;
+}
+.item.active .item_frame{
+  border: 3px solid red;
+  padding:3px;
+}
+.item .item_img{
+  width:auto;
+  height:auto;
+  max-width: 100px;
+  max-height: 100px;
+}
+.item .item_name{
+  font-weight: bold;
+  margin-top: 110px;
+}
 #finish{
     width: inherit;
     height: 100px;
