@@ -270,7 +270,10 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
         Page_data.find({page_index: req.body.page_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
             console.log(doc[0].img_dir);
-            fs.unlinkSync("./public" + filePath);
+            try {
+                fs.unlinkSync("./public" + filePath);
+            } catch (e) {
+            }
             dir = req.file.path.split('public')[1];
             console.log(dir);
             return edit();
@@ -315,7 +318,10 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
         Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
             //console.log(doc[0].img_dir);
-            fs.unlinkSync("./public" + filePath);
+            try {
+                fs.unlinkSync("./public" + filePath);
+            } catch (e) {
+            }
             dir = req.file.path.split('public')[1];
             //console.log(dir);
             return edit();
