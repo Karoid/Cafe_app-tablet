@@ -38,7 +38,9 @@ var Page_data = require('./models/page_data');
 var Item_data = require('./models/item_data');
 var Page_count = require('./models/page_count');
 var Item_count = require('./models/item_count');
-var Item_count = require('./models/order_data');
+var Order_data = require('./models/order_data');
+var Order_count = require('./models/order_count');
+var User_data = require('./models/user');
 var multer = require('multer');
 var path = require('path');
 
@@ -160,6 +162,30 @@ app.use(function (req, res, next) {
         next();
     }
 });
+//주문
+app.post('/make_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    //console.log("get");
+    //console.log(req.body.page_index);
+    var count;
+    Order_count.find({}).lean().exec(function (err, doc) {
+        console.log(doc[0])
+        count = doc[0].value;
+        conn.collection('order_data').insert({
+            order_id: "01097570954",
+            order_count: count
+        });
+        conn.collection('order_count').update({value: count}, {value: count + 1});
+    });
+})
+app.post('/get_order_data', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    //console.log("get");
+    //console.log(req.body.page_index);
+    Order_data.find().lean().exec(function (err, doc) {
+        //console.log(doc[0].value)
+        res.end(JSON.stringify(doc));
+    });
+})
+
 //페이지 생성
 app.post('/make_page', upload_main.single('uploadFile'), function (req, res) {
     //console.log(req.body); //form fields
@@ -335,7 +361,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
                 item_index: count,
                 item_name: req.body.item_name,
                 item_price: req.body.item_price,
-                img_dir: req.file.path.split('public')[1],
+                img_dir: req.file.path.split('public')[1].replace(/\\/g, "/"),
                 like: req.body.like,
                 order_count: 0,
                 item_discount: "False"
@@ -395,7 +421,10 @@ app.post('/delete_page', function (req, res) {
 app.post('/delete_item', function (req, res) {
     Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
         var filePath = doc[0].img_dir;
+        try {
         fs.unlinkSync("./public" + filePath);
+        } catch (e) {}
+
         doc[0].remove();
         res.end();
     })
@@ -438,7 +467,6 @@ app.post('/get_page_data', function (req, res) {
 
     Page_data.find().lean().exec(function (err, documents) {
         var doc = documents;
-
             async.series([
                 // 1st
                 function (done) {

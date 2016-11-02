@@ -69,19 +69,14 @@
             $scope.get_item_data();
         });
 
-        app.controller('bestCtrl', function ($scope, $http) {
-
-            $scope.get_item_data = function () {
-                $http.post('/get_item_data').success(function (data) {
-                    $scope.items = data;
+        app.controller('orderCtrl', function ($scope, $http) {
+            $scope.get_order_data = function () {
+                $http.post('/get_order_data').success(function (data) {
+                    console.log(data)
+                    $scope.orders = data;
                 })
             }
-            $scope.delete_item = function () {
-                $http.post('/get_item_data').success(function (data) {
-                    $scope.items = data;
-                })
-            }
-            $scope.get_item_data();
+            $scope.get_order_data();
         })
         app.controller('editCtrl', function ($scope, $http, $stateParams) {
             var preset;
@@ -157,10 +152,10 @@
                             , controller: 'pageCtrl'
                         });
                 $stateProvider
-                        .state('best', {
-                            url: '/best',
-                            templateUrl: '/best.html'
-                            , controller: 'bestCtrl'
+                        .state('order', {
+                            url: '/order',
+                            templateUrl: '/order.html'
+                            , controller: 'orderCtrl'
                         });
                 $stateProvider
                         .state('edit_page', {
@@ -198,7 +193,7 @@
         <div><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
         <div><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
         <div><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
-        <div><a href="#/best" onclick="document.getElementById('test').checked = false">Best Menu 관리</a></div>
+        <div><a href="#/order" onclick="document.getElementById('test').checked = false">주문 관리</a></div>
     </div>
 
 
@@ -231,8 +226,8 @@
         </div>
         <div class="btn-bg bg-1" style="background:#e5d272;">
             <div class="btn btn-1">
-                <a href="#/best">
-                    <button>Best Menu 관리</button>
+                <a href="#/order">
+                    <button>주문 관리</button>
                 </a>
             </div>
         </div>
@@ -267,6 +262,17 @@
                     <button ng-click="delete_page($index)">페이지 삭제</button>
                     <button ng-click="edit_page($index)">페이지 수정</button>
                     <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="/order.html">
+    <div class="page-header">
+        <div ng-repeat="order in orders">
+            <div class="btn-bg bg-2">
+                폰번호 : {{order.order_id}}<br><br>
+                주문번호 : {{order.order_count}}<br><br>
                 </div>
             </div>
         </div>
