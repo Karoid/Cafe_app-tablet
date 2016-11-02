@@ -530,18 +530,23 @@ app.post('/get_item_data', function (req, res) {
 });
 app.post('/get_face_page_data', function (req, res) {
     var itemlist = [];
-    var a = 0;
+    var itemlist2 = [];
     //console.log("test");
     Page_data.find({bestable: "true"}).lean().sort("-like").exec((function (err, documents) {
-        itemlist.push(documents[0].item_name);
-        //console.log("리스트" + itemlist);
+        documents.forEach(function (doc) {
+            //console.log(doc);
+            itemlist.push(doc.item_name);
+        });
+        Item_data.find({item_name: {$in: itemlist}}).sort('-like').lean().exec(function (err, docs) {
+            itemlist2.push(docs[0].item_name);
+        })
         return last();
     }))
     function last() {
         Page_data.find({todayable: "true"}).lean().exec((function (err, documents) {
-            itemlist.push(documents[0].item_name);
+            itemlist2.push(documents[0].item_name);
             //console.log("a" + itemlist);
-            Item_data.find({item_name: {$in: itemlist}}).lean().exec(function (err, documents) {
+            Item_data.find({item_name: {$in: itemlist2}}).lean().exec(function (err, documents) {
                 //console.log("b" + documents[0].item_name);
                 return res.end(JSON.stringify(documents));
             })
@@ -565,7 +570,8 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
                     stringArray += JSON.stringify(docs[i]);
 
                 }
-            //console.log(stringArray);
+            console.log(itemlist);
+            console.log(stringArray);
             return res.end(JSON.stringify(docs));
             }
         )
