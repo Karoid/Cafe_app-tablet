@@ -38,12 +38,13 @@
 
             $scope.get_item_data = function () {
                 $http.post('/get_item_data').success(function (data) {
+                    //console.log(data);
                     $scope.items = data;
                 })
             };
             $scope.test = function () {
                 console.log("test");
-                $http.post('/get_face_page_data').success(function (data) {
+                $http.post('/get_item_data_sorted_by_liked').success(function (data) {
                     console.log(data);
                 })
             };
@@ -274,7 +275,7 @@
                     <h2>{{page.page_info}}</h2>
                     제품명 : {{page.item_name}}<br>
                     좋아요 수 : {{page.like}}<br>
-                    이미지 : <img height="250" width="250" src="{{page.img_dir}}"><br>
+                    이미지 : <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
                     메인 페이지 <input type="checkbox" name="testable" disabled="true" ng-checked="{{page.testable}}">
                     오늘의 메뉴 <input type="checkbox" name="todayable" disabled="true" ng-checked="{{page.todayable}}">
                     베스트 메뉴 <input type="checkbox" name="bestable" disabled="true" ng-checked="{{page.bestable}}"><br>
@@ -304,6 +305,7 @@
             <h1 style="text-align:center;color:white">Item 관리</h1>
             <form action="/make_item" , method="post" enctype="multipart/form-data" name="make_item">
                 제품 이름 <input type="text" name="item_name"><br>
+                제품 영문 <input type="text" name="item_name_eng"><br>
                 제품 가격 <input type="number" name="item_price"><br>
                 좋아요 수 <input type="number" name="like"><br>
                 이미지 업로드 <input type="file" name="uploadFile"/>
@@ -315,10 +317,11 @@
             <div class="btn-bg bg-1" style="height:450px">
                 <div class="btn btn-1">
                     <h2>제품명 : {{item.item_name}}</h2>
+                    제품명(영문) : {{item.item_name_eng}}<br>
                     가격 : {{item.item_price}}<br>
                     좋아요 : {{item.like}}<br>
                     할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
-                    이미지 : <img height="250" width="250" src="{{item.img_dir}}"><br>
+                    이미지 : <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
                     <button ng-click="delete_item($index)">제품 삭제</button>
                     <button ng-click="edit_item($index)">제품 수정</button>
                     <br>
@@ -335,7 +338,7 @@
                       value=item.item_name ng-model="selected"></select><br>
         <input type="text" name="page_info" value="{{page.page_info}}"><br>
         <input type="hidden" name="page_index" value="{{page_index}}"><br>
-        <img height="250" width="250" src="{{page.img_dir}}"><br>
+        <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
         이미지 수정 <input type="file" name="uploadFile"/><br>
         메인 페이지 <input type="checkbox" name="testable" ng-checked=page.testable>
         오늘의 메뉴 <input type="checkbox" name="todayable" ng-checked=page.todayble>
@@ -348,10 +351,11 @@
     <br><br><br><br><br>
     <form action="/edit_item" , method="post" enctype="multipart/form-data" name="edit_item">
         제품명<input type="text" name="item_name" value="{{item.item_name}}"><br>
+        제품명(영문)<input type="text" name="item_name_eng" value="{{item.item_name_eng}}"><br>
         가격<input type="text" name="item_price" value="{{item.item_price}}"><br>
         좋아요 수 <input type="number" name="like" value="{{item.like}}"><br>
         <input type="hidden" name="item_index" value="{{item_index}}"><br>
-        <img height="250" width="250" src="{{item.img_dir}}"><br>
+        <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
         이미지 수정 <input type="file" name="uploadFile"/><br>
         <input type=submit value="수정하기">
     </form>

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     item_index: {type: Number},
     item_name: {type: String},
+    item_name_eng: {type: String},
     item_price: {type: Number},
     like: {type: Number},
     order_count: {type: Number},
@@ -21,6 +22,12 @@ userSchema.pre('save', function (next) {
     }
     if (!this.bestable) {
         this.bestable = true;
+    }
+    next();
+});
+userSchema.pre('find', function (next) {
+    if (!this.item_name_eng) {
+        this.item_name_eng = "test";
     }
     next();
 });
