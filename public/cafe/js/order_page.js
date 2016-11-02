@@ -34,5 +34,15 @@ $('#finish').click(function() {
   submit_action($('#telephone'))
 });
 
-
+$('.container').on("mouseover",function(){
+  boolean = $('.col-md-4').eq(0).is(":hover")
+  || $('.col-md-4').eq(1).is(":hover")
+  || $('.col-md-4').eq(2).is(":hover")
+  console.log("12", boolean);
+  if (!boolean) {
+    $('.col-md-4').eq(2).addClass("hover");
+  }else{
+    $('.col-md-4').eq(2).removeClass("hover");
+  }
+})
 });
