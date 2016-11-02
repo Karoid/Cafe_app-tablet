@@ -269,14 +269,10 @@
 </script>
 <script type="text/ng-template" id="/order.html">
     <div class="page-header">
-        <div class="btn-bg" style="background:#7278e5;">
-            <h1 style="text-align:center;color:white">주문 관리</h1>
-            <div ng-repeat="order in orders">
-                <div class="btn-bg bg-1" style="height:380px">
-                    <div class="btn btn-1">
-                        폰번호 : {{order.order_id}}<br><br>
-                        주문번호 : {{order.order_count}}<br><br>
-                    </div>
+        <div ng-repeat="order in orders">
+            <div class="btn-bg bg-2">
+                폰번호 : {{order.order_id}}<br><br>
+                주문번호 : {{order.order_count}}<br><br>
                 </div>
             </div>
         </div>

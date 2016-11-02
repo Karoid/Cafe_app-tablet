@@ -15,6 +15,11 @@ body .btn-bg {
 body .btn-bg.bg-1 {
   background: #6ab1c9;
 }
+
+  body .btn-bg.bg-2 {
+    background: #6ab1c9;
+    border: solid black 2px;
+  }
 body .btn-bg.bg-1 .btn-1 button {
   color: #c7f8f9;
   background: transparent;
