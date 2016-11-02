@@ -98,6 +98,7 @@ ul#up div.userlogin-change>button{
 .login button{
   background-color: #c49a6c;
   border: 1.5px black solid;
+  cursor: pointer;
 }
 .input-ect button{
   vertical-align: top;
