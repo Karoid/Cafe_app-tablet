@@ -560,12 +560,13 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
         //console.log(itemlist);
 
         Item_data.find({item_name: {$in: itemlist}}).sort('-like').lean().exec(function (err, docs) {
+            var stringArray = []
                 for (var i = 0; i < 3; i++) {
-                    if (i == 2) {//console.log(JSON.stringify(documents));
-                        //console.log(docs);
-                        return res.end(JSON.stringify(docs));
-                    }
+                    stringArray += JSON.stringify(docs[i]);
+
                 }
+            //console.log(stringArray);
+            return res.end(JSON.stringify(docs));
             }
         )
 

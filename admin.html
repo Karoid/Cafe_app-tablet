@@ -43,7 +43,7 @@
             };
             $scope.test = function () {
                 console.log("test");
-                $http.post('/get_face_page_data').success(function (data) {
+                $http.post('/get_item_data_sorted_by_liked').success(function (data) {
                     console.log(data);
                 })
             };
@@ -57,7 +57,7 @@
                 $state.go("edit_item", {id: $scope.items[index].item_index});
             };
             $scope.get_item_data();
-            //$scope.test();
+            $scope.test();
         });
 
 
