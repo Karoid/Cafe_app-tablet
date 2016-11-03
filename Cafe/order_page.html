@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <head>
-    
-    <script src="libs/jquery-1.11.0.min.js"></script>
-    <script src="js/order_page.js" type="text/javascript" charset="utf-8"></script>
       <link rel = "stylesheet" type = "text/css" href = "/cafe/css/order_page.css">
-    
-<title>메인페이지</title>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/cafe/js/order_page.js" type="text/javascript" charset="utf-8"></script>
+      <title>메인페이지</title>
+
 </head>
 
-    
+
 <body>
 
     <div id="top" class="non_main">탑
-    
+
     </div>
 
     <div id="mid" class="main">미드
-        <div class="container">
+    <div class="container">
       <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-12 border">
           <h2>STEP 1</h2>
             <h5> 개인정보 수정 및 입력</h5>
             <div class="past">
@@ -30,41 +30,55 @@
                     <p>222222222221</p>
                     <p>3333333333333</p>
             </div>
-            
+
             <div class = "del-info">
                 <p>-주소 정보 수정 (회원)/ 주문 정보 입력(비회원)</p>
-                <p><span>이름  </span><input type="text"></p>
-                 <p><span>주소  </span><textarea></textarea></p>
-                 <p><span>전화번호  </span><input type="text"></p>
+                <div class="wrap">
+                  <div class="mat-div">
+                    <label for="first-name" class="mat-label">이름</label>
+                    <input type="text" class="mat-input" id="first-name">
+                  </div>
+
+                    <div class="mat-div">
+                      <label for="first-name" class="mat-label">주소</label>
+                    <input type="text" class="mat-input" id="last-name">
+                  </div>
+
+                    <div class="mat-div">
+                    <label for="address" class="mat-label">전화번호</label>
+                    <input type="tel" class="mat-input" id="telephone">
+                  </div>
+                </div>
             </div>
-            
+
             <div class="private-check">
-                <span>개인정보 사용 동의</span><input type = "checkbox">
+                <label><input type ="checkbox" class="checkbox">개인정보 사용 동의</label>
             </div>
-          
+
         </div>
-          
-            
-        <div class="col-md-4">
+
+
+        <div class="col-md-4 col-xs-12 border">
           <h2>STEP 2</h2>
             <h5>메뉴 선택</h5>
             <div class="menu-image">
+
             
      <img class ="menu-list" src="/img/like_1.png">                
              <img class ="menu-list" src="/img/like_1.png">     
                 <img class ="menu-list" src="/img/like_1.png">     
                 <img class ="menu-list" src="/img/like_1.png">     
                 <img class ="menu-list" src="/img/like_1.png">     
-                <img class ="menu-list" src="/img/like_1.png">     
-            
+ 
             </div>
-         
+
        </div>
-          
-          
-        <div class="col-md-4">
+
+
+        <div class="col-md-4 col-xs-12 border">
           <h2>STEP 3</h2>
             <h5>메뉴 확인 및 옵션 선택</h5>
+
  <div class="menu-image">
             <img class ="menu-list" src="/img/like_1.png">     
      <img class ="menu-list" src="/img/like_1.png">     
@@ -77,13 +91,11 @@
                
             
             </div>
-            <button id ="finish" >주문완료</button>
-          
-        </div>
-          
-      </div>
 
-            </div>
+            <button id ="finish" >주문완료</button>
+        </div>
+
+    </div>
     </div>
 </body>
 </html>
