@@ -1,3 +1,5 @@
+var serverip = "http://52.78.68.136"
+var selected_menu = new Array()
 function submit_action(obj) {
   var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
   // 01로 시작하는 핸드폰 및 지역번호와 050, 070 검증
@@ -17,32 +19,86 @@ function submit_action(obj) {
   }
   return true;
 }
-
+function addMenuData(item_el){
+  addobj = new Object()
+  img_url = item_el.children('.item_frame').children('.item_img').attr('src');
+  addobj.img_dir = img_url.split(serverip)[1];
+  addobj.item_name = item_el.children('.item_name').text();
+  addobj.item_price = item_el.children('.item_price').text().split("원")[0];
+  addobj._id = item_el.children('input').val();
+  selected_menu.push(addobj)
+}
+function removeMenuData(item_el){
+  index = selected_menu.findIndex(x => x._id==item_el.children('input').val())
+  console.log(index);
+  selected_menu.splice(index, 1);
+}
+function loadMenuData(objs){
+  html = ""
+  objs.forEach(obj => {
+  html +='<div class="item">'+
+          '<div class="item_frame">'+
+            '<img src="'+ serverip + obj.img_dir + '" class="item_img">'+
+          '</div>'+
+          '<div class="item_name">'+
+            obj.item_name +
+          '</div>'+
+          '<div class="item_price">'+
+            obj.item_price +
+          '원</div>'+
+          '<input type="hidden" value="'+obj._id+'">' +
+        '</div>'
+  });
+  return html
+}
 $(document).ready(function() {
-$(".mat-input").focus(function(){
-  $(this).parent().addClass("is-active is-completed");
-});
+  $(".mat-input").focus(function(){
+    $(this).parent().addClass("is-active is-completed");
+  });
 
-$(".mat-input").focusout(function(){
-  if($(this).val() === "")
-    $(this).parent().removeClass("is-completed");
-  $(this).parent().removeClass("is-active");
-})
+  $(".mat-input").focusout(function(){
+    if($(this).val() === "")
+      $(this).parent().removeClass("is-completed");
+    $(this).parent().removeClass("is-active");
+  })
+  $('.container').on("mouseover",function(){
+    boolean = $('.col-md-4').eq(0).is(":hover")
+    || $('.col-md-4').eq(1).is(":hover")
+    || $('.col-md-4').eq(2).is(":hover")
+    if (!boolean) {
+      $('.col-md-4').eq(2).addClass("hover");
+    }else{
+      $('.col-md-4').eq(2).removeClass("hover");
+    }
+  })
+  /*ajax call*/
+  $.ajax({
+    url: '/get_item_data',
+    type: 'POST'
+  })
+  .done(function(data) {
+    objs = eval(data);
+    console.log(objs);
+    $('.menu-image').html(loadMenuData(objs));
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    $('.item').on('click', function() {
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active')
+        removeMenuData($(this))
+      }else {
+        $(this).addClass('active')
+        addMenuData($(this))
+      }
+      $('.selected_menu').html(loadMenuData(selected_menu));
+    });
+  });
 
-/*ajax call*/
-$('#finish').click(function() {
-  submit_action($('#telephone'))
-});
+  $('#finish').click(function() {
+    submit_action($('#telephone'))
+  });
 
-$('.container').on("mouseover",function(){
-  boolean = $('.col-md-4').eq(0).is(":hover")
-  || $('.col-md-4').eq(1).is(":hover")
-  || $('.col-md-4').eq(2).is(":hover")
-  console.log("12", boolean);
-  if (!boolean) {
-    $('.col-md-4').eq(2).addClass("hover");
-  }else{
-    $('.col-md-4').eq(2).removeClass("hover");
-  }
-})
 });
