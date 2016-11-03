@@ -5,6 +5,13 @@ body{
   font-family:'Malgun Gothic';
   font-size:16px;
 }
+h2{
+    text-align: center;
+}
+
+h5{
+    text-align: center;
+}
 .container{
   width:100%;
   height:100vh;
@@ -61,13 +68,6 @@ body{
 .private-check{
   margin:20px;
 }
-h2{
-    text-align: center;
-}
-
-h5{
-    text-align: center;
-}
 .item{
   width:110px;
   height:160px;
@@ -108,6 +108,16 @@ h5{
   font-size: 27px;
   line-height: 25px;
 }
+.item .item_img{
+  width:auto;
+  height:auto;
+  max-width: 100px;
+  max-height: 100px;
+}
+.item .item_name{
+  font-weight: bold;
+  margin-top: 110px;
+}
 .selected_menu .item .item_frame .after{
   position: absolute;
   background: red;
@@ -121,15 +131,14 @@ h5{
   line-height: 27px;
   cursor: pointer;
 }
-.item .item_img{
-  width:auto;
-  height:auto;
-  max-width: 100px;
-  max-height: 100px;
+.selected_menu .item input[type="number"] {
+  width:50px;
+  text-align: center;
 }
-.item .item_name{
-  font-weight: bold;
-  margin-top: 110px;
+.selected_menu .item .item_frame .submenu{
+  overflow-x: hidden;
+  background-color: gray;
+  transition:.5s;
 }
 #finish{
     width: inherit;

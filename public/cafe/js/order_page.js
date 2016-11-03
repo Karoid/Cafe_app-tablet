@@ -19,6 +19,7 @@ function submit_action(obj) {
   }
   return true;
 }
+/*class menu start*/
 function Menu(){}
 Menu.prototype.addMenuData = function(item_el){
   addobj = new Object()
@@ -29,8 +30,13 @@ Menu.prototype.addMenuData = function(item_el){
   addobj.item_price = item_el.children('.item_price').text().split("원")[0];
   addobj._id = item_el.children('input').val();
   selected_menu.push(addobj)
-  addition = '<div class="after">X</div>'
-  $('.selected_menu').append(this.loadMenuData([addobj])).children('.item').last().children('.item_frame').append(addition)
+  x_button = '<div class="after">X</div>'
+  quantity = '<div class="item_quantity"><input type="number">잔</div>'
+  subselect = '<div class="submenu"></div>'
+  $('.selected_menu').append(this.loadMenuData([addobj])).children('.item').last()
+  .children('.item_frame').append(x_button).append(subselect)
+  .parent('.item').children('.item_price').remove().end()
+  $('.selected_menu').children('.item').last().append(quantity)
   $('.selected_menu .item').last().on('click',".after",this.clickevent)
 }
 Menu.prototype.removeMenuData = function(item_el){
@@ -62,6 +68,8 @@ Menu.prototype.clickevent = function (){
   thisitem = $(this).parent('.item_frame').parent('.item')
   menu.removeMenuData(thisitem)
 }
+/*class menu end*/
+/*on browser start, call*/
 $(document).ready(function() {
   var menu = new Menu();
   $(".mat-input").focus(function(){
@@ -85,7 +93,7 @@ $(document).ready(function() {
   })
   /*ajax call*/
   $.ajax({
-    url: '/get_item_data',
+    url: serverip+'/get_item_data',
     type: 'POST'
   })
   .done(function(data) {
