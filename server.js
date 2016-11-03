@@ -572,16 +572,25 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
         });
         //console.log(itemlist);
 
-        Item_data.find({item_name: {$in: itemlist}}).lean().exec(function (err, docs) {
+        Item_data.find({item_name: {$in: itemlist}}).lean().sort("-like").exec(function (err, docs) {
 
             console.log("b ");
-            var stringArray = []
-            for (var i = 0; i < 6; i++) {
+            var stringArray = "[";
+            for (var i = 0; i < 3; i++) {
+                //console.log(typeof(docs));
                 stringArray += JSON.stringify(docs[i]);
-                //console.log("stringArray:" + i + stringArray);
+                if (i != 2)
+                    stringArray += ","
                 }
-            console.log("b " + itemlist);
-            return res.end(JSON.stringify(docs));
+            stringArray += "]"
+            //stringArray = JSON.stringify(docs[2]);
+            // console.log("stringArray:" + JSON.stringify(docs[0]));
+            // console.log("stringArray:" + JSON.stringify(docs[1]));
+            // console.log("stringArray:" + JSON.stringify(docs[2]));
+            console.log("stringArray:" + stringArray);
+            console.log("stringArray:" + JSON.parse(stringArray));
+            //console.log("b " + itemlist);
+            return res.end(stringArray);
             }
         )
 

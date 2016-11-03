@@ -11,13 +11,9 @@ var userSchema = new mongoose.Schema({
     img_dir: {type: String},
     created_at: {type: Date}
 });
-userSchema.pre('find', function (next) {
-    //console.log("pre save!");
+userSchema.pre('save', function (next) {
+    //console.log(this.item_name);
     now = new Date();
-    this.updated_at = now;
-    if (!this.created_at) {
-        this.created_at = now;
-    }
     if (!this.order_count) {
         this.order_count = 0;
     }
@@ -26,7 +22,7 @@ userSchema.pre('find', function (next) {
     }
     if (!this.item_name_eng) {
         //console.log("없다!");
-        this["item_name_eng"] = "??";
+        this.item_name_eng = "test";
     }
     next();
 });
