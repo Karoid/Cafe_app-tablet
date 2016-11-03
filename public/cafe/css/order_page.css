@@ -19,7 +19,7 @@ body{
 .container:hover > .col-md-4{
   width:21.3%;
 }
-.container:hover > .col-md-4:hover,.container:hover > .col-md-4.hover{
+.container:hover > .col-md-4:hover,.container:hover > .col-md-4.hover {
   width:45.3%;
 }
 .border{
@@ -84,10 +84,15 @@ h5{
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   position:absolute;
+  cursor: pointer;
 }
 .item .item_frame:hover{
   border: 2px solid black;
   padding:4px;
+}
+.item.active .item_frame{
+  border: 3px solid red;
+  padding:3px;
 }
 .item.active .item_frame:after{
   position: absolute;
@@ -103,9 +108,18 @@ h5{
   font-size: 27px;
   line-height: 25px;
 }
-.item.active .item_frame{
-  border: 3px solid red;
-  padding:3px;
+.selected_menu .item .item_frame .after{
+  position: absolute;
+  background: red;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
+  left: 90px;
+  top: -15px;
+  color: white;
+  font-size: 20px;
+  line-height: 27px;
+  cursor: pointer;
 }
 .item .item_img{
   width:auto;

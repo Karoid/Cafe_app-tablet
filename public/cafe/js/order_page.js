@@ -19,24 +19,30 @@ function submit_action(obj) {
   }
   return true;
 }
-function addMenuData(item_el){
+function Menu(){}
+Menu.prototype.addMenuData = function(item_el){
   addobj = new Object()
   img_url = item_el.children('.item_frame').children('.item_img').attr('src');
+  addobj.eq = parseInt(item_el.attr("value"))
   addobj.img_dir = img_url.split(serverip)[1];
   addobj.item_name = item_el.children('.item_name').text();
   addobj.item_price = item_el.children('.item_price').text().split("원")[0];
   addobj._id = item_el.children('input').val();
   selected_menu.push(addobj)
+  addition = '<div class="after">X</div>'
+  $('.selected_menu').append(this.loadMenuData([addobj])).children('.item').last().children('.item_frame').append(addition)
+  $('.selected_menu .item').last().on('click',".after",this.clickevent)
 }
-function removeMenuData(item_el){
+Menu.prototype.removeMenuData = function(item_el){
   index = selected_menu.findIndex(x => x._id==item_el.children('input').val())
-  console.log(index);
+  $(".menu-image .item").eq(selected_menu[index].eq).removeClass('active')
   selected_menu.splice(index, 1);
+  $('.selected_menu .item').eq(index).remove()
 }
-function loadMenuData(objs){
+Menu.prototype.loadMenuData = function(objs){
   html = ""
-  objs.forEach(obj => {
-  html +='<div class="item">'+
+  objs.forEach(function(obj,index) {
+  html +='<div class="item" value="'+index+'">'+
           '<div class="item_frame">'+
             '<img src="'+ serverip + obj.img_dir + '" class="item_img">'+
           '</div>'+
@@ -51,7 +57,13 @@ function loadMenuData(objs){
   });
   return html
 }
+Menu.prototype.clickevent = function (){
+  menu = new Menu;
+  thisitem = $(this).parent('.item_frame').parent('.item')
+  menu.removeMenuData(thisitem)
+}
 $(document).ready(function() {
+  var menu = new Menu();
   $(".mat-input").focus(function(){
     $(this).parent().addClass("is-active is-completed");
   });
@@ -78,8 +90,7 @@ $(document).ready(function() {
   })
   .done(function(data) {
     objs = eval(data);
-    console.log(objs);
-    $('.menu-image').html(loadMenuData(objs));
+    $('.menu-image').html(menu.loadMenuData(objs));
   })
   .fail(function() {
     console.log("error");
@@ -87,13 +98,11 @@ $(document).ready(function() {
   .always(function() {
     $('.item').on('click', function() {
       if ($(this).hasClass('active')) {
-        $(this).removeClass('active')
-        removeMenuData($(this))
+        menu.removeMenuData($(this))
       }else {
         $(this).addClass('active')
-        addMenuData($(this))
+        menu.addMenuData($(this))
       }
-      $('.selected_menu').html(loadMenuData(selected_menu));
     });
   });
 
