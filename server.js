@@ -309,15 +309,19 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
 
 });
 app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
-    //console.log(req.body); //form fields
-    //console.log(req.file); //form files
+   // console.log(req.body); //form fields
+  //  console.log(req.file); //form files
     //path.extname(req.file)
     var dir;
+    var tempItem;
     if (req.file != null) { //이미지 새로 업로드 했을때임.
         console.log("이미지" + req.file);
         Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
             //console.log(doc[0].img_dir);
+                        console.log("hear"+doc[0].item_name);
+
+            var tempItem = doc[0].item_name;
             try {
                 fs.unlinkSync("./public" + filePath);
             } catch (e) {
@@ -329,14 +333,15 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
     }
     else {
         Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
+            //console.log("hear"+doc[0].item_name);
+            tempItem = doc[0].item_name;
             dir = doc[0].img_dir;
             //console.log(doc[0].img_dir);
             return edit();
         });
     }
     function edit() {
-        //console.log(req.body.page_index);
-        
+       
         Item_data.update(
             {item_index: req.body.item_index},
             {
@@ -349,7 +354,20 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
                 }
             },
             function (err, numberAffected, rawResponse) {
-                //console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
+                console.log("에러2:"+err+"영향"+numberAffected+"raw"+rawResponse);
+              
+            })
+        
+        Page_data.update(
+            {item_name: tempItem},
+            {
+                $set: {
+                    item_name: req.body.item_name,
+                    
+                }
+            },{ multi: true },
+            function (err, numberAffected, rawResponse) {
+                console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
                 res.redirect("../admin.html#/item");
             })
     }
@@ -588,7 +606,7 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
             // console.log("stringArray:" + JSON.stringify(docs[0]));
             // console.log("stringArray:" + JSON.stringify(docs[1]));
             // console.log("stringArray:" + JSON.stringify(docs[2]));
-            console.log("stringArray:" + stringArray);
+         ////   console.log("stringArray:" + stringArray);
        //     console.log("stringArray:" + JSON.parse(stringArray));
             //console.log("b " + itemlist);
             return res.end(stringArray);
