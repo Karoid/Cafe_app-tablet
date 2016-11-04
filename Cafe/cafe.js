@@ -99,6 +99,11 @@ router.get('/order_page.html', function(req, res) {
     }
   })
 });
+router.post('/order_page.html', function(req, res) {
+  fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
+    res.end(ejs.render(data,{data:req.params.password}))
+  })
+});
 router.get('/sign_up.html', function(req, res) {
   fs.readFile('./Cafe/sign_up.html','utf8',function(err,data){
     if (err) {
