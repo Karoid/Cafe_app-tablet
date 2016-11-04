@@ -16,7 +16,7 @@ Menu.prototype.addMenuData = function(item_el){
   x_button = '<div class="after">X</div>'
   quantity = '<div class="item_quantity"><input type="number" value="1">잔</div>'
   subselect = '<div class="submenu">'+
-                '<div class="title">'+
+                '<div class="sub_title">'+
                   '<hr>옵션 선택<hr>'+
                 '</div>'+
                 '<div class="round">휘핑크림'+
