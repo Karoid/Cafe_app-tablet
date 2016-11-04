@@ -103,6 +103,7 @@ function Submit(){
     userdata.agreement = $('.checkbox').val()
   }
   this.submit_action = function(){
+    console.log({userdata: userdata, orderdata: selected_menu});
     done = submit_phone($('#telephone'))
     get_userdata()
     if (done) {

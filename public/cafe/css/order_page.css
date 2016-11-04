@@ -83,7 +83,6 @@ h5{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  position:absolute;
   cursor: pointer;
 }
 .item .item_frame:hover{
@@ -95,18 +94,19 @@ h5{
   padding:3px;
 }
 .item.active .item_frame:after{
-  position: absolute;
+  position: relative;
   background: red;
   border-radius: 30px;
   width: 30px;
   height: 30px;
   content: "∧";
   left: 90px;
-  top: -15px;
+  top: -120px;
   transform: rotate(180deg);
   color: white;
   font-size: 27px;
   line-height: 25px;
+  display: block;
 }
 .item .item_img{
   width:auto;
@@ -116,7 +116,6 @@ h5{
 }
 .item .item_name{
   font-weight: bold;
-  margin-top: 110px;
 }
 .selected_menu .item{
   width:260px;
@@ -126,7 +125,7 @@ h5{
   cursor: auto;
 }
 .selected_menu .item .item_frame .after{
-  position: absolute;
+  position: relative;
   background: red;
   border-radius: 30px;
   width: 30px;
@@ -143,14 +142,12 @@ h5{
   text-align: center;
 }
 .selected_menu .item .item_frame .submenu{
-  width:150px;
-  height:110px;
-  position:absolute;
+  width: 150px;
+  height: 110px;
   overflow-x: hidden;
   background-color: #9E9E9E;
-  transition:.5s;
-  top:-1px;
-  left:110px;
+  transition: .5s;
+  margin: -110px 110px;
 }
 .selected_menu .item .item_frame .submenu .title{
   margin: 10px;
