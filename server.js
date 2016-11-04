@@ -309,17 +309,34 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
 
 });
 app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
-    console.log(req.body); //form fields
-    console.log(req.file); //form files
+    //console.log(req.body); //form fields
+    //console.log(req.file); //form files
     //path.extname(req.file)
     var dir;
-    var testable, todayable, bestable;
-  
-    
+    if (req.file != null) { //이미지 새로 업로드 했을때임.
+        console.log("이미지" + req.file);
+        Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
+            var filePath = doc[0].img_dir;
+            //console.log(doc[0].img_dir);
+            try {
+                fs.unlinkSync("./public" + filePath);
+            } catch (e) {
+            }
+            dir = req.file.path.split('public')[1];
+            //console.log(dir);
+            return edit();
+        });
+    }
+    else {
+        Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
+            dir = doc[0].img_dir;
+            //console.log(doc[0].img_dir);
+            return edit();
+        });
+    }
     function edit() {
-     
-
-       
+        //console.log(req.body.page_index);
+        
         Item_data.update(
             {item_index: req.body.item_index},
             {
@@ -428,10 +445,10 @@ app.post('/liked', function (req, res) {
     console.log("liked 받음"); //이거 asd좀 바꾸자!!
     Item_data.find({item_name: req.body.asd}).exec(function (err, doc) {
         try {
-            //console.log(doc[0].like);
+            console.log(doc[0].like);
             doc[0].like += 1;
             doc[0].save();
-            //console.log(doc[0].like);
+            console.log(doc[0].like);
             return res.end(doc[0].like + "");
         }
         catch (err) {
@@ -572,7 +589,7 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
             // console.log("stringArray:" + JSON.stringify(docs[1]));
             // console.log("stringArray:" + JSON.stringify(docs[2]));
             console.log("stringArray:" + stringArray);
-           // console.log("stringArray:" + JSON.parse(stringArray));
+       //     console.log("stringArray:" + JSON.parse(stringArray));
             //console.log("b " + itemlist);
             return res.end(stringArray);
             }
