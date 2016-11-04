@@ -1,26 +1,6 @@
 
 var serverip = "http://52.78.68.136"
 var selected_menu = new Array()
->>>>>>> 8639686a1706fb61264eb2bc6f752a559a818083
-function submit_action(obj) {
-  var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-  // 01로 시작하는 핸드폰 및 지역번호와 050, 070 검증
-  // 원래 050은 0505 평생번호인가 그런데 보편적으로 050-5xxx-xxxx 로 인식함
-  // 0505-xxx-xxxx 라는 식으로 넣으면 통과할 수 없음. 그래서 경고창 띄울때 예시 넣는것이 좋음.
-  // -(하이픈)은 넣어도 되고 생략해도 되나 넣을 때에는 정확한 위치에 넣어야 함.
-  if(!obj.val()) {
-    alert("전화번호를 입력하세요.");
-    obj.focus();
-    return false;
-  }
-  else if (!regExp.test(obj.val())) {
-    alert("잘못된 전화번호입니다. 숫자, - 를 포함한 숫자만 입력하세요. 예) 050-XXXX-XXXX");
-    obj.focus();
-    obj.select();
-    return false
-  }
-  return true;
-}
 /*class menu start*/
 function Menu(){}
 Menu.prototype.addMenuData = function(item_el){
@@ -31,15 +11,30 @@ Menu.prototype.addMenuData = function(item_el){
   addobj.item_name = item_el.children('.item_name').text();
   addobj.item_price = item_el.children('.item_price').text().split("원")[0];
   addobj._id = item_el.children('input').val();
+  addobj.option = 0
   selected_menu.push(addobj)
   x_button = '<div class="after">X</div>'
-  quantity = '<div class="item_quantity"><input type="number">잔</div>'
-  subselect = '<div class="submenu"></div>'
+  quantity = '<div class="item_quantity"><input type="number" value="1">잔</div>'
+  subselect = '<div class="submenu">'+
+                '<div class="title">'+
+                  '<hr>옵션 선택<hr>'+
+                '</div>'+
+                '<div class="round">휘핑크림'+
+                '</div>'+
+                '<div class="round oneline">시럽'+
+                '</div>'+
+                '<div class="round oneline">얼음'+
+                '</div>'+
+                '<div class="round">샷<br>추가'+
+                '</div>'+
+              '</div>'
   $('.selected_menu').append(this.loadMenuData([addobj])).children('.item').last()
-  .children('.item_frame').append(x_button).append(subselect)
+  .children('.item_frame').append(subselect).append(x_button)
   .parent('.item').children('.item_price').remove().end()
   $('.selected_menu').children('.item').last().append(quantity)
-  $('.selected_menu .item').last().on('click',".after",this.clickevent)
+  $('.selected_menu .item').last().on('click',".after",this.xclickevent)
+  .children('.item_frame').children('.submenu').on('click', '.round',this.optionclickevent)
+
 }
 Menu.prototype.removeMenuData = function(item_el){
   index = selected_menu.findIndex(x => x._id==item_el.children('input').val())
@@ -65,16 +60,73 @@ Menu.prototype.loadMenuData = function(objs){
   });
   return html
 }
-Menu.prototype.clickevent = function (){
+Menu.prototype.xclickevent = function (){
   menu = new Menu;
   thisitem = $(this).parent('.item_frame').parent('.item')
   menu.removeMenuData(thisitem)
 }
+Menu.prototype.optionclickevent = function (){
+  item = $(this).parent('.submenu').parent('.item_frame').parent('.item');
+  item_index = selected_menu.findIndex(x => x._id==item.children('input').val())
+  option_index = $(this).index() -1;
+    if ($(this).hasClass('active')) {
+      $(this).removeClass('active')
+      selected_menu[item_index].option -= Math.pow(2,option_index)
+    }else {
+      $(this).addClass('active')
+      selected_menu[item_index].option += Math.pow(2,option_index)
+    }
+}
 /*class menu end*/
+/*class submit start*/
+function Submit(){
+  userdata = new Object();
+  submit_phone = function (obj) {
+    var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+    if(!obj.val()) {
+      alert("전화번호를 입력하세요.");
+      obj.focus();
+      return false;
+    }
+    else if (!regExp.test(obj.val())) {
+      alert("잘못된 전화번호입니다. 숫자, - 를 포함한 숫자만 입력하세요. 예) 050-XXXX-XXXX");
+      obj.focus();
+      obj.select();
+      return false
+    }
+    return true;
+  }
+  get_userdata = function(){
+    userdata.name = $('#first-name').val()
+    userdata.address = $('#last-name').val()
+    userdata.telephone = $('#telephone').val()
+    userdata.agreement = $('.checkbox').val()
+  }
+  this.submit_action = function(){
+    done = submit_phone($('#telephone'))
+    get_userdata()
+    if (done) {
+      $.ajax({
+        url: '/order',
+        type: 'POST',
+        dataType: json,
+        data: {userdata: userdata, orderdata: selected_menu}
+      })
+      .done(function(data) {
+        console.log("success");
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+      })
+    }
+  }
+}
+/*class submit end*/
 /*on browser start, call*/
 $(document).ready(function() {
 
   var menu = new Menu();
+  var submit = new Submit();
   $(".mat-input").focus(function(){
     $(this).parent().addClass("is-active is-completed");
   });
@@ -115,9 +167,8 @@ $(document).ready(function() {
       }
     });
   });
-
+  /*send data to server*/
   $('#finish').click(function() {
-    submit_action($('#telephone'))
+    submit.submit_action()
   });
-
 });
