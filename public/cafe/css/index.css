@@ -96,19 +96,19 @@ div.wood{
 @media screen and (max-aspect-ratio: 1/1){
   div.main {
       color: black;
-      height:250px;
+      height:270px;
   }
   div.main.expand{
-    height: calc(100vh - 53vw);
+    height: calc(100vh - 44vw);
   }
   div.header{
-    height: 53vw;
+    height: 44vw;
   }
   div.header img{
-        max-height:25vw;
+        max-height:20vw;
   }
   .navbar{
-    margin:4.5vw 0 6vw 0;
+    margin:0;
   }
   .navbar img{
       padding: 1.5vw;

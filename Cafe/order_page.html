@@ -5,7 +5,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <head>
       <link rel = "stylesheet" type = "text/css" href = "/cafe/css/order_page.css">
-      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+      <script src="/cafe/libs/jquery-1.11.0.min.js"></script>
       <script src="/cafe/js/order_page.js" type="text/javascript" charset="utf-8"></script>
       <title>메인페이지</title>
 
@@ -16,10 +16,10 @@
     <div class="container">
       <!-- Example row of columns -->
         <div class="col-md-4 col-xs-12 border">
-          <h2 class="title">STEP 1</h2>
+          <img class="title" src="./img/step 1.png" alt="STEP 1">
           <div class="inner">
 
-            <h5> 개인정보 수정 및 입력</h5>
+            <h3> 개인정보 수정 및 입력</h3>
             <div class="past">
                     <p>- 지난 주문 내역</p>
                     <p>111111111111</p>
@@ -50,13 +50,14 @@
             <div class="private-check">
                 <label><input type ="checkbox" class="checkbox">개인정보 사용 동의</label>
             </div>
+            <input type="hidden" name="password" value="<%=data%>" class="pw">
           </div>
         </div>
 
         <div class="col-md-4 col-xs-12 border">
-          <h2 class="title">STEP 2</h2>
+          <img class="title" src="./img/step 2.png" alt="STEP 2">
           <div class="inner">
-            <h5>메뉴 선택</h5>
+            <h3>메뉴 선택</h3>
             <div class="menu-image">
 
                <p>메뉴사진들</p>
@@ -66,18 +67,17 @@
         </div>
 
         <div class="col-md-4 col-xs-12 border">
-          <h2 class="title">STEP 3</h2>
+          <img class="title" src="./img/step 3.png" alt="STEP 3">
           <div class="inner">
-            <h5>메뉴 확인 및 옵션 선택</h5>
+            <h3>메뉴 확인 및 옵션 선택</h3>
 
             <div class="selected_menu">
             </div>
             <form action="/make_order" method="post" enctype="appication/json" name="order">
-                <input id="finish" type=submit value="주문완료">
+                <input id="finish" type=submit value="">
             </form>
           </div>
         </div>
-
     </div>
 </body>
 </html>
