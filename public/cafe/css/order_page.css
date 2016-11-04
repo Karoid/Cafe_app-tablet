@@ -184,6 +184,15 @@ h5{
 #finish{
     width: 100%;
     height: 100px;
+
+
+}
+
+.menu-list{
+    cursor: pointer;
+    width: 20%;
+    margin: 10px;
+}
 }
 @media (max-width: 992px){
   .col-xs-12{

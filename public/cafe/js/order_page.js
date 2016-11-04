@@ -1,3 +1,4 @@
+
 var serverip = "http://52.78.68.136"
 var selected_menu = new Array()
 /*class menu start*/
@@ -123,12 +124,12 @@ function Submit(){
 /*class submit end*/
 /*on browser start, call*/
 $(document).ready(function() {
+
   var menu = new Menu();
   var submit = new Submit();
   $(".mat-input").focus(function(){
     $(this).parent().addClass("is-active is-completed");
   });
-
   $(".mat-input").focusout(function(){
     if($(this).val() === "")
       $(this).parent().removeClass("is-completed");
