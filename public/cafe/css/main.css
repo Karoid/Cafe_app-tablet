@@ -2,6 +2,8 @@ body{
     overflow: hidden;
     padding: 0;
     margin: 0 0 0 0;
+    font-family:'Malgun Gothic';
+    font-size:16px;
 }
 ul{
     font-size: 0;
@@ -20,13 +22,259 @@ ul#up div{
     margin: 2px;
     font-size: 16px;
     box-sizing: content-box;
-
     display:inline-block;
-    color: white;
 }
 ul#up div#left
 {
     float: left;
     width: 100%;
     height: 100%;
+}
+/*nonuserbox, userbox*/
+ul#up div.nonuserbox, ul#up div.userbox{
+  position: absolute;
+  top: 50%;
+  margin-top: -7%;
+  margin-left: 25px;
+  border:1px solid black;
+  background-color: white;
+  width:300px;
+  height: 150px;
+  color: black;
+  box-shadow: 2px 2px 4px #888888;
+}
+ul#up div.userbox{
+  margin-left: -325px;
+}
+ul#up div.userbox .nonuserlogin-change, ul#up div.nonuserbox .userlogin-change{
+  display: none;
+}
+ul#up div.nonuserbox .login>button, ul#up div.nonuserbox .login{
+  height:25px;
+}
+ul#up div.userlogin-change>button{
+  width:250px;
+}
+.nonuserbox h1{
+  margin:0;
+}
+.gray-header{
+  color:gray;
+  display: block;
+}
+.gray-header hr{
+  width:80px;
+  margin:0 5px;
+  vertical-align:middle;
+  display: inline-block;
+}
+.gray-header p{
+  width:62px;
+  margin:0;
+  display: inline-block;
+  font-size: 20px;
+}
+.nonuserbox .gray-header hr{
+  width:50px;
+}
+.nonuserbox .gray-header p, .nonuserbox img{
+  width:160px;
+}
+#up div.input-self>input,#up div.login>button{
+  margin:5px 0;
+}
+.input-name{
+  text-align: right;
+  line-height: 30px;
+}
+.input-self, .input-self input{
+  width:100px;
+}
+.login, .login button{
+  height:53px;
+  vertical-align:top;
+  font-weight: bold;
+}
+.login button{
+  background-color: #c49a6c;
+  border: 1.5px black solid;
+  cursor: pointer;
+}
+.input-ect button{
+  vertical-align: top;
+  background:none!important;
+  border:none;
+  padding:0!important;
+  font: inherit;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.input-ect .right-border{
+  vertical-align: top;
+  border-right:1px solid black;
+}
+/*mobile 대응*/
+@media screen and (max-width: 767px){
+  ul#up div.nonuserbox, ul#up div.userbox{
+    position: relative;
+    margin: 0;
+    width:100%;
+  }
+  ul#up div.nonuserbox{
+    padding:5px 15px;
+    margin:-5px -15px;
+  }
+  ul#up div.nonuserbox, ul#up div.userbox.inactive{
+    display: none;
+  }
+  ul#up div.nonuserbox.active, ul#up div.nonuserlogin-change, ul#up div.nonuserbox .userlogin-change{
+    display: inline-block!important;
+  }
+  #up div.input-self>input,#up div.login>button{
+    margin:5px 0;
+    background-color: white;
+    border: 1px black solid;
+    box-shadow: 1px 1px 2px #888888;
+  }
+}
+
+/*checkbox*/
+/* Checkmark style starts */
+@-moz-keyframes dothabottomcheck {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 10px;
+  }
+}
+@-webkit-keyframes dothabottomcheck {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 10px;
+  }
+}
+@keyframes dothabottomcheck {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 10px;
+  }
+}
+@keyframes dothatopcheck {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: 24px;
+  }
+}
+@-webkit-keyframes dothatopcheck {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: 24px;
+  }
+}
+@-moz-keyframes dothatopcheck {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: 24px;
+  }
+}
+input[type=checkbox] {
+  display: none;
+}
+
+.check-box {
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border: 2px solid #000;
+  border-radius: 5px;
+  position: relative;
+  display: inline-block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-transition: border-color ease 0.2s;
+  -o-transition: border-color ease 0.2s;
+  -webkit-transition: border-color ease 0.2s;
+  transition: border-color ease 0.2s;
+  cursor: pointer;
+}
+.check-box::before, .check-box::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  height: 0;
+  width: 4px;
+  background-color: #c49a6c;
+  display: inline-block;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  border-radius: 5px;
+  content: ' ';
+  -webkit-transition: opacity ease .5;
+  -moz-transition: opacity ease .5;
+  transition: opacity ease .5;
+}
+.check-box::before {
+  top: 14.4px;
+  left: 8.2px;
+  box-shadow: 0 0 0 1px white;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+.check-box::after {
+  top: 7.4px;
+  left: 1px;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+input[type=checkbox]:checked + .check-box,
+.check-box.checked {
+  border-color: #c49a6c;
+}
+input[type=checkbox]:checked + .check-box::after,
+.check-box.checked::after {
+  height: 10px;
+  -moz-animation: dothabottomcheck 0.2s ease 0s forwards;
+  -o-animation: dothabottomcheck 0.2s ease 0s forwards;
+  -webkit-animation: dothabottomcheck 0.2s ease 0s forwards;
+  animation: dothabottomcheck 0.2s ease 0s forwards;
+}
+input[type=checkbox]:checked + .check-box::before,
+.check-box.checked::before {
+  height: 24px;
+  -moz-animation: dothatopcheck 0.4s ease 0s forwards;
+  -o-animation: dothatopcheck 0.4s ease 0s forwards;
+  -webkit-animation: dothatopcheck 0.4s ease 0s forwards;
+  animation: dothatopcheck 0.4s ease 0s forwards;
 }

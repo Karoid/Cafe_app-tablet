@@ -20,32 +20,18 @@ $(document).ready(function(){
     })
   });
   $("#signup-button").click(function(event){
-    $.ajax({
-      url: serverip+loginLocation+"sign_up",
-      method:"post",
-      data: {'username':$("#username").val(),'password':$("#password").val() },
-      success: function(data){
-        console.log("sign_up server accessed");
-        var login = eval("("+data+")")
-        if (data) {
-          $(".notification").html(login.err)
-        }else {
-          $(".notification").html("sign_up successful")
-          empty_form()
-        }
-      }
-    })
+    window.location = '/cafe/sign_up.html'
   });
   $("#nonuser-button").click(function(event){
     $.ajax({
-      url: serverip+loginLocation+"nonuserlogin",
+      url: serverip+loginLocation+"nonusersign_up",
       method:"post",
+      data: {'password':$("#nonuser_password").val() },
       success: function(data){
         console.log("nonuser logging");
         var login = eval("("+data+")")
         try {
-          $(".notification").html("nonuser login successful")
-          location.reload();
+          $(".notification").html(login.err)
           empty_form()
         } catch (e) {
           $(".notification").html(login.err)
@@ -70,7 +56,13 @@ $(document).ready(function(){
     })
     location.reload();
   })
+  /*모바일 UX*/
+  $('.nonuserlogin-change').click(function() {
+    $('.userbox').addClass('inactive')
+    $('.nonuserbox').addClass('active')
+  });
+  $('.userlogin-change').click(function() {
+    $('.userbox').removeClass('inactive')
+    $('.nonuserbox').removeClass('active')
+  });
 })
-function empty_form(){
-  $('input').val("")
-}

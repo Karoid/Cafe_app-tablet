@@ -1,22 +1,29 @@
-/**
- * Created by AJH322 on 2016-09-16.
- */
-/*function expand_pre()
-{
-    console.log("on!");
-    $("div#top").animate({height:"10%"});
-    $("div#mid").animate({height:"20%"});
-    $("div#bot").animate({height:"70%"},function() {
-        $("div#bot").css("overflow","auto");
-    });
-
-}
-function contract_pre()
-{
-    console.log("out!");
-    $("div#top").animate({height:"25%"});
-    $("div#mid").animate({height:"50%"});
-    $("div#bot").animate({height:"25%"} ,function() {
-        $("div#bot").css("overflow","hidden");
-    });
-}*/
+$(document).ready(function(){
+  $('.cafe_title').click(function(){
+    window.location = "/cafe/index"
+    var body = document.documentElement;
+    if (body.requestFullscreen) {
+      body.requestFullscreen();
+    } else if (body.webkitrequestFullscreen) {
+      body.webkitrequestFullscreen();
+    } else if (body.mozrequestFullscreen) {
+      body.mozrequestFullscreen();
+    } else if (body.msrequestFullscreen) {
+      body.msrequestFullscreen();
+    }
+  })
+  $('.go_to_order').on(function(){
+    console.log('move');
+    window.location="/cafe/order_page.html"
+  })
+  var css = setInterval(function(){
+    var url = $('#mid_frame').contents().get(0).location.pathname
+    var Regexr = /(order\w+|[Qq]n[Aa]\w*|sign_up).html(\/\d*)*/g
+    var change_boolean = Regexr.test(url)
+    if (change_boolean) {
+      $('#mid').addClass('expand')
+    }else {
+      $('#mid').removeClass('expand')
+    }
+  },500)
+})

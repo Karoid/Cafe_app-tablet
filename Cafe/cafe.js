@@ -99,13 +99,27 @@ router.get('/order_page.html', function(req, res) {
     }
   })
 });
-router.get('/QnA.html', function(req, res) {
+router.get('/sign_up.html', function(req, res) {
+  fs.readFile('./Cafe/sign_up.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data))
+    }
+  })
+});
+router.get('/QnA.html/:page?', function(req, res) {
   fs.readFile('./Cafe/QnA.html','utf8',function(err,data){
       try {
-        Qna.find({}, function (err, documents){
+        if (req.params.page) {
+          var page_num = req.params.page;
+        }else {
+          var page_num = 1;
+        }
+        Qna.paginate({},{page:page_num,limit:5}, function (err, documents){
           var seen_button = new Array()
-          for (var i = 0; i < documents.length; i++) {
-            var saved_user               = documents[i].username;
+          for (var i = 0; i < documents.docs.length; i++) {
+            var saved_user               = documents.docs[i].username;
             var logged_in_user           = req.session.username
             var not_logged_in            = saved_user == "nonuser" && !logged_in_user;
             var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";
@@ -252,7 +266,7 @@ router.post("/sign_up",function(req,res){
     username: req.body.username,
     password: req.body.password
   });
-  // save user to database
+  // save user to database 회원가입 부분 최초저장부분
   return testUser.save(function(err) {
     if (err) {
       console.log(req.body.username+"log on failed");
@@ -262,14 +276,29 @@ router.post("/sign_up",function(req,res){
       console.log(req.body+"sign_up success");
       return res.end('{"err":"'+testUser.username+' 가입완료"}')
     }
-
   })
 })
-router.post("/nonuserlogin",function(req,res){
-  req.session.username = "nonuser"
-  console.log(req.session.username+"login attempt");
-  res.end('{"err":"nonuser 로그인."}')
-});
+router.post("/nonusersign_up",function(req,res){
+  //NONUser 회원가입
+  User.find({},function(err,documents){
+    global.username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
+    var testUser = new User({
+      username: global.username,
+      password: req.body.password
+    });
+    // save user to database
+    return testUser.save(function(err) {
+      if (err) {
+        console.log(req.body.username+"log on failed");
+        if (err.code == 11000) return res.end('{"err":"'+testUser.username+'은 이미 사용중입니다"}')
+        return res.end(JSON.stringify(err))
+      }else {
+        console.log(req.body+"sign_up success");
+        return res.end('{"err":"id값이 '+testUser.username+'로 비회원 가입되었습니다!"}')
+      }
+    })
+  })
+})
 
 module.exports = router;
 

@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var userSchema = new mongoose.Schema({
 	username: {type:String},
 	password:{type:String},
 	title:{type:String},
 	content:{type:String}
 });
+userSchema.plugin(mongoosePaginate);
 var Qna = mongoose.model('Qna', userSchema, "Qna");
 module.exports = Qna;
 

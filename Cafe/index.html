@@ -2,31 +2,36 @@
 <html lang="kr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="libs/jquery-1.11.0.min.js"></script>
     <script src="js/index.js" type="text/javascript" charset="utf-8"></script>
-    <link rel = "stylesheet" type = "text/css" href = "./css/index.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <title>메인페이지</title>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="background">
-      <div class="header">
-      <h1 class="col-md-6" style="text-align:center">MAROO t</h1>
-        <div class="navbar col-md-6">
-          <a href="main.html" target="mid"><img src="img/홈아이콘.png"></a>
-          <a href="introduce.html" target="mid"><img src="img/가게소개아이콘.png"></a>
-              <a href="menu_page.html" target="mid"><img src="img/메뉴아이콘.png"></a>
-          <a href="QnA.html" target="mid"><img src="img/질문.png"></a>
+        <div class="header">
+            <div class="col-md-6 col-sm-6">
+                <img class="cafe_title" src="/cafe/img/logo.png" align="middle"/>
+            </div>
+            <div class="navbar col-md-6">
+                <a href="main.html" target="mid"><img src="img/홈아이콘.png"></a>
+                <a href="introduce.html" target="mid"><img src="img/가게소개아이콘.png"></a>
+                <a href="menu_page.html" target="mid"><img src="img/메뉴아이콘.png"></a>
+                <a href="QnA.html" target="mid"><img src="img/질문.png"></a>
+            </div>
         </div>
-      </div>
-      <div id="mid" class="main">
-          <iframe name="mid" src="./main.html"></iframe>
-      </div>
-      <div id="bot" class="non_main" >
-      </div>
-  </div>
+        <div class="wood" style="margin-top:-3vh"></div>
+        <div id="mid" class="main">
+            <iframe name="mid" src="./main.html" id="mid_frame"></iframe>
+        </div>
+        <div class="wood"></div>
+        <div id="bot" class="non_main">
+        </div>
+    </div>
 </body>
 </html>

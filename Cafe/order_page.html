@@ -13,16 +13,12 @@
 
 
 <body>
-
-    <div id="top" class="non_main">탑
-
-    </div>
-
-    <div id="mid" class="main">미드
     <div class="container">
       <!-- Example row of columns -->
         <div class="col-md-4 col-xs-12 border">
-          <h2>STEP 1</h2>
+          <h2 class="title">STEP 1</h2>
+          <div class="inner">
+
             <h5> 개인정보 수정 및 입력</h5>
             <div class="past">
                     <p>- 지난 주문 내역</p>
@@ -54,48 +50,34 @@
             <div class="private-check">
                 <label><input type ="checkbox" class="checkbox">개인정보 사용 동의</label>
             </div>
-
+          </div>
         </div>
 
-
         <div class="col-md-4 col-xs-12 border">
-          <h2>STEP 2</h2>
+          <h2 class="title">STEP 2</h2>
+          <div class="inner">
             <h5>메뉴 선택</h5>
             <div class="menu-image">
 
-            
-     <img class ="menu-list" src="/img/like_1.png">                
-             <img class ="menu-list" src="/img/like_1.png">     
-                <img class ="menu-list" src="/img/like_1.png">     
-                <img class ="menu-list" src="/img/like_1.png">     
-                <img class ="menu-list" src="/img/like_1.png">     
- 
+               <p>메뉴사진들</p>
+
             </div>
-
-       </div>
-
-
-        <div class="col-md-4 col-xs-12 border">
-          <h2>STEP 3</h2>
-            <h5>메뉴 확인 및 옵션 선택</h5>
-
- <div class="menu-image">
-            <img class ="menu-list" src="/img/like_1.png">     
-     <img class ="menu-list" src="/img/like_1.png">     
-     <img class ="menu-list" src="/img/like_1.png">     
-     <img class ="menu-list" src="/img/like_1.png">     
-     <img class ="menu-list" src="/img/like_1.png">     
-     <img class ="menu-list" src="/img/like_1.png">     
-     
-     
-               
-            
-            </div>
-
-            <button id ="finish" >주문완료</button>
+          </div>
         </div>
 
-    </div>
+        <div class="col-md-4 col-xs-12 border">
+          <h2 class="title">STEP 3</h2>
+          <div class="inner">
+            <h5>메뉴 확인 및 옵션 선택</h5>
+
+            <div class="selected_menu">
+            </div>
+            <form action="/make_order" method="post" enctype="appication/json" name="order">
+                <input id="finish" type=submit value="주문완료">
+            </form>
+          </div>
+        </div>
+
     </div>
 </body>
 </html>

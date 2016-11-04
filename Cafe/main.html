@@ -10,24 +10,64 @@
 <ul>
     <ul id="up">
         <div align="center" id="left">
-          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%><%if(redirect){%><%=redirect%>에 접속하기 위해 <%}%>Login!<%}%></h1>
+          <h1 class="notification"><%if(data){%><%=data%> 님이 로그인 하셨습니다<%}else{%><%if(redirect){%><%=redirect%>에 접속하기 위해 <%}}%></h1>
           <div class="form">
             <%if(data){%>
             <button type="submit" id="logout-button">Logout</button>
+            <h1><a href="/cafe/order_page.html">주문하러 가기</a></h1>
               <%if(redirect){%>
                 <script>
-                  $(document).ready(function() {
-                    console.log("move to <%=redirect%>")
-                    window.location = "../<%=redirect%>"
-                  });
+                    $(document).ready(function() {
+                        console.log("move to <%=redirect%>")
+                        window.location = "../<%=redirect%>"
+                    });
                 </script>
               <%}%>
             <%}else{%>
-            <input type="text" name="username" id="username" placeholder="Username"><br>
-            <input type="password" name="password" id="password" placeholder="Password"><br>
-            <button type="submit" id="login-button">Login</button><br>
-            <button type="submit" id="signup-button">Sign up</button><br><br>
-            <button type="submit" id="nonuser-button">비회원 주문하기</button> <!--로그인상태인지 아닌지 확인하고 로그인상태면 이동, 비로그인상태면 경고창 구현 -->
+            <div class="userbox">
+              <div class="gray-header">
+                <hr><p>Login</p><hr>
+              </div><br>
+              <div class="input-name">
+                전화번호<br>비밀번호
+              </div>
+              <div class="input-self">
+                <input type="text" name="username" id="username"><br>
+                <input type="password" name="password" id="password"><br>
+              </div>
+              <div class="login">
+                <button type="submit" id="login-button">로그인</button><br>
+              </div>
+              <div class="login nonuserlogin-change">
+                <button type="submit" id="login-button">비회원<br>주문</button><br>
+              </div><br>
+              <div class="input-ect">
+                <input id='save-login-session' type='checkbox' />
+                <label for='save-login-session' class="check-box">
+                </label>
+                <label for='save-login-session' class="right-border">
+                  아이디 저장
+                </label>
+                <button type="submit" id="signup-button">회원가입</button><br>
+              </div>
+              </div>
+            <div class ="nonuserbox">
+              <div class="gray-header">
+                <img src="./img/nonuser_order.png" alt="비회원 주문하기">
+              </div><br>
+              <div class="input-name">
+                비밀번호
+              </div>
+              <div class="input-self">
+              <input type="password" name="password" id="nonuser_password">
+              </div>
+              <div class="login">
+                <button type="submit" id="nonuser-button">주문하기</button>
+              </div><br>
+              <div class="login userlogin-change">
+                <button type="submit" id="login-button">회원 주문으로 전환</button>
+              </div>
+            </div>
             <%}%>
           </div>
         </div>
