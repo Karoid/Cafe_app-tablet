@@ -11,6 +11,9 @@ ul{
     list-style-type: none;
     padding: 0;
 }
+form{
+  margin:0;
+}
 ul#up{
     background-image: url("../img/background_coffee.jpg");
     background-size: auto 100%;

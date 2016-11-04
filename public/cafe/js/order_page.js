@@ -37,7 +37,7 @@ Menu.prototype.addMenuData = function(item_el){
 
 }
 Menu.prototype.removeMenuData = function(item_el){
-  index = selected_menu.findIndex(x => x._id==item_el.children('input').val())
+  index = selected_menu.map(function(obj){ return obj._id}).indexOf(item_el.children('input').val())
   $(".menu-image .item").eq(selected_menu[index].eq).removeClass('active')
   selected_menu.splice(index, 1);
   $('.selected_menu .item').eq(index).remove()
@@ -66,8 +66,8 @@ Menu.prototype.xclickevent = function (){
   menu.removeMenuData(thisitem)
 }
 Menu.prototype.optionclickevent = function (){
-  item = $(this).parent('.submenu').parent('.item_frame').parent('.item');
-  item_index = selected_menu.findIndex(x => x._id==item.children('input').val())
+  item_el = $(this).parent('.submenu').parent('.item_frame').parent('.item');
+  item_index = selected_menu.map(function(obj){ return obj._id}).indexOf(item_el.children('input').val())
   option_index = $(this).index() -1;
     if ($(this).hasClass('active')) {
       $(this).removeClass('active')
@@ -103,15 +103,29 @@ function Submit(){
     userdata.agreement = $('.checkbox').val()
   }
   this.submit_action = function(){
-    console.log({userdata: userdata, orderdata: selected_menu});
+    console.log({userdata: userdata, orderdata: selected_menu},$('.pw').val());
     done = submit_phone($('#telephone'))
+    nonuser = $('.pw').val()
     get_userdata()
-    if (done) {
+    if (done && nonuser == "") {
       $.ajax({
-        url: '/order',
+        url: '/user_order',
         type: 'POST',
         dataType: json,
         data: {userdata: userdata, orderdata: selected_menu}
+      })
+      .done(function(data) {
+        console.log("success");
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+      })
+    }else if (done) {
+      $.ajax({
+        url: '/nonuser_order',
+        type: 'POST',
+        dataType: json,
+        data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
       })
       .done(function(data) {
         console.log("success");

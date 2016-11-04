@@ -91,17 +91,30 @@ router.get('/order_page.html', function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      if (req.session.username) {
-        var user = req.session.username
+      var user = req.session.username
+      if (user) {
         console.log(user + "is logged on");
+        res.end(ejs.render(data,{data:null}))
       }
-      res.end(ejs.render(data,{data:user}))
     }
   })
 });
 router.post('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
-    res.end(ejs.render(data,{data:req.params.password}))
+    res.end(ejs.render(data,{data:req.body.password}))
+  })
+});
+router.get('/order_check/:order_id?', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      var user = req.session.username
+      if (user) {
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
+    }
   })
 });
 router.get('/sign_up.html', function(req, res) {
