@@ -137,7 +137,7 @@ function Submit(){
       $.ajax({
         url: '/cafe/nonuser_order',
         type: 'POST',
-        dataType: application/json,
+        dataType: 'application/json',
         data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
       })
       .done(function(data) {
