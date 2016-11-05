@@ -224,6 +224,61 @@ router.get('/QnA_d/:id', function(req, res) {
   }
 });
 
+//회원
+router.post('/user_order', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      if (req.session.username) {
+          
+          
+          var item = req.body.orderdata ;
+        
+           var count;
+        Order_count.find({}).lean().exec(function (err, doc) {
+    
+            console.log(doc[0])
+            count = doc[0].value;
+            
+            for(i=0;i<item.length;i++){
+                
+                var goitem = { price : item[i].item_price, name : item[i].item_name, option : item[i].option}
+                goitem = goitem + "";
+                
+                conn.collection('order_data').insert({
+                                order_id: req.session.username,
+                                order_count: count,
+                                order_item_index : goitem
+                                                        });
+
+                conn.collection('order_count').update({value: count}, 
+                                                      {value: count + 1});
+
+            }
+        });
+          
+          
+      }
+      res.end(ejs.render(data,{data:user}))
+    }
+  })
+});
+//비회원
+
+router.post('/nonuser_oder', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      if (req.session.username) {
+        var user = req.session.username
+        console.log(user + "is logged on");
+      }
+      res.end(ejs.render(data,{data:user}))
+    }
+  })
+});
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){

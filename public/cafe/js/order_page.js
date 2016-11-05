@@ -107,7 +107,7 @@ function Submit(){
     get_userdata()
     if (done) {
       $.ajax({
-        url: '/order',
+        url: '/user_order',
         type: 'POST',
         dataType: json,
         data: {userdata: userdata, orderdata: selected_menu}
