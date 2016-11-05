@@ -5,11 +5,7 @@ body{
   font-family:'Malgun Gothic';
   font-size:16px;
 }
-h2{
-    text-align: center;
-}
-
-h5{
+h3{
     text-align: center;
 }
 .container{
@@ -35,11 +31,12 @@ h5{
     display: block;
 }
 .title{
-  width:100%;
-  height:3vh;
-  margin:2vh 0;
+  width: auto;
+  height: 5vh;
+  margin: 0 auto;
   line-height: 3vh;
-  color:white;
+  color: white;
+  display: block;
 }
 .inner{
   width:100%;
@@ -52,6 +49,7 @@ h5{
   box-sizing: border-box;
   height:89vh;
   overflow-y:scroll;
+  scrollbar-track-color: white;
 }
 .inner::-webkit-scrollbar {
     width: 0.4em;
@@ -83,7 +81,6 @@ h5{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  position:absolute;
   cursor: pointer;
 }
 .item .item_frame:hover{
@@ -91,22 +88,23 @@ h5{
   padding:4px;
 }
 .item.active .item_frame{
-  border: 3px solid red;
+  border: 3px solid #bf1e2e;
   padding:3px;
 }
 .item.active .item_frame:after{
-  position: absolute;
-  background: red;
+  position: relative;
+  background: #bf1e2e;
   border-radius: 30px;
   width: 30px;
   height: 30px;
   content: "∧";
   left: 90px;
-  top: -15px;
+  top: -120px;
   transform: rotate(180deg);
   color: white;
   font-size: 27px;
   line-height: 25px;
+  display: block;
 }
 .item .item_img{
   width:auto;
@@ -116,7 +114,6 @@ h5{
 }
 .item .item_name{
   font-weight: bold;
-  margin-top: 110px;
 }
 .selected_menu .item{
   width:260px;
@@ -126,8 +123,8 @@ h5{
   cursor: auto;
 }
 .selected_menu .item .item_frame .after{
-  position: absolute;
-  background: red;
+  position: relative;
+  background: #bf1e2e;
   border-radius: 30px;
   width: 30px;
   height: 30px;
@@ -143,24 +140,24 @@ h5{
   text-align: center;
 }
 .selected_menu .item .item_frame .submenu{
-  width:150px;
-  height:110px;
-  position:absolute;
+  width: 150px;
+  height: 110px;
   overflow-x: hidden;
   background-color: #9E9E9E;
-  transition:.5s;
-  top:-1px;
-  left:110px;
+  transition: .5s;
+  margin: -110px 110px;
 }
-.selected_menu .item .item_frame .submenu .title{
+.selected_menu .item .item_frame .submenu .sub_title{
   margin: 10px;
   font-size: 13px;
   width: 130px;
+  color:white;
 }
-.selected_menu .item .item_frame .submenu .title hr{
+.selected_menu .item .item_frame .submenu .sub_title hr{
   width: 28px;
   display: inline-block;
   margin: 4px 3px;
+  border:.1px solid white
 }
 .selected_menu .item .item_frame .submenu .round{
   border-radius: 35px;
@@ -182,17 +179,20 @@ h5{
   line-height: 33px;
 }
 #finish{
-    width: 100%;
-    height: 100px;
-
-
+  width: 100%;
+  height: 50px;
+  background-color: #bf1e2e;
+  background-image: url(../img/order_fin.png);
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 0;
 }
 
 .menu-list{
     cursor: pointer;
     width: 20%;
     margin: 10px;
-}
 }
 @media (max-width: 992px){
   .col-xs-12{
@@ -207,6 +207,9 @@ h5{
   }
   .container:hover > .col-md-4:hover{
     width:45.3%;
+  }
+  .title{
+    height:15vw;
   }
 }
 @media (min-aspect-ratio: 706/332){

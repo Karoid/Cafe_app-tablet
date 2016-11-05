@@ -22,7 +22,7 @@ $(document).ready(function(){
   $("#signup-button").click(function(event){
     window.location = '/cafe/sign_up.html'
   });
-  $("#nonuser-button").click(function(event){
+  /*$("#nonuser-button").click(function(event){
     $.ajax({
       url: serverip+loginLocation+"nonusersign_up",
       method:"post",
@@ -38,7 +38,7 @@ $(document).ready(function(){
         }
       }
     })
-  });
+  });*/
   $("#logout-button").click(function(){
     $.ajax({
       url: serverip+loginLocation+"logout",

@@ -1,0 +1,77 @@
+body{
+  background-image: url(/cafe/img/background_order.jpg);
+  background-size: auto 100%;
+  margin:0;
+  font-family:'Malgun Gothic';
+  font-size:16px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+#paper{
+  background-color: white;
+  width: 86vw;
+  height: 84vh;
+  margin: 5vh 4vw;
+  padding: 3vh 3vw;
+}
+.col-md-6{
+  width: 43vw;
+  float: left;
+  padding:10px 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.right-line{
+  height: 100%;
+  border-right: 1px solid;
+}
+.price{
+  text-align: right;
+  font-size: 25px;
+}
+.ordered_item{
+  width:100%;
+  height:500px;
+  border: 1px solid;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-y:scroll;
+  padding:20px;
+  scrollbar-track-color: white;
+}
+.ordered_item::-webkit-scrollbar {
+    width: 0.4em;
+}
+
+.ordered_item::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+
+.ordered_item::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+@media (min-aspect-ratio: 706/332){
+  body{
+    background-size:100% auto;
+  }
+}
+@media (max-width: 992px){
+  .col-xs-12{
+    width:95.2%!important;
+    height: auto!important;
+  }
+  .right-line{
+    border:none;
+    height: auto;
+  }
+  #paper{
+    overflow-y: scroll;
+  }
+  .ordered_item{
+    height:100%;
+  }
+}
