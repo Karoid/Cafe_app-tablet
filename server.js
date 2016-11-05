@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
 var os = require("os");
-if (os.type() == "Linux") {
+if (os.type() == "Linux" && false) {
     console.log("server is on AWS");
     mongoose.connect('mongodb://localhost:27017/test', function (err) {
         mongoose.Promise = global.Promise;
@@ -57,7 +57,7 @@ app.use(function (req, res, next) {
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe', require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정
-app.listen(80, function () {
+app.listen(process.env.PORT || 80, process.env.IP || "0.0.0.0", function () {
     console.log('Server Start http://localhost/test.html');
     console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });

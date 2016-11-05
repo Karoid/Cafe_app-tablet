@@ -74,7 +74,7 @@ router.get('/menu_page.html', function(req, res) {
     }
   })
 });
-router.get('/order_check.html', function(req, res) {
+router.post('/order_check.html', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
@@ -83,7 +83,7 @@ router.get('/order_check.html', function(req, res) {
         var user = req.session.username
         console.log(user + "is logged on");
       }
-      res.end(ejs.render(data,{data:user}))
+      res.end(ejs.render(data,{userdata: userdata, orderdata: orderdata}))
     }
   })
 });

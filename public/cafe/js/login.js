@@ -1,8 +1,7 @@
 var serverip = ""
 var loginLocation = "/cafe/"
 $(document).ready(function(){
-  console.log("js loaded");
-  $("#login-button").click(function(event){
+  function login(){
     $.ajax({
       url: serverip+loginLocation+"login",
       method:"post",
@@ -18,6 +17,16 @@ $(document).ready(function(){
         }
       }
     })
+  }
+  console.log("js loaded");
+  $('#password').keypress(function(event) {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        login()
+    }
+  });
+  $("#login-button").click(function(event){
+    login()
   });
   $("#signup-button").click(function(event){
     window.location = '/cafe/sign_up.html'
