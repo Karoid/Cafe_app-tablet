@@ -33,14 +33,21 @@ Menu.prototype.addMenuData = function(item_el){
   .children('.item_frame').children('.submenu').on('click', '.round',this.optionclickevent)
 }
 Menu.prototype.removeMenuData = function(item_el){
-  id_string = selected_menu.map(function(obj){ return obj._id}).slice().sort();
+  id_string_sort = selected_menu.map(function(obj){ return obj._id}).slice().sort();
+  id_string = selected_menu.map(function(obj){ return obj._id})
   index = id_string.lastIndexOf(item_el.children('input').val())
-  first_index = id_string.indexOf(item_el.children('input').val())
-  if (index == first_index && selected_menu[index].eq) {
+  last_index = id_string_sort.lastIndexOf(item_el.children('input').val())
+  first_index = id_string_sort.indexOf(item_el.children('input').val())
+  $(".menu-image .item").eq(selected_menu[index].eq).children('.item_frame').children('.number').html((last_index-first_index))
+  if ((last_index-first_index)<=0) {
     $(".menu-image .item").eq(selected_menu[index].eq).removeClass('active')
   }
   selected_menu.splice(index, 1);
-  $('.selected_menu .item').eq(index).remove()
+  if (item_el.parents('.selected_menu').length) {
+    item_el.remove()
+  }else {
+    $('.selected_menu .item').eq(index).remove()
+  }
 }
 Menu.prototype.loadMenuData = function(objs){
   html = ""
@@ -69,7 +76,7 @@ Menu.prototype.xclickevent = function (){
 }
 Menu.prototype.optionclickevent = function (){
   item_el = $(this).parent('.submenu').parent('.item_frame').parent('.item');
-  item_index = selected_menu.map(function(obj){ return obj._id}).indexOf(item_el.children('input').val())
+  item_index = item_el.index()
   option_index = $(this).index() -1;
     if ($(this).hasClass('active')) {
       $(this).removeClass('active')
@@ -189,12 +196,15 @@ $(document).ready(function() {
     console.log("error");
   })
   .always(function() {
-    $('.item').on('click', function() {
-      this_item = $(this)
+    $('.item_frame .item_img').on('click', function() {
+      this_item = $(this).parent('.item_frame').parent('.item')
         this_item.addClass('active')
         menu.addMenuData(this_item)
-    }).children(".item_frame").children(".after").off("click").click(function(){
-      menu.removeMenuData(this_item)
+        old_count = this_item.children('.item_frame').children('.number').html()
+        this_item.children('.item_frame').children('.number').html(parseInt(old_count)+1)
+    })
+    $('.item_frame .after').click(function(){
+      this_item = $(this).parent('.item_frame').parent('.item')
       menu.removeMenuData(this_item)
     })
   });

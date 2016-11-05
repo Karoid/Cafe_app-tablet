@@ -113,15 +113,17 @@ h3{
 }
 .item.active .item_frame .number{
   position: relative;
-  background: #bf1e2e;
+  background: white;
   border-radius: 30px;
   width: 30px;
   height: 30px;
-  left: -20px;
-  top: -125px;
-  color: white;
+  right: -87px;
+  top: -47px;
+  color: #bf1e2e;
   font-size: 20px;
   line-height: 27px;
+  display: block;
+  border: 1px solid #bf1e2e;
 }
 .item .item_img{
   width:auto;
