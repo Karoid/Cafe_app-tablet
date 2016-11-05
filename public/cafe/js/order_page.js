@@ -108,10 +108,11 @@ function Submit(){
     nonuser = $('.pw').val()
     get_userdata()
     if (done && nonuser == "") {
+      //console.log("going");
       $.ajax({
         url: '/user_order',
         type: 'POST',
-        dataType: json,
+            dataType: 'application/json',
         data: {userdata: userdata, orderdata: selected_menu}
       })
       .done(function(data) {
