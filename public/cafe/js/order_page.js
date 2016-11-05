@@ -111,7 +111,7 @@ function Submit(){
       //var redirect = '/cafe/order_check.html';
       //.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
       $.ajax({
-        url: '/user_order',
+        url: '/cafe/user_order',
         type: 'POST',
             dataType: 'application/json',
         data: {userdata: userdata, orderdata: selected_menu}
