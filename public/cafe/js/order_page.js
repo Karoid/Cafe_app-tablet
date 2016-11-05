@@ -108,9 +108,9 @@ function Submit(){
     nonuser = $('.pw').val()
     get_userdata()
     if (done && nonuser == "") {
-      var redirect = '/cafe/user_order';
-      $.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
-      /*$.ajax({
+      //var redirect = '/cafe/order_check.html';
+      //.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
+      $.ajax({
         url: '/user_order',
         type: 'POST',
             dataType: 'application/json',
@@ -121,7 +121,7 @@ function Submit(){
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
-      })*/
+      })
     }else if (done) {
       $.ajax({
         url: '/cafe/nonuser_order',
