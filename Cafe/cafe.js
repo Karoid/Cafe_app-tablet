@@ -79,11 +79,7 @@ router.post('/order_check.html', function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
-      }
-      res.end(ejs.render(data,{userdata: userdata, orderdata: orderdata}))
+      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
     }
   })
 });
