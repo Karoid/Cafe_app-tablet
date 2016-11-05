@@ -91,20 +91,37 @@ h3{
   border: 3px solid #bf1e2e;
   padding:3px;
 }
-.item.active .item_frame:after{
+.item .item_frame .after{
+  display: none;
+}
+.item.active .item_frame .after{
   position: relative;
   background: #bf1e2e;
   border-radius: 30px;
   width: 30px;
   height: 30px;
-  content: "∧";
-  left: 90px;
-  top: -120px;
-  transform: rotate(180deg);
+  left: -20px;
+  top: -125px;
   color: white;
-  font-size: 27px;
-  line-height: 25px;
-  display: block;
+  font-size: 20px;
+  line-height: 27px;
+  cursor: pointer;
+  display:block;
+}
+.item .item_frame .number{
+  display: none;
+}
+.item.active .item_frame .number{
+  position: relative;
+  background: #bf1e2e;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
+  left: -20px;
+  top: -125px;
+  color: white;
+  font-size: 20px;
+  line-height: 27px;
 }
 .item .item_img{
   width:auto;
@@ -133,6 +150,7 @@ h3{
   font-size: 20px;
   line-height: 27px;
   cursor: pointer;
+  display: block;
 }
 .selected_menu .item input[type="number"] {
   width:50px;

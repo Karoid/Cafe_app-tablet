@@ -14,9 +14,13 @@
     <div class="col-md-6 col-xs-12 right-line">
       <h3>*주문내역 확인</h3>
       <div class="ordered_item">
-        <%%>
+        <%price=0%>
+        <% JSON.parse(unescape(orderdata)).forEach(function(order){%>
+        <%=order.item_name%>  X  <%=order.option.length%><br>
+        <%price+=parseInt(order.item_price)%>
+        <%})%>
       </div>
-      <div class="price">총 금액:<span class="won">10000</span>원</div>
+      <div class="price">총 금액:<span class="won"><%=price%></span>원</div>
     </div>
     <div class="col-md-6 col-xs-12">
       <h3>*주문정보 확인</h3>

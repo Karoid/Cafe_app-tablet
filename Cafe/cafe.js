@@ -74,15 +74,6 @@ router.get('/menu_page.html', function(req, res) {
     }
   })
 });
-router.post('/order_check.html', function(req, res) {
-  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    } else {
-      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
-    }
-  })
-});
 router.get('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
     if (err) {
@@ -101,7 +92,17 @@ router.post('/order_page.html', function(req, res) {
     res.end(ejs.render(data,{data:req.body.password}))
   })
 });
-router.get('/order_check/:order_id?', function(req, res) {
+router.post('/order_check.html', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(req.body.orderdata,  req.body.userdata)
+      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
+    }
+  })
+});
+router.get('/order_check', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
