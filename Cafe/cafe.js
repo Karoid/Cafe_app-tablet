@@ -376,35 +376,21 @@ router.post('/nonuser_order', function(req, res) {
 
 // 최근 주문 
 router.get('/recent_order', function(req, res) {
-   
- 
-    
-    console.log(req.session.username);
+       console.log(req.session.username);
       if (req.session.username) {
           var recent_order;
           Order_data.find({order_id : req.session.username}, function (err, documents){
-          
-              
-            //  console.log("hi"+documents[0]);
-            
               var goitem = new Array();
-        
-              for(i=0;i<3;i++){
+                      for(i=0;i<3;i++){
                 goitem.push({ order : documents[i].order_item_index})
             }
-           
-              return res.end(' '+goitem);
+                         return res.end(' '+goitem);
 
-        
-          });
-                                             
-                                             }
+          });      
+      }
                                              
       else
-        res.end();
-      
-    
-    
+        res.end();      
   });
 
 //User 로그인
