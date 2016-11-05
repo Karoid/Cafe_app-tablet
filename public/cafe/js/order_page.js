@@ -108,8 +108,9 @@ function Submit(){
     nonuser = $('.pw').val()
     get_userdata()
     if (done && nonuser == "") {
-      //console.log("going");
-      $.ajax({
+      var redirect = '/cafe/order_check.html';
+      $.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
+      /*$.ajax({
         url: '/user_order',
         type: 'POST',
             dataType: 'application/json',
@@ -120,7 +121,7 @@ function Submit(){
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
-      })
+      })*/
     }else if (done) {
       $.ajax({
         url: '/nonuser_order',
@@ -138,6 +139,19 @@ function Submit(){
   }
 }
 /*class submit end*/
+// jquery extend function
+$.extend(
+{
+    redirectPost: function(location, args)
+    {
+        var form = '';
+        $.each( args, function( key, value ) {
+            value = value.split('"').join('\"')
+            form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+        });
+        $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+    }
+});
 /*on browser start, call*/
 $(document).ready(function() {
 
