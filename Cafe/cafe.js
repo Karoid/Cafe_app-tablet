@@ -280,9 +280,10 @@ router.post('/user_order', function(req, res) {
                                 order_date: Date.now(),
                                 order_total_price: total_price,
                                 order_state: "ready", //ready or done
-                                order_id: req.body.userdata.telephone,
+                                order_id: req.session.username,
                                 order_count: count,
-                                order_item_index : goitem
+                                order_item_index : goitem,
+                                user_index : req.body.userdata
                                                         });
 
                 conn.collection('order_count').update({value: count}, 
@@ -298,17 +299,20 @@ router.post('/user_order', function(req, res) {
 });
 //비회원
 
-router.post('/nonuser_oder', function(req, res) {
+router.post('/nonuser_order', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     } else {    
-
+        console.log("hi");
+        nonuser_signup();
+        function nonuser_signup(){
+            
         User.find({},function(err,documents){
             global.username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
             var testUser = new User({
                 username: global.username,
-                password: req.body.pw;
+                password: req.body.pw
                                     });
                 // save user to database
                 return testUser.save(function(err) {
@@ -324,9 +328,11 @@ router.post('/nonuser_oder', function(req, res) {
                   }
                 })
               })
-
-        
-         // console.log(req.body.orderdata);
+            return insert_order();
+        }
+        function insert_order(){
+            
+         console.log(req.body.orderdata);
           var item = req.body.orderdata ;
           var total_price=0;
            var count;
@@ -354,15 +360,17 @@ router.post('/nonuser_oder', function(req, res) {
                                 order_date: Date.now(),
                                 order_total_price: total_price,
                                 order_state: "ready", //ready or done
-                                order_id: req.body.userdata.telephone,
+                                order_id:  global.username,
                                 order_count: count,
-                                order_item_index : goitem
+                                order_item_index : goitem,
+                                user_index : req.body.userdata
                                                         });
 
                 conn.collection('order_count').update({value: count}, 
                                                       {value: count + 1});
 
         });          
+        }
       res.end(ejs.render(data,{data:null}))
     }
   })
