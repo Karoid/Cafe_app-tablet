@@ -19,13 +19,13 @@ Menu.prototype.addMenuData = function(item_el){
                 '<div class="sub_title">'+
                   '<hr>옵션 선택<hr>'+
                 '</div>'+
-                '<div class="round">휘핑크림'+
+                '<div class="round noadd">no <br>휘핑'+
                 '</div>'+
-                '<div class="round oneline">시럽'+
+                '<div class="round noadd">no <br>시럽'+
                 '</div>'+
-                '<div class="round oneline">얼음'+
+                '<div class="round oneline icehot">ice'+
                 '</div>'+
-                '<div class="round">샷<br>추가'+
+                '<div class="round noadd">no <br>샷'+
                 '</div>'+
               '</div>'
   $('.selected_menu').append(this.loadMenuData([addobj])).children('.item').last()
@@ -34,7 +34,6 @@ Menu.prototype.addMenuData = function(item_el){
   $('.selected_menu').children('.item').last().append(quantity)
   $('.selected_menu .item').last().on('click',".after",this.xclickevent)
   .children('.item_frame').children('.submenu').on('click', '.round',this.optionclickevent)
-
 }
 Menu.prototype.removeMenuData = function(item_el){
   index = selected_menu.map(function(obj){ return obj._id}).indexOf(item_el.children('input').val())
@@ -71,9 +70,21 @@ Menu.prototype.optionclickevent = function (){
   option_index = $(this).index() -1;
     if ($(this).hasClass('active')) {
       $(this).removeClass('active')
+      if ($(this).hasClass('noadd')) {
+        $(this).html($(this).html().split("yes")[1])
+        $(this).html("no"+$(this).html())
+      }else if($(this).hasClass('icehot')){
+        $(this).html("ice")
+      }
       selected_menu[item_index].option -= Math.pow(2,option_index)
     }else {
       $(this).addClass('active')
+      if ($(this).hasClass('noadd')) {
+        $(this).html($(this).html().split("no")[1])
+        $(this).html("yes"+$(this).html())
+      }else if($(this).hasClass('icehot')){
+        $(this).html("hot")
+      }
       selected_menu[item_index].option += Math.pow(2,option_index)
     }
 }
@@ -109,9 +120,9 @@ function Submit(){
     get_userdata()
     if (done && nonuser == "") {
       //var redirect = '/cafe/order_check.html';
-      //.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
+      //$.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
       $.ajax({
-        url: '/user_order',
+        url: '/cafe/user_order',
         type: 'POST',
             dataType: 'application/json',
         data: {userdata: userdata, orderdata: selected_menu}
@@ -135,22 +146,11 @@ function Submit(){
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
       })
+      
     }
   }
 }
 /*class submit end*/
-// jquery extend function
-$.extend(
-{
-    redirectPost: function(location, args)
-    {
-        var form = '';
-        $.each( args, function( key, value ) {
-            form += '<input type="hidden" name="'+key+'" value="'+value+'">';
-        });
-        $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
-    }
-});
 /*on browser start, call*/
 $(document).ready(function() {
 
