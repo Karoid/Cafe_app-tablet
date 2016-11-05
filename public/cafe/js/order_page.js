@@ -124,7 +124,7 @@ function Submit(){
       })*/
     }else if (done) {
       $.ajax({
-        url: '/nonuser_order',
+        url: '/cafe/nonuser_order',
         type: 'POST',
         dataType: json,
         data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
