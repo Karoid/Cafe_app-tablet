@@ -244,13 +244,14 @@ router.get('/QnA_d/:id', function(req, res) {
 
 //회원
 router.post('/user_order', function(req, res) {
+    console.log(req.session.username);
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     } else {
       if (req.session.username) {
           
-          
+          console.log(req.body.orderdata);
           var item = req.body.orderdata ;
         
            var count;
