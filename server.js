@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 async = require("async");
 var os = require("os");
-if (os.type() == "Linux") {
+if (os.type() == "Linux" && false) {
     console.log("server is on AWS");
     mongoose.connect('mongodb://localhost:27017/test', function (err) {
         mongoose.Promise = global.Promise;
@@ -57,7 +57,7 @@ app.use(function (req, res, next) {
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe', require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정
-app.listen(80, function () {
+app.listen(process.env.PORT || 80, process.env.IP || "0.0.0.0", function () {
     console.log('Server Start http://localhost/test.html');
     console.log('DB에 들어가고 싶다면 ./mongo를 이용');
 });
@@ -163,28 +163,6 @@ app.use(function (req, res, next) {
     }
 });
 //주문
-app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
-    //console.log("get");
-    //console.log(req.body.page_index);
-    var count;
-    Order_count.find({}).lean().exec(function (err, doc) {
-        //console.log(doc[0])
-        console.log(req.body);
-        count = doc[0].value;
-        //var count_today =conn.collection('order_count_today').find(Order_count)
-        //conn.collection('order_count_today').update({Order_count: count}, {item_count: count + 1});
-        conn.collection('order_data').insert({
-            order_count: count,
-            order_count_today: 0,
-            order_date: Date.now(),
-            order_item_index: req.body.orderdata,
-            order_total_price: req.body.orderdata.item_price,
-            order_id: req.body.userdata.telephone,
-            order_state: "ready", //ready or done
-        });
-        conn.collection('order_count').update({value: count}, {value: count + 1});
-    });
-})
 app.post('/get_order_data', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     //console.log("get");
     //console.log(req.body.page_index);
