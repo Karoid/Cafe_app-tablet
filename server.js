@@ -163,16 +163,24 @@ app.use(function (req, res, next) {
     }
 });
 //주문
-app.post('/make_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     //console.log("get");
     //console.log(req.body.page_index);
     var count;
     Order_count.find({}).lean().exec(function (err, doc) {
-        console.log(doc[0])
+        //console.log(doc[0])
+        console.log(req.body);
         count = doc[0].value;
+        //var count_today =conn.collection('order_count_today').find(Order_count)
+        //conn.collection('order_count_today').update({Order_count: count}, {item_count: count + 1});
         conn.collection('order_data').insert({
-            order_id: "01097570954",
-            order_count: count
+            order_count: count,
+            order_count_today: 0,
+            order_date: Date.now(),
+            order_item_index: req.body.orderdata,
+            order_total_price: req.body.orderdata.item_price,
+            order_id: req.body.userdata.telephone,
+            order_state: "ready", //ready or done
         });
         conn.collection('order_count').update({value: count}, {value: count + 1});
     });
@@ -309,8 +317,8 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
 
 });
 app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
-   // console.log(req.body); //form fields
-  //  console.log(req.file); //form files
+    // console.log(req.body); //form fields
+    //  console.log(req.file); //form files
     //path.extname(req.file)
     var dir;
     var tempItem;
@@ -319,7 +327,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
         Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
             //console.log(doc[0].img_dir);
-                        console.log("hear"+doc[0].item_name);
+            console.log("hear" + doc[0].item_name);
 
             var tempItem = doc[0].item_name;
             try {
@@ -354,20 +362,20 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
                 }
             },
             function (err, numberAffected, rawResponse) {
-                console.log("에러2:"+err+"영향"+numberAffected+"raw"+rawResponse);
-              
+                console.log("에러2:" + err + "영향" + numberAffected + "raw" + rawResponse);
+
             })
-        
+
         Page_data.update(
             {item_name: tempItem},
             {
                 $set: {
                     item_name: req.body.item_name,
-                    
+
                 }
-            },{ multi: true },
+            }, {multi: true},
             function (err, numberAffected, rawResponse) {
-                console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
+                console.log("에러:" + err + "영향" + numberAffected + "raw" + rawResponse);
                 res.redirect("../admin.html#/item");
             })
     }
@@ -587,7 +595,7 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
         //console.log(documents);
         documents.forEach(function (doc) {
             itemlist.push(doc.item_name);
-            console.log("a");
+            //console.log("a");
         });
         //console.log(itemlist);
 
@@ -606,9 +614,6 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
             // console.log("stringArray:" + JSON.stringify(docs[0]));
             // console.log("stringArray:" + JSON.stringify(docs[1]));
             // console.log("stringArray:" + JSON.stringify(docs[2]));
-
-         ////   console.log("stringArray:" + stringArray);
-       //     console.log("stringArray:" + JSON.parse(stringArray));
             //console.log("b " + itemlist);
             return res.end(stringArray);
             }
