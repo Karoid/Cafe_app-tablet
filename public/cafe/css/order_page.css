@@ -147,12 +147,13 @@ h3{
   transition: .5s;
   margin: -110px 110px;
 }
-.selected_menu .item .item_frame .submenu .title{
+.selected_menu .item .item_frame .submenu .sub_title{
   margin: 10px;
   font-size: 13px;
   width: 130px;
+  color:white;
 }
-.selected_menu .item .item_frame .submenu .title hr{
+.selected_menu .item .item_frame .submenu .sub_title hr{
   width: 28px;
   display: inline-block;
   margin: 4px 3px;
