@@ -179,7 +179,7 @@ app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지
             order_date: Date.now(),
             order_item_index: req.body.orderdata,
             order_total_price: req.body.orderdata.item_price,
-            order_id: userdata.telephone,
+            order_id: req.body.telephone,
             order_state: "ready", //ready or done
         });
         conn.collection('order_count').update({value: count}, {value: count + 1});
