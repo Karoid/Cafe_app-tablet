@@ -6,6 +6,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var User = require('../models/user');
+var Order_count = require('../models/order_count')
 var Qna = require('../models/qna');
 var router = express.Router();
 // middleware that is specific to this router
@@ -253,19 +254,32 @@ router.post('/user_order', function(req, res) {
           
           console.log(req.body.orderdata);
           var item = req.body.orderdata ;
-        
+          var total_price=0;
            var count;
-        Order_count.find({}).lean().exec(function (err, doc) {
+       
+          Order_count.find({}).lean().exec(function (err, doc) {
     
-            console.log(doc[0])
+            //console.log(doc[0])
             count = doc[0].value;
-            
+           // console.log(item.length);
+              
+              
             for(i=0;i<item.length;i++){
-                
-                var goitem = { price : item[i].item_price, name : item[i].item_name, option : item[i].option}
-                goitem = goitem + "";
-                
+                total_price = Number(total_price) + Number(item[i].item_price);
+            }
+            var goitem = new Array();
+            for(i=0;i<item.length;i++){
+                goitem.push({ name : item[i].item_name, option : item[i].option})
+            }
+              
+                 // console.log(goitem);
                 conn.collection('order_data').insert({
+             
+                                order_count: count,
+                                order_count_today: 0,
+                                order_date: Date.now(),
+                                order_total_price: total_price,
+                                order_state: "ready", //ready or done
                                 order_id: req.session.username,
                                 order_count: count,
                                 order_item_index : goitem
@@ -274,12 +288,11 @@ router.post('/user_order', function(req, res) {
                 conn.collection('order_count').update({value: count}, 
                                                       {value: count + 1});
 
-            }
         });
           
           
       }
-      res.end(ejs.render(data,{data:user}))
+      res.end(ejs.render(data,{data:null}))
     }
   })
 });

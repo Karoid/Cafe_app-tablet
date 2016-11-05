@@ -110,7 +110,7 @@ function Submit(){
     if (done && nonuser == "") {
       //console.log("going");
       $.ajax({
-        url: '/user_order',
+        url: '/cafe/user_order',
         type: 'POST',
             dataType: 'application/json',
         data: {userdata: userdata, orderdata: selected_menu}
@@ -123,7 +123,7 @@ function Submit(){
       })
     }else if (done) {
       $.ajax({
-        url: '/nonuser_order',
+        url: '/cafe/nonuser_order',
         type: 'POST',
         dataType: json,
         data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
