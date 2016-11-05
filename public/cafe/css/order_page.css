@@ -157,7 +157,7 @@ h3{
   width: 28px;
   display: inline-block;
   margin: 4px 3px;
-  border:.1px solid white
+  border:.1px solid white;
 }
 .selected_menu .item .item_frame .submenu .round{
   border-radius: 35px;
