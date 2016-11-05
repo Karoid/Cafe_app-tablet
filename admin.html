@@ -41,7 +41,7 @@
                 $state.go("edit_item", {id: $scope.items[index].item_index});
             };
             $scope.get_item_data();
-            $scope.test();
+            //$scope.test();
         });
 
 
@@ -72,10 +72,20 @@
             $scope.get_page_data();
             $scope.get_item_data();
         });
-
         app.controller('orderCtrl', function ($scope, $http) {
+            $scope.date = Date.now();
+            $scope.pre = function () {
+                $scope.date -= 86400000;
+                $scope.get_order_data($scope.date);
+            }
+            $scope.next = function () {
+                $scope.date += 86400000;
+                $scope.get_order_data($scope.date);
+            }
             $scope.get_order_data = function () {
-                $http.post('/get_order_data').success(function (data) {
+                var search_date = $scope.date - $scope.date % 86400000;
+                console.log(search_date);
+                $http.post('/order_data_search', ({date: search_date})).success(function (data) {
                     console.log(data)
                     $scope.orders = data;
                 })
@@ -273,11 +283,16 @@
 </script>
 <script type="text/ng-template" id="/order.html">
     <div class="page-header" id="slider">
+        <div class="btn-bg bg-2">
+            <button ng-click="pre()">이전</button>
+            {{date|date:'yyyy-MM-dd'}}
+            <button ng-click="next()">다음</button>
+        </div>
         <div ng-repeat="order in orders">
             <div class="btn-bg bg-2">
-                <h3>{{model}}</h3>
-                폰번호 : {{order.order_id}}<br><br>
                 주문번호 : {{order.order_count}}<br><br>
+                폰번호 : {{order.order_id}}<br><br>
+                주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm:ss'}}<br><br>
             </div>
         </div>
     </div>

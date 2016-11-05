@@ -1,3 +1,4 @@
+
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
@@ -6,6 +7,8 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var User = require('../models/user');
+var Order_count = require('../models/order_count')
+var Order_data = require('../models/order_data')
 var Qna = require('../models/qna');
 var router = express.Router();
 // middleware that is specific to this router
@@ -73,19 +76,6 @@ router.get('/menu_page.html', function(req, res) {
     }
   })
 });
-router.get('/order_check.html', function(req, res) {
-  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    } else {
-      if (req.session.username) {
-        var user = req.session.username
-        console.log(user + "is logged on");
-      }
-      res.end(ejs.render(data,{data:user}))
-    }
-  })
-});
 router.get('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
     if (err) {
@@ -104,7 +94,17 @@ router.post('/order_page.html', function(req, res) {
     res.end(ejs.render(data,{data:req.body.password}))
   })
 });
-router.get('/order_check/:order_id?', function(req, res) {
+router.post('/order_check.html', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(req.body.orderdata,  req.body.userdata)
+      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
+    }
+  })
+});
+router.get('/order_check', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
@@ -241,6 +241,158 @@ router.get('/QnA_d/:id', function(req, res) {
     res.end(e)
   }
 });
+
+//회원 주문
+router.post('/user_order', function(req, res) {
+    console.log(req.session.username);
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      if (req.session.username) {
+          
+          //console.log(req.body.orderdata);
+          var item = req.body.orderdata ;
+          var total_price=0;
+           var count;
+       
+          Order_count.find({}).lean().exec(function (err, doc) {
+    
+            //console.log(doc[0])
+            count = doc[0].value;
+           // console.log(item.length);
+              
+              
+            for(i=0;i<item.length;i++){
+                total_price = Number(total_price) + Number(item[i].item_price);
+            }
+            var goitem = new Array();
+            for(i=0;i<item.length;i++){
+                goitem.push({ name : item[i].item_name, option : item[i].option})
+            }
+              
+                 // console.log(goitem);
+                conn.collection('order_data').insert({
+             
+                                order_count: count,
+                                order_count_today: 0,
+                                order_date: Date.now(),
+                                order_total_price: total_price,
+                                order_state: "ready", //ready or done
+                                order_id: req.session.username,
+                                order_count: count,
+                                order_item_index : goitem,
+                                user_index : req.body.userdata
+                                                        });
+
+                conn.collection('order_count').update({value: count}, 
+                                                      {value: count + 1});
+
+        });
+          
+          
+      }
+      res.end(ejs.render(data,{data:null}))
+    }
+  })
+});
+//비회원 주문
+
+router.post('/nonuser_order', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {    
+        
+        nonuser_signup();
+        function nonuser_signup(){
+            
+        User.find({},function(err,documents){
+            global.username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
+            var testUser = new User({
+                username: global.username,
+                password: req.body.pw
+                                    });
+                // save user to database
+                return testUser.save(function(err) {
+                  if (err) {
+                    console.log(req.body.username+"log on failed");
+                    if (err.code == 11000) return res.end('{"err":"'+testUser.username+'은 이미 사용중입니다"}')
+                    return res.end(JSON.stringify(err))
+                  }
+                    
+                    else {
+                    console.log(req.body+"sign_up success");
+                    return res.end('{"err":"id값이 '+testUser.username+'로 비회원 가입되었습니다!"}')
+                  }
+                })
+              })
+            return insert_order();
+        }
+        function insert_order(){
+            
+         console.log(req.body.orderdata);
+          var item = req.body.orderdata ;
+          var total_price=0;
+           var count;
+       
+          Order_count.find({}).lean().exec(function (err, doc) {
+    
+            //console.log(doc[0])
+            count = doc[0].value;
+           // console.log(item.length);
+              
+              
+            for(i=0;i<item.length;i++){
+                total_price = Number(total_price) + Number(item[i].item_price);
+            }
+            var goitem = new Array();
+            for(i=0;i<item.length;i++){
+                goitem.push({ name : item[i].item_name, option : item[i].option})
+            }
+              
+                 // console.log(goitem);
+                conn.collection('order_data').insert({
+             
+                                order_count: count,
+                                order_count_today: 0,
+                                order_date: Date.now(),
+                                order_total_price: total_price,
+                                order_state: "ready", //ready or done
+                                order_id:  global.username,
+                                order_count: count,
+                                order_item_index : goitem,
+                                user_index : req.body.userdata
+                                                        });
+
+                conn.collection('order_count').update({value: count}, 
+                                                      {value: count + 1});
+
+        });          
+        }
+      res.end(ejs.render(data,{data:null}))
+    }
+  })
+});
+
+// 최근 주문 
+router.get('/recent_order', function(req, res) {
+       console.log(req.session.username);
+      if (req.session.username) {
+          var recent_order;
+          Order_data.find({order_id : req.session.username}, function (err, documents){
+              var goitem = new Array();
+                      for(i=0;i<3;i++){
+                goitem.push({ order : documents[i].order_item_index})
+            }
+                         return res.end(' '+goitem);
+
+          });      
+      }
+                                             
+      else
+        res.end();      
+  });
 
 //User 로그인
 // create a user a new user
