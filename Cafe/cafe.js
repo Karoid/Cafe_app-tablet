@@ -1,3 +1,4 @@
+
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
@@ -7,6 +8,7 @@ var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var User = require('../models/user');
 var Order_count = require('../models/order_count')
+var Order_data = require('../models/order_data')
 var Qna = require('../models/qna');
 var router = express.Router();
 // middleware that is specific to this router
@@ -239,7 +241,7 @@ router.get('/QnA_d/:id', function(req, res) {
   }
 });
 
-//회원
+//회원 주문
 router.post('/user_order', function(req, res) {
     console.log(req.session.username);
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
@@ -293,14 +295,14 @@ router.post('/user_order', function(req, res) {
     }
   })
 });
-//비회원
+//비회원 주문
 
 router.post('/nonuser_order', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     } else {    
-        console.log("hi");
+        
         nonuser_signup();
         function nonuser_signup(){
             
@@ -371,6 +373,40 @@ router.post('/nonuser_order', function(req, res) {
     }
   })
 });
+
+// 최근 주문 
+router.get('/recent_order', function(req, res) {
+   
+ 
+    
+    console.log(req.session.username);
+      if (req.session.username) {
+          var recent_order;
+          Order_data.find({order_id : req.session.username}, function (err, documents){
+          
+              
+            //  console.log("hi"+documents[0]);
+            
+              var goitem = new Array();
+        
+              for(i=0;i<3;i++){
+                goitem.push({ order : documents[i].order_item_index})
+            }
+           
+              return res.end(' '+goitem);
+
+        
+          });
+                                             
+                                             }
+                                             
+      else
+        res.end();
+      
+    
+    
+  });
+
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
