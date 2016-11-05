@@ -108,7 +108,7 @@ function Submit(){
     nonuser = $('.pw').val()
     get_userdata()
     if (done && nonuser == "") {
-      var redirect = '/cafe/order_check.html';
+      var redirect = '/cafe/user_order';
       $.redirectPost(redirect, {userdata: userdata, orderdata: selected_menu});
       /*$.ajax({
         url: '/user_order',
@@ -126,7 +126,7 @@ function Submit(){
       $.ajax({
         url: '/cafe/nonuser_order',
         type: 'POST',
-        dataType: json,
+        dataType: application/json,
         data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
       })
       .done(function(data) {
@@ -146,7 +146,6 @@ $.extend(
     {
         var form = '';
         $.each( args, function( key, value ) {
-            value = value.split('"').join('\"')
             form += '<input type="hidden" name="'+key+'" value="'+value+'">';
         });
         $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
