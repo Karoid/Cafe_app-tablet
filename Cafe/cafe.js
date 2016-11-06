@@ -1,3 +1,4 @@
+
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
@@ -7,7 +8,14 @@ var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var User = require('../models/user');
 var Order_count = require('../models/order_count')
+var Order_data = require('../models/order_data')
 var Qna = require('../models/qna');
+var Page_data = require('../models/page_data');
+var Item_data = require('../models/item_data');
+
+var multer = require('multer');
+var path = require('path');
+
 var router = express.Router();
 // middleware that is specific to this router
 router.use(cookieParser());
@@ -74,15 +82,6 @@ router.get('/menu_page.html', function(req, res) {
     }
   })
 });
-router.post('/order_check.html', function(req, res) {
-  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
-    if (err) {
-      console.log(err);
-    } else {
-      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
-    }
-  })
-});
 router.get('/order_page.html', function(req, res) {
   fs.readFile('./Cafe/order_page.html','utf8',function(err,data){
     if (err) {
@@ -101,7 +100,17 @@ router.post('/order_page.html', function(req, res) {
     res.end(ejs.render(data,{data:req.body.password}))
   })
 });
-router.get('/order_check/:order_id?', function(req, res) {
+router.post('/order_check.html', function(req, res) {
+  fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(req.body.orderdata,  req.body.userdata)
+      res.end(ejs.render(data,{userdata: req.body.userdata, orderdata: req.body.orderdata}))
+    }
+  })
+});
+router.get('/order_check', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
@@ -239,7 +248,7 @@ router.get('/QnA_d/:id', function(req, res) {
   }
 });
 
-//회원
+//회원 주문
 router.post('/user_order', function(req, res) {
     console.log(req.session.username);
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
@@ -293,14 +302,14 @@ router.post('/user_order', function(req, res) {
     }
   })
 });
-//비회원
+//비회원 주문
 
 router.post('/nonuser_order', function(req, res) {
   fs.readFile('./Cafe/order_check.html','utf8',function(err,data){
     if (err) {
       console.log(err);
     } else {    
-        console.log("hi");
+        
         nonuser_signup();
         function nonuser_signup(){
             
@@ -370,6 +379,61 @@ router.post('/nonuser_order', function(req, res) {
       res.end(ejs.render(data,{data:null}))
     }
   })
+});
+
+// 최근 주문 
+router.post('/recent_order', function(req, res) {
+       console.log(req.session.username);
+      if (req.session.username) {
+          var recent_order;
+          Order_data.find({order_id : req.session.username}, function (err, documents){
+              var goitem = new Array();
+                      for(i=0;i<3;i++){
+                goitem.push({ order : documents[i].order_item_index})
+            }
+                         return res.end(' '+goitem);
+          });      
+      }
+                                             
+      else
+        res.end();      
+  });
+
+// best3 메뉴
+router.post('/best3_menu', function (req, res) {
+    console.log("Ho");
+    Page_data.find({bestable: "true"}).lean().exec(function (err, documents) {
+        var itemlist = [];
+  
+        documents.forEach(function (doc) {
+            itemlist.push(doc.item_name);
+         
+        });
+
+        Item_data.find({item_name: {$in: itemlist}}).lean().sort("-like").exec(function (err, docs) {
+            var stringArray = "[";
+            for (var i = 0; i < 3; i++) {
+     
+                stringArray += JSON.stringify(docs[i].img_dir);
+  
+                if (i != 2)
+                    stringArray += ","
+                }
+            stringArray += "]"
+
+            return res.end(stringArray);
+            
+            }
+        )
+
+    })
+});
+//모든 메뉴
+router.post('/all_menu', function (req, res) {
+    Item_data.find().lean().exec(function (err, documents) {
+        //console.log(JSON.stringify(documents));
+        return res.end(JSON.stringify(documents));
+    })
 });
 //User 로그인
 // create a user a new user
