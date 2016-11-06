@@ -180,6 +180,12 @@ app.post('/order_change_state', function (req, res) { //페이지 인덱스로 �
         })
     })
 })
+//유저 정보 받아오기
+app.post('/get_user_data', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    Order_count.find({username: req.body.username}).lean().exec(function (err, doc) {
+        res.end(JSON.stringify(doc));
+    });
+})
 
 //주문
 app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
