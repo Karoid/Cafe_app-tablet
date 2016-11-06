@@ -89,18 +89,16 @@
                             change();
                             return;
                         }
+                        $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
+                            console.log("done")
+                        })
+
                         if (scope.selected == "active") {
-                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
-                                console.log("done")
-                            })
                             scope.selected = "unactive";
                             scope.order.order_state = "done";
                         }
                         else {
                             scope.selected = "active";
-                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
-                                console.log("done")
-                            })
                             scope.order.order_state = "ready";
                         }
                     });
