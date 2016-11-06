@@ -247,7 +247,19 @@ router.get('/QnA_d/:id', function(req, res) {
     res.end(e)
   }
 });
-
+//qna 내용 보여주기 
+router.get('/Qna_in/:id?', function(req, res) {
+  fs.readFile('./Cafe/Qna_in.html','utf8',function(err,data){
+      
+      var user = req.session.username;
+      
+   
+      Qna.findOne({ _id: req.params.id }, function (err, doc){
+        
+          res.end(doc.content) //warning
+          })
+     })
+});
 //회원 주문
 router.post('/user_order', function(req, res) {
     console.log(req.session.username);
