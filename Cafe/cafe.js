@@ -393,7 +393,7 @@ router.post('/nonuser_order', function (req, res) {
     })
 });
 
-// 최근 주문 
+// 최근 주문
 router.get('/recent_order', function (req, res) {
     console.log(req.session.username);
     if (req.session.username) {
