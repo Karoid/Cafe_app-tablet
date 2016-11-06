@@ -8,6 +8,7 @@ var conn = mongoose.connection;
 var User = require('../models/user');
 var Order_count = require('../models/order_count')
 var Order_data = require('../models/order_data')
+var user = require('../models/user')
 var Qna = require('../models/qna');
 var Item_data = require('../models/item_data');
 var router = express.Router();
@@ -244,12 +245,12 @@ router.get('/QnA_d/:id', function (req, res) {
 
 //회원 주문
 router.post('/user_order', function (req, res) {
-    console.log(req.session.username + "가 주문중");
+    //console.log(req.session.username + "가 주문중");
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            if (req.session.username || 1) {
+            if (req.session.username || 1) { //디버깅하게 편하게 로그인안해도 주문할수있도록 || 1 붙여놓음 후에 해제바람
 
                 console.log(req.body.orderdata);
                 var item = req.body.orderdata;
@@ -265,7 +266,7 @@ router.post('/user_order', function (req, res) {
                     conn.collection('order_count').update({value: count},
                         {value: count + 1});
 
-                    console.log(req.body.orderdata[0].item_name);
+                    //console.log(req.body.orderdata[0].item_name);
                     for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
                         Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
                             //console.log("제품가격:" + doc[0].item_price);
