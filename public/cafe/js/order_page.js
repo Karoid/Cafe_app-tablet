@@ -203,6 +203,15 @@ $(document).ready(function() {
         old_count = this_item.children('.item_frame').children('.number').html()
         this_item.children('.item_frame').children('.number').html(parseInt(old_count)+1)
     })
+    $.ajax({
+      url: '/cafe/recent_order',
+      type: 'GET'
+    })
+    .done(function(data) {
+      console.log(data);
+      $('.past').html(data)
+    })
+
     $('.item_frame .after').click(function(){
       this_item = $(this).parent('.item_frame').parent('.item')
       menu.removeMenuData(this_item)
