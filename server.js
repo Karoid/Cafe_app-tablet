@@ -631,8 +631,6 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
             // console.log("stringArray:" + JSON.stringify(docs[0]));
             // console.log("stringArray:" + JSON.stringify(docs[1]));
             // console.log("stringArray:" + JSON.stringify(docs[2]));
-            //console.log("stringArray:" + stringArray);
-            //console.log("stringArray:" + JSON.parse(stringArray));
             //console.log("b " + itemlist);
             return res.end(stringArray);
             }
