@@ -86,24 +86,26 @@ router.post('/order_check.html', function (req, res) {
         }
     })
 });
-router.get('/order_page.html', function (req, res) { //회원 주문
+router.get('/order_page.html', function (req, res) { //회원 주문확인
     fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
             var user = req.session.username
             if (user) {
-              User.find({username: user},function(err,doc){
-                res.end(ejs.render(data, {data: doc}))
+              User.findOne({username: user},function(err,doc){
+                doc.password = ""
+                doc._id = ""
+                res.end(ejs.render(data, {data:null,userdata: doc}))
                 console.log(doc);
               })
             }
         }
     })
 });
-router.post('/order_page.html', function (req, res) { //비회원 주문
+router.post('/order_page.html', function (req, res) { //비회원 주문확인
     fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
-        res.end(ejs.render(data, {data: req.body.password}))
+        res.end(ejs.render(data, {data: req.body.password, userdata:null}))
     })
 });
 router.get('/order_check/:order_id?', function (req, res) {

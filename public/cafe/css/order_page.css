@@ -259,7 +259,9 @@ h3{
   padding: 8px 0;
   font-size: 16px;
 }
-
+.mat-input.red {
+  background:rgba(255, 0, 0, 0.3);
+}
 .mat-div {
   padding: 30px 0 0 0;
   position: relative;
@@ -311,6 +313,10 @@ h3{
   width: 1rem;
   height: 1rem;
   border: 2px solid #888888;
+}
+.checkbox.red:before {
+  border: 2px solid red;
+  background: yellow
 }
 .checkbox:checked:before {
   -webkit-transform: rotate(-45deg);
