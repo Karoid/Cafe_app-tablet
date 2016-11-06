@@ -292,7 +292,10 @@
             <div class="btn-bg bg-2">
                 주문번호 : {{order.order_count}}<br><br>
                 폰번호 : {{order.order_id}}<br><br>
-                주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm:ss'}}<br><br>
+                주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br><br>
+                제품정보 : {{order.order_item_index}}<br><br>
+                주문가격 : {{order.order_total_price}}<br><br>
+                주문상황 : {{order.order_state}}<br><br>
             </div>
         </div>
     </div>

@@ -169,7 +169,7 @@ app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지
     var count;
     Order_count.find({}).lean().exec(function (err, doc) {
         //console.log(doc[0])
-        console.log(req.body);
+        //console.log(req.body);
         count = doc[0].value;
         //var count_today =conn.collection('order_count_today').find(Order_count)
         //conn.collection('order_count_today').update({Order_count: count}, {item_count: count + 1});
@@ -197,17 +197,17 @@ app.post('/order_data_search', function (req, res) { //날짜를 parma로 하는
     //console.log("get");
     Order_data.find().lean().exec(function (err, doc) {
         var stringArray = "[";
-        console.log(req.body.date);
+        //console.log(req.body.date);
         doc.forEach(function (docu) {
             if (docu.order_date > req.body.date && docu.order_date < req.body.date + 86400000) {
-                console.log(docu.order_date);
+                //console.log(docu.order_date);
                 stringArray += JSON.stringify(docu);
                 stringArray += ","
             }
         })
         stringArray = stringArray.substring(0, stringArray.length - 1);
         stringArray += "]"
-        console.log(stringArray);
+        //console.log(stringArray);
         res.end(stringArray);
     });
 })

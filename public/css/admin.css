@@ -18,6 +18,7 @@ body .btn-bg.bg-1 {
 
   body .btn-bg.bg-2 {
     background: #6ab1c9;
+    font-size: 12px;
     border: solid black 2px;
   }
 body .btn-bg.bg-1 .btn-1 button {
