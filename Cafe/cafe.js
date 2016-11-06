@@ -10,6 +10,12 @@ var User = require('../models/user');
 var Order_count = require('../models/order_count')
 var Order_data = require('../models/order_data')
 var Qna = require('../models/qna');
+var Page_data = require('../models/page_data');
+var Item_data = require('../models/item_data');
+
+var multer = require('multer');
+var path = require('path');
+
 var router = express.Router();
 // middleware that is specific to this router
 router.use(cookieParser());
@@ -375,7 +381,7 @@ router.post('/nonuser_order', function(req, res) {
 });
 
 // 최근 주문 
-router.get('/recent_order', function(req, res) {
+router.post('/recent_order', function(req, res) {
        console.log(req.session.username);
       if (req.session.username) {
           var recent_order;
@@ -385,7 +391,6 @@ router.get('/recent_order', function(req, res) {
                 goitem.push({ order : documents[i].order_item_index})
             }
                          return res.end(' '+goitem);
-
           });      
       }
                                              
@@ -393,6 +398,42 @@ router.get('/recent_order', function(req, res) {
         res.end();      
   });
 
+// best3 메뉴
+router.post('/best3_menu', function (req, res) {
+    console.log("Ho");
+    Page_data.find({bestable: "true"}).lean().exec(function (err, documents) {
+        var itemlist = [];
+  
+        documents.forEach(function (doc) {
+            itemlist.push(doc.item_name);
+         
+        });
+
+        Item_data.find({item_name: {$in: itemlist}}).lean().sort("-like").exec(function (err, docs) {
+            var stringArray = "[";
+            for (var i = 0; i < 3; i++) {
+     
+                stringArray += JSON.stringify(docs[i].img_dir);
+  
+                if (i != 2)
+                    stringArray += ","
+                }
+            stringArray += "]"
+
+            return res.end(stringArray);
+            
+            }
+        )
+
+    })
+});
+//모든 메뉴
+router.post('/all_menu', function (req, res) {
+    Item_data.find().lean().exec(function (err, documents) {
+        //console.log(JSON.stringify(documents));
+        return res.end(JSON.stringify(documents));
+    })
+});
 //User 로그인
 // create a user a new user
 router.post("/login",function(req,res){
