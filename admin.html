@@ -8,9 +8,17 @@
     <meta name="theme-color" content="#7278e5">
     <link rel="stylesheet" href="/css/admin.css" type="text/css"/>
     <title>Admin</title>
+    <script src="/js/jquery-1.12.4.min.js"></script>
     <script src="/js/angular.min.js"></script>
     <script src="/js/angular-ui-router.js"></script>
-
+    <script>
+        function change() {
+            if ($('.unactive').css("display") == "none")
+                $('.unactive').css("display", "flex")
+            else
+                $('.unactive').css("display", "none")
+        }
+    </script>
     <script>
         var app = angular.module('flapperNews', ['ui.router'])
         app.controller('MainCtrl',
@@ -72,6 +80,44 @@
             $scope.get_page_data();
             $scope.get_item_data();
         });
+        app.directive('click', function ($http) {
+            return {
+                link: function (scope, element, attrs) {
+                    element.click(function () {
+                        //console.log(scope)
+                        if (scope.$id == "003") {
+                            change();
+                            return;
+                        }
+                        if (scope.selected == "active") {
+                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
+                                console.log("done")
+                            })
+                            scope.selected = "unactive";
+                            scope.order.order_state = "done";
+                        }
+                        else {
+                            scope.selected = "active";
+                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
+                                console.log("done")
+                            })
+                            scope.order.order_state = "ready";
+                        }
+                    });
+                }
+            }
+        });
+        app.directive('repeatDirective', function () {
+            return function (scope, element) {
+                var i = 0;
+                if (scope.order.order_state == "ready") {
+                    scope.selected = "active";
+                }
+                else {
+                    scope.selected = "unactive";
+                }
+            };
+        })
         app.controller('orderCtrl', function ($scope, $http) {
             $scope.date = Date.now();
             $scope.pre = function () {
@@ -86,7 +132,7 @@
                 var search_date = $scope.date - $scope.date % 86400000;
                 console.log(search_date);
                 $http.post('/order_data_search', ({date: search_date})).success(function (data) {
-                    console.log(data)
+                    //console.log(data)
                     $scope.orders = data;
                 })
             }
@@ -287,15 +333,17 @@
             <button ng-click="pre()">이전</button>
             {{date|date:'yyyy-MM-dd'}}
             <button ng-click="next()">다음</button>
+            완료주문<input type="checkbox" click="" ng-model="check">
         </div>
-        <div ng-repeat="order in orders">
-            <div class="btn-bg bg-2">
-                주문번호 : {{order.order_count}}<br><br>
-                폰번호 : {{order.order_id}}<br><br>
-                주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br><br>
-                제품정보 : {{order.order_item_index}}<br><br>
-                주문가격 : {{order.order_total_price}}<br><br>
-                주문상황 : {{order.order_state}}<br><br>
+        <div ng-repeat="order in orders" repeat-directive>
+            <div ng-class="selected" ng-click="">
+                주문번호 : {{order.order_count}}<br>
+                폰번호 : {{order.order_id}}<br>
+                주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br>
+                제품정보 : {{order.order_item_index}}<br>
+                주문가격 : {{order.order_total_price}}<br>
+                주문상황 : {{order.order_state}}<br>
+                <button click="">주문완료</button>
             </div>
         </div>
     </div>

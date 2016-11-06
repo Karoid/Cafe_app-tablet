@@ -162,6 +162,25 @@ app.use(function (req, res, next) {
         next();
     }
 });
+//주문상태바꾸기 order_state : done -> ready // ready -> done
+app.post('/order_change_state', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    Order_data.find({order_count: req.body.order_count}).lean().exec(function (err, doc) {
+        var val;
+        if (doc[0].order_state == "ready")//ready -> done
+            val = "done";
+        else
+            val = "ready";
+        Order_data.update({order_count: req.body.order_count}, {$set: {order_state: val}}, function (err, result) {
+            //console.log(val);
+            /*if(err)
+             console.log(err)
+             else
+             console.log(result)
+             return;*/
+        })
+    })
+})
+
 //주문
 app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     //console.log("get");
@@ -618,7 +637,7 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
 
         Item_data.find({item_name: {$in: itemlist}}).lean().sort("-like").exec(function (err, docs) {
 
-            console.log("b ");
+            //console.log("b ");
             var stringArray = "[";
             for (var i = 0; i < 3; i++) {
                 //console.log(typeof(docs));
