@@ -449,20 +449,22 @@ router.get("/logout", function (req, res) {
 })
 //User 회원가입
 router.post("/sign_up", function (req, res) {
-    console.log(req.body + "sign_up attempt");
+    console.log(JSON.stringify(req.body) + "sign_up attempt");
     var testUser = new User({
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        realname: req.body.realname,
+        address: req.body.address
     });
     // save user to database 회원가입 부분 최초저장부분
     return testUser.save(function (err) {
         if (err) {
             console.log(req.body.username + "log on failed");
-            if (err.code == 11000) return res.end('{"err":"' + testUser.username + '은 이미 사용중입니다"}')
+            if (err.code == 11000) return res.end('{"msg":"' + testUser.username + '은 이미 사용중입니다"}')
             return res.end(JSON.stringify(err))
         } else {
             console.log(req.body + "sign_up success");
-            return res.end('{"err":"' + testUser.username + ' 가입완료"}')
+            return res.end('{"msg":"' + testUser.username + ' 가입완료"}')
         }
     })
 })
