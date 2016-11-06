@@ -244,14 +244,14 @@ router.get('/QnA_d/:id', function (req, res) {
 
 //회원 주문
 router.post('/user_order', function (req, res) {
-    console.log(req.session.username);
+    console.log(req.session.username + "가 주문중");
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            if (req.session.username) {
+            if (req.session.username || 1) {
 
-                //console.log(req.body.orderdata);
+                console.log(req.body.orderdata);
                 var item = req.body.orderdata;
                 var total_price = 0;
                 var count;
@@ -262,42 +262,52 @@ router.post('/user_order', function (req, res) {
                     count = doc[0].value;
                     // console.log(item.length);
 
-                    //쿠폰 증가
-                    conn.collection('user').update({$inc: {coupon: 1}}, {upsert: true});
-                    for (i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
-                        Item_data.find({item_name: item[i].item_name}).lean().exec(function (err, doc) {
-                            console.log(item[i].item_name);
-                            total_price = Number(total_price) + Number(doc.item_price);
+                    conn.collection('order_count').update({value: count},
+                        {value: count + 1});
+
+                    console.log(req.body.orderdata[0].item_name);
+                    for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
+                        Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
+                            //console.log("제품가격:" + doc[0].item_price);
+                            //console.log(doc[0].item_price);
+                            //쿠폰 증가
+                            user.find({username: req.session.username}).lean().exec(function (err, doc) {
+                                count = doc[0].coupon;
+                                conn.collection('order_count').update({value: count},
+                                    {value: count + 1});
+
+                            })
+                            total_price = Number(total_price) + Number(doc[0].item_price);
+                            if (i + 1 >= item.length)
+                                insert();
                         })
                     }
-                    var goitem = new Array();
-                    for (i = 0; i < item.length; i++) {
-                        goitem.push({name: item[i].item_name, option: item[i].option})
+                    function insert() {
+                        // console.log("총가격:" + total_price);
+                        for (i = 0; i < item.length; i++) {
+                            var goitem = new Array();
+                            goitem.push({name: item[i].item_name, option: item[i].option})
+                        }
+
+                        conn.collection('order_data').insert({
+                            order_count: count,
+                            order_count_today: 0,
+                            order_date: Date.now(),
+                            order_total_price: total_price,
+                            order_state: "ready", //ready or done
+                            order_id: req.session.username,
+                            order_count: count,
+                            order_item_index: goitem,
+                            user_index: req.body.userdata
+                        })
                     }
 
-                    // console.log(goitem);
-                    conn.collection('order_data').insert({
-
-                        order_count: count,
-                        order_count_today: 0,
-                        order_date: Date.now(),
-                        order_total_price: total_price,
-                        order_state: "ready", //ready or done
-                        order_id: req.session.username,
-                        order_count: count,
-                        order_item_index: goitem,
-                        user_index: req.body.userdata
-                    });
-
-                    conn.collection('order_count').update({$inc: {order_count: 1}}, {upsert: true});
-                    /*conn.collection('order_count').update({value: count},
-                     {value: count + 1});*/
 
                 });
 
 
             }
-            res.end(ejs.render(data, {data: null}))
+            res.end()
         }
     })
 });
