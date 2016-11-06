@@ -14,9 +14,19 @@
     <div class="col-md-6 col-xs-12 right-line">
       <h3>*주문내역 확인</h3>
       <div class="ordered_item">
-        1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1.아메리카노<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+        <%price=0%>
+        <%orderdata = JSON.parse(unescape(orderdata))%>
+        <%orderdata = orderdata.sort(function(a,b) { return a.eq - b.eq;});%>
+        <% orderdata.forEach(function(order){%>
+        <%=order.item_name%> <%=order.item_price%>원 옵션:
+          <%if(parseInt(order.option)%2){%>휘핑<%}%>
+          <%if(parseInt(order.option/2)%2){%>시럽<%}%>
+          <%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%>
+          <%if(parseInt(order.option/8)%2){%>샷<%}%><br>
+        <%price+=parseInt(order.item_price)%>
+        <%})%>
       </div>
-      <div class="price">총 금액:<span class="won">10000</span>원</div>
+      <div class="price">총 금액:<span class="won"><%=price%></span>원</div>
     </div>
     <div class="col-md-6 col-xs-12">
       <h3>*주문정보 확인</h3>
