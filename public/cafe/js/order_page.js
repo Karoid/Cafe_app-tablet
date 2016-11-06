@@ -120,8 +120,8 @@ function Submit(){
   submit_input = function(){
     var x = 0
     for (var i = 2; i >= 0; i--) {
-      check = $(':text').eq(i).text() ==""
-      if (!check) {
+      check = $(':text').eq(i).val() ==""
+      if (check) {
         x++;
         $(':text').eq(i).addClass('red')
         $(':text').eq(i).focus()

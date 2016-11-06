@@ -5,11 +5,11 @@ function Submit(){
     $.ajax({
       url: '/cafe/user_order',
       type: 'POST',
-      dataType: 'json',
       data: {userdata: userdata, orderdata: selected_menu}
     })
     .done(function(data) {
       window.location = "/cafe/main.html"
+      //window.location = "/cafe/order_fin.html"
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
       alert(errorThrown);
@@ -18,8 +18,9 @@ function Submit(){
   function getObject(callback){
     orderdata = JSON.parse(unescape($('.orderdata').val()))
     userdata = JSON.parse(unescape($('.userdata').val()))
-    orderdata.ect = $('#ect').val();
-    orderdata.payment = $(":radio[name=payment]:checked").val();
+    userdata.ect = $('#ect').val();
+    userdata.payment = $(":radio[name=payment]:checked").val();
+    logObject()
     return callback(userdata,orderdata)
   }
   function logObject(){

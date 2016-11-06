@@ -276,7 +276,7 @@ router.post('/user_order', function (req, res) {
                             //console.log("제품가격:" + doc[0].item_price);
                             //console.log(doc[0].item_price);
                             //쿠폰 증가
-                            user.find({username: req.session.username}).lean().exec(function (err, doc) {
+                            User.find({username: req.session.username}).lean().exec(function (err, doc) {
                                 count = doc[0].coupon;
                                 conn.collection('order_count').update({value: count},
                                     {value: count + 1});
@@ -289,8 +289,8 @@ router.post('/user_order', function (req, res) {
                     }
                     function insert() {
                         // console.log("총가격:" + total_price);
+                        goitem = new Array();
                         for (i = 0; i < item.length; i++) {
-                            var goitem = new Array();
                             goitem.push({name: item[i].item_name, option: item[i].option})
                         }
 
