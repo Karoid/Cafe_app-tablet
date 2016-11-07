@@ -149,19 +149,10 @@ function Submit(){
     if (done && nonuser == "") {
       var redirect = '/cafe/order_check.html';
       $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu)});
-      /*$.ajax({
-        url: '/cafe/user_order',
-        type: 'POST',
-            dataType: 'application/json',
-        data: {userdata: userdata, orderdata: selected_menu}
-      })
-      .done(function(data) {
-        console.log("success");
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        alert(errorThrown);
-      })*/
     }else if (done) {
+      var redirect = '/cafe/order_check.html';
+      $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu), pw: nonuser});
+      /*
       $.ajax({
         url: '/cafe/nonuser_order',
         type: 'POST',
@@ -173,7 +164,7 @@ function Submit(){
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
-      })
+      })*/
 
     }
   }
@@ -245,6 +236,24 @@ $(document).ready(function() {
         html+= '</div>'
       });
       $('.past').html(html)
+      $('.recent_order').click(function(){
+        $(this).children('.recent_item').children('.item_name').each(function(index,elem){
+          array = $(".menu-image .item .item_name")
+          elem=($(elem));
+          for (var i = 0; i < array.length; i++) {
+            console.log("menu:"+array.eq(i).text(),"elem:"+ elem.text());
+            if (array.eq(i).text() == elem.text()) {
+              item_el = $(".menu-image .item").eq(i)
+              console.log("found!", item_el);
+              item_el.addClass('active')
+              menu.addMenuData(item_el)
+              old_count = item_el.children('.item_frame').children('.number').html()
+              item_el.children('.item_frame').children('.number').html(parseInt(old_count)+1)
+              break;
+            }
+          }
+        })
+      })
     })
 
     $('.item_frame .after').click(function(){

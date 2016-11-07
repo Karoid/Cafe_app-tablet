@@ -68,10 +68,11 @@
       </div>
       <center>
         개인정보 이용 동의  <div class="checkbox checked" style="display:inline; vertical-align:top;">
+        </div>
       </center>
-    </div>
     <input type="hidden" class="orderdata" value="<%=JSON.stringify(orderdata)%>">
     <input type="hidden" class="userdata" value="<%=JSON.stringify(userdata)%>">
+    <input type="hidden" class="pw" value="<%=pw%>">
   </div>
   <a href="javascript:history.back()" style="position: fixed;left: 7vw;bottom: 8vh;">뒤로가기</a>
   <input id="finish" type="submit" value="">

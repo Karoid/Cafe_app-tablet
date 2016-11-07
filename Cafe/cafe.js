@@ -100,13 +100,13 @@ router.post('/order_page.html', function (req, res) { //비회원 주문확인
     })
 });
 router.post('/order_check.html', function (req, res) {
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
-        }
-    })
+  fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
+    }
+  })
 });
 router.get('/order_fin.html', function (req, res) {
     fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
@@ -271,6 +271,60 @@ router.get('/Qna_in/:id?', function (req, res) {
 //회원 주문
 router.post('/user_order', function (req, res) {
     //console.log(req.session.username + "가 주문중");
+  if (req.session.username) {
+
+      console.log(req.body.orderdata);
+      var item = req.body.orderdata;
+      var total_price = 0;
+      var count;
+
+      Order_count.find({}).lean().exec(function (err, doc) {
+
+          //console.log(doc[0])
+          count = doc[0].value;
+          // console.log(item.length);
+
+          conn.collection('order_count').update({value: count},
+              {value: count + 1});
+
+          //console.log(req.body.orderdata[0].item_name);
+          for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
+              Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
+                  //console.log("제품가격:" + doc[0].item_price);
+                  //console.log(doc[0].item_price);
+                  //쿠폰 증가
+                  User.find({username: req.session.username}).lean().exec(function (err, doc) {
+                      count = doc[0].coupon;
+                      conn.collection('order_count').update({value: count},
+                          {value: count + 1});
+
+                  })
+                  total_price = Number(total_price) + Number(doc[0].item_price);
+                  if (i + 1 >= item.length)
+                      insert();
+              })
+          }
+          function insert() {
+              // console.log("총가격:" + total_price);
+              goitem = new Array();
+              for (i = 0; i < item.length; i++) {
+                  goitem.push({name: item[i].item_name, option: item[i].option})
+              }
+
+              conn.collection('order_data').insert({
+                  order_count: count,
+                  order_count_today: 0,
+                  order_date: Date.now(),
+                  order_total_price: total_price,
+                  order_state: "ready", //ready or done
+                  order_id: req.session.username,
+                  order_count: count,
+                  order_item_index: goitem,
+                  user_index: req.body.userdata
+              })
+          }
+
+/*=======
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
@@ -336,93 +390,90 @@ router.post('/user_order', function (req, res) {
                     }
 
                 });
+>>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
+*/
+      });
 
 
-            }
-            res.end()
-        }
-    })
+  }
+  res.end()
 });
 ;
 //비회원 주문
 
 router.post('/nonuser_order', function (req, res) {
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
+  nonuser_signup();
+  function nonuser_signup() {
+      User.find({}, function (err, documents) {
+        username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
+          var testUser = new User({
+              username: username,
+              password: req.body.pw,
+              address: "not saved",
+              realname: "not saved"
+          });
+          function atfunctionend(){
+            testUser.save(function (err) {
+                if (err) {
+                    console.log(testUser.username + "sign up failed");
+                    console.log(err);
+                    if (err.code == 11000) return res.end('{"err":"' + testUser.username + '은 이미 사용중입니다"}')
+                    return res.end(JSON.stringify(err))
+                }else{
+                    console.log(req.body + "sign_up success");
+                    return res.end('{"err":"id값이 ' + testUser.username + '로 비회원 가입되었습니다!"}')
+                }
+            })
+            return insert_order(username);
+          }
+          // save user to database
+          console.log(username);
+          return atfunctionend()
+      })
+  }
 
-            nonuser_signup();
-            function nonuser_signup() {
+  function insert_order(username) {
 
-                User.find({}, function (err, documents) {
-                    global.username = "" + documents.length + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
-                    var testUser = new User({
-                        username: global.username,
-                        password: req.body.pw
-                    });
-                    // save user to database
-                    return testUser.save(function (err) {
-                        if (err) {
-                            console.log(req.body.username + "log on failed");
-                            if (err.code == 11000) return res.end('{"err":"' + testUser.username + '은 이미 사용중입니다"}')
-                            return res.end(JSON.stringify(err))
-                        }
+      console.log("insert_order");
+      var item = req.body.orderdata;
+      var total_price = 0;
+      var count;
 
-                        else {
-                            console.log(req.body + "sign_up success");
-                            return res.end('{"err":"id값이 ' + testUser.username + '로 비회원 가입되었습니다!"}')
-                        }
-                    })
-                })
-                return insert_order();
-            }
+      Order_count.find({}).lean().exec(function (err, doc) {
 
-            function insert_order() {
-
-                //console.log(req.body.orderdata);
-                var item = req.body.orderdata;
-                var total_price = 0;
-                var count;
-
-                Order_count.find({}).lean().exec(function (err, doc) {
-
-                    //console.log(doc[0])
-                    count = doc[0].value;
-                    // console.log(item.length);
+          //console.log(doc[0])
+          count = doc[0].value;
+          // console.log(item.length);
 
 
-                    for (i = 0; i < item.length; i++) {
-                        total_price = Number(total_price) + Number(item[i].item_price);
-                    }
-                    var goitem = new Array();
-                    for (i = 0; i < item.length; i++) {
-                        goitem.push({name: item[i].item_name, option: item[i].option})
-                    }
+          for (i = 0; i < item.length; i++) {
+              total_price = Number(total_price) + Number(item[i].item_price);
+          }
+          var goitem = new Array();
+          for (i = 0; i < item.length; i++) {
+              goitem.push({name: item[i].item_name, option: item[i].option})
+          }
 
-                    // console.log(goitem);
-                    conn.collection('order_data').insert({
+           console.log(username);
+          conn.collection('order_data').insert({
+              order_count: count,
+              order_count_today: 0,
+              order_date: Date.now(),
+              order_total_price: total_price,
+              order_state: "ready", //ready or done
+              order_id: username,
+              order_count: count,
+              order_item_index: goitem,
+              user_index: req.body.userdata
+          });
 
-                        order_count: count,
-                        order_count_today: 0,
-                        order_date: Date.now(),
-                        order_total_price: total_price,
-                        order_state: "ready", //ready or done
-                        order_id: global.username,
-                        order_count: count,
-                        order_item_index: goitem,
-                        user_index: req.body.userdata
-                    });
+          conn.collection('order_count').update({value: count},
+              {value: count + 1});
 
-                    conn.collection('order_count').update({value: count},
-                        {value: count + 1});
+      });
+  }
 
-                });
-            }
-
-            res.end(ejs.render(data, {data: null}))
-        }
-    })
+  res.end()
 });
 
 // 최근 주문
@@ -537,8 +588,6 @@ router.post("/sign_out", function (req, res) {
         documents[0].remove();
         return res.redirect("/cafe/main.html/")
     });
-
-
 })
 module.exports = router;
 
