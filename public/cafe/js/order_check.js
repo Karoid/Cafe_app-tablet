@@ -8,8 +8,7 @@ function Submit(){
       data: {userdata: userdata, orderdata: selected_menu}
     })
     .done(function(data) {
-      window.location = "/cafe/main.html"
-      //window.location = "/cafe/order_fin.html"
+      window.location = "/cafe/order_fin.html"
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
       alert(errorThrown);

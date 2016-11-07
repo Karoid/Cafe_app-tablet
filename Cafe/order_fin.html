@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="/cafe/libs/jquery-1.11.0.min.js"></script>
+  <title>order_fin</title>
+</head>
+<body>
+  <div class="container">
+    <div class="fin_img">
+      <div class="to_home"></div>
+      <div class="order_check"></div>
+    </div>
+  </div>
+  <script>
+  $(document).ready(function(){
+    $('.to_home').click(function(){
+      window.location = "/cafe/main.html"
+    })
+    $('.order_check').click(function(){
+      window.location = "/cafe/order_check"
+    })
+  })
+
+  </script>
+  <style>
+  body{
+    background-image: url(/cafe/img/background_order.jpg);
+    background-size: auto 100%;
+    margin:0;
+    font-family:'Malgun Gothic';
+    font-size:16px;
+    width:100vw;
+    height:100vh;
+  }
+  .fin_img{
+    width: 400px;
+    height: 200px;
+    background-image: url(/cafe/img/order_fin2.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: fixed; /* or absolute */
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+  }
+  .to_home {
+    background-image: url(/cafe/img/order_fin2_home.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 110px;
+    height: 50px;
+    position: relative;
+    top: 129px;
+    left: 48px;
+    cursor: pointer;
+  }
+  .order_check{
+    background-image: url(/cafe/img/order_fin2_check.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 211px;
+    height: 51px;
+    position: relative;
+    left: 171px;
+    top: 80px;
+    cursor: pointer;
+  }
+  </style>
+</body>
+</html>
