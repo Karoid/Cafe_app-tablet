@@ -102,6 +102,11 @@ h3{
 .private-check{
   margin:20px;
 }
+.show_info{
+  display: inline-block;
+  color:#1011e3;
+  cursor: pointer;
+}
 .item{
   width:110px;
   height:160px;

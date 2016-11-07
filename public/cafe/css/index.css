@@ -18,6 +18,27 @@ iframe{
  height: auto;
  cursor: pointer;
 }
+.popup{
+  position: fixed;
+  width: 80vw;
+  height: 80vh;
+  top: 10vh;
+  left: 10vw;
+  background: white;
+}
+.popup .back{
+  font-size: 30px;
+  left: 80vw;
+  position: relative;
+  margin-left: -50px;
+}
+.popup .xbutton{
+  font-size: 30px;
+  cursor: pointer;
+}
+.popup iframe{
+  height: 70vh;
+}
 div.container{
   padding:0;
   margin:0;
@@ -72,7 +93,16 @@ div#bot {
   height:100%;
   background-image: url("../img/상단 칠판사진.jpg");
   background-size: 100% 100%;
-  overflow: hidden;
+}
+div#bot .agreement{
+  text-align: left;
+  color: white;
+  padding:5px;
+  position: fixed;
+  text-shadow: 0 0 1px black;
+  -moz-text-shadow: 0 0 1px black;
+  -webkit-text-shadow: 0 0 1px black;
+  bottom:0
 }
 
 div#name ,#non-main {

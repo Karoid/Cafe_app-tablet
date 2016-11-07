@@ -10,6 +10,7 @@
   <title>주문 완료</title>
 </head>
 <body>
+  <input id="finish" type="submit" value>
   <div id="paper">
     <div class="col-md-6 col-xs-12 right-line">
       <h3>*주문내역 확인</h3>
@@ -20,7 +21,7 @@
             <th class="col-25">가격</th>
             <th class="col-12">휘핑</th>
             <th class="col-12">시럽</th>
-            <th class="col-12">핫/<br>아이스</th>
+            <th class="col-12 nomobile">핫/<br>아이스</th>
             <th class="col-12">샷</th>
           </tr>
         <%price=0%>
@@ -31,7 +32,7 @@
             <td><%=order.item_price%></td>
             <td><%if(parseInt(order.option)%2){%>O<%}%></td>
             <td><%if(parseInt(order.option/2)%2){%>O<%}%></td>
-            <td><%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%></td>
+            <td class="nomobile"><%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%></td>
             <td><%if(parseInt(order.option/8)%2){%>O<%}%></td>
           <%price+=parseInt(order.item_price)%>
           <%})%>
@@ -66,15 +67,16 @@
         <p>-결제 방법: <label>카드 <input type="radio" name="payment" class="checkbox" value="card" checked> </label>
         <label>현금 <input type="radio" name="payment" value="cash" class="checkbox"> </label></p>
       </div>
+      <%if(pw){%>
       <center>
         개인정보 이용 동의  <div class="checkbox checked" style="display:inline; vertical-align:top;">
         </div>
       </center>
+      <%}%>
     <input type="hidden" class="orderdata" value="<%=JSON.stringify(orderdata)%>">
     <input type="hidden" class="userdata" value="<%=JSON.stringify(userdata)%>">
     <input type="hidden" class="pw" value="<%=pw%>">
   </div>
-  <a href="javascript:history.back()" style="position: fixed;left: 7vw;bottom: 8vh;">뒤로가기</a>
-  <input id="finish" type="submit" value="">
+  <a href="javascript:history.back()" class="back"><span class="xbutton">✖</span></a>
 </body>
 </html>

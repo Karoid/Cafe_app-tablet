@@ -108,12 +108,16 @@ router.post('/order_check.html', function (req, res) {
     }
   })
 });
-router.get('/order_fin.html', function (req, res) {
+router.get('/order_fin.html/:id?', function (req, res) {
     fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
+          if (req.params.id) {
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, id:req.params.id}))
+          }else{
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, id:null}))
+          }
         }
     })
 });
@@ -258,13 +262,9 @@ router.get('/QnA_d/:id', function (req, res) {
 //qna 내용 보여주기
 router.get('/Qna_in/:id?', function (req, res) {
     fs.readFile('./Cafe/Qna_in.html', 'utf8', function (err, data) {
-
-        var user = req.session.username;
-
-
-        Qna.findOne({_id: req.params.id}, function (err, doc) {
-
-            res.end(doc.content) //warning
+        Qna.find({_id: req.params.id}, function (err, doc) {
+          console.log(doc);
+            return res.end(ejs.render(data,{doc:doc[0]}))
         })
     })
 });
@@ -427,7 +427,6 @@ router.post('/nonuser_order', function (req, res) {
             return insert_order(username);
           }
           // save user to database
-          console.log(username);
           return atfunctionend()
       })
   }
@@ -453,8 +452,6 @@ router.post('/nonuser_order', function (req, res) {
           for (i = 0; i < item.length; i++) {
               goitem.push({name: item[i].item_name, option: item[i].option})
           }
-
-           console.log(username);
           conn.collection('order_data').insert({
               order_count: count,
               order_count_today: 0,
@@ -470,10 +467,10 @@ router.post('/nonuser_order', function (req, res) {
           conn.collection('order_count').update({value: count},
               {value: count + 1});
 
+          res.end(username)
       });
   }
 
-  res.end()
 });
 
 // 최근 주문

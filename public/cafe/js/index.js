@@ -1,3 +1,14 @@
+function popup(txt){
+  html= '<div class="popup">' +
+        '<div class="back"><span class="xbutton">✖</span></div>' +
+          txt +
+        '</div>'
+  $('body').append(html)
+  $('.popup .back').click(function(){
+    $('.popup').remove()
+  })
+}
+
 $(document).ready(function(){
   $('.cafe_title').click(function(){
     window.location = "/cafe/index"
@@ -18,7 +29,7 @@ $(document).ready(function(){
   })
   var css = setInterval(function(){
     var url = $('#mid_frame').contents().get(0).location.pathname
-    var Regexr = /(\w*order\w+|[Qq]n[Aa]\w*|sign_up|menu_page).html(\/\d*)*/g
+    var Regexr = /(\w*order\w+|[Qq]n[Aa]\w*|sign_up|menu_page).*/g
     var change_boolean = Regexr.test(url)
     if (change_boolean) {
       $('#mid').addClass('expand')
@@ -26,4 +37,8 @@ $(document).ready(function(){
       $('#mid').removeClass('expand')
     }
   },500)
+
+  $('.agreement').click(function(){
+    popup("<iframe src='/cafe/agreement.txt' style='width:100%;'>")
+  })
 })

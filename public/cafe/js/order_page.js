@@ -1,4 +1,3 @@
-
 var serverip = "http://52.78.68.136"
 var selected_menu = new Array()
 /*class menu start*/
@@ -128,7 +127,7 @@ function Submit(){
         alert("정보입력이 필요합니다")
       }
     }
-    if (!$('.private-check input').is(":checked")) {
+    if (!$('.private-check input').is(":checked") && !$('.private-check input')) {
       x++;
       $('.private-check input').addClass('red')
       alert("약관동의가 필요합니다")
@@ -146,10 +145,13 @@ function Submit(){
     done = submit_phone($('#telephone')) && submit_input()
     nonuser = $('.pw').val()
     get_userdata()
+    console.log(done);
     if (done && nonuser == "") {
+      console.log("회원");
       var redirect = '/cafe/order_check.html';
       $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu)});
     }else if (done) {
+      console.log("비회원");
       var redirect = '/cafe/order_check.html';
       $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu), pw: nonuser});
       /*
@@ -259,6 +261,9 @@ $(document).ready(function() {
     $('.item_frame .after').click(function(){
       this_item = $(this).parent('.item_frame').parent('.item')
       menu.removeMenuData(this_item)
+    })
+    $('.show_info').click(function(){
+      $(".iframe").css("display","")
     })
   });
   /*send data to server*/

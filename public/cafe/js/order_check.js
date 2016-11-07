@@ -10,7 +10,8 @@ function Submit(){
         data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
       })
       .done(function(data) {
-        console.log("success");
+
+        window.location = "/cafe/order_fin.html/"+data;
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
@@ -35,7 +36,7 @@ function Submit(){
     userdata = JSON.parse(unescape($('.userdata').val()))
     userdata.ect = $('#ect').val();
     userdata.payment = $(":radio[name=payment]:checked").val();
-    logObject()
+    //logObject()
     return callback(userdata,orderdata)
   }
   function logObject(){

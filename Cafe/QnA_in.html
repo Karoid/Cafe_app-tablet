@@ -1,13 +1,31 @@
 <html>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
-    
-
-<%=data.docs[0].content%>
-    
-
-
+<head>
+  <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/cafe/css/QnA_in.css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+  <div class="article fr-view ">
+    <!--제목 시작-->
+    <h3 style="display:inline-block"><%=doc.title%></h3>
+    <span> - <%=doc.username%></span>
+    <!--수정 버튼-->
+    <form action="/create" method="post" style="display:inline-block">
+      <input type="hidden" name="title" value="<%=doc.title%>">
+      <input type="hidden" name="content" value="<%=doc.content%>">
+      <input type="hidden" name="id" value="<%=doc._id%>">
+      <button type="submit" class="glyphicon glyphicon-edit" aria-hidden="true" style="border:none;background:none"></button>
+    </form>
+    <!--삭제 버튼-->
+    <form action="/write" method="post" style="display:inline-block">
+      <input type="hidden" name="usage" value="delete">
+      <input type="hidden" name="id" value="<%=doc._id%>">
+      <button type="submit" class="glyphicon glyphicon-remove" aria-hidden="true" style="border:none;background:none" data-confirm="삭제 하시겠습니까?"></button>
+    </form>
+    <hr>
+    <!--본문 시작-->
+    <%=doc.content%>
+    <hr>
+  </div>
+</body>
 </html>
-    
