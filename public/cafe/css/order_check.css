@@ -8,6 +8,67 @@ body{
   height: 100vh;
   overflow: hidden;
 }
+table{
+  width:100%;
+}
+table, th, td {
+    border-collapse: collapse;
+    border: none;
+}
+td{
+    text-align: center;
+}
+table.stick2left th, table.stick2left td{
+  text-align: left;
+}
+input[type="radio"] {
+    -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+    -moz-appearance: checkbox;    /* Firefox */
+    -ms-appearance: checkbox;     /* not currently supported */
+}
+.checkbox {
+  position: relative;
+  top: -0.375rem;
+  margin: 0 1rem 0 0;
+  cursor: pointer;
+}
+.checkbox:before {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  content: "";
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #888888;
+}
+.checkbox.red:before {
+  border: 2px solid red;
+  background: yellow
+}
+.checkbox:checked:before ,.checkbox.checked:before {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  height: .5rem;
+  border-color: #009688;
+  border-top-style: none;
+  border-right-style: none;
+}
+.checkbox:after {
+  content: "";
+  position: absolute;
+  top: -0.125rem;
+  left: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  background: #fff;
+  cursor: pointer;
+}
 #paper{
   background-color: white;
   width: 86vw;
@@ -22,6 +83,20 @@ body{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+.col-md-3{
+  width : 50%;
+  float: left;
+  padding:10px 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.col-25{
+  width:25%;
+}
+.col-12{
+  width:12.5%;
 }
 .right-line{
   height: 100%;
@@ -53,6 +128,20 @@ body{
 .ordered_item::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
+}
+#finish{
+  position: fixed;
+  width: 220px;
+  height: 75px;
+  border-radius: 20px;
+  background-color: #bf1e2e;
+  background-image: url(../img/order_fin.png);
+  background-size: auto 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 0;
+  right: 7vw;
+  bottom: 8vh;
 }
 @media (min-aspect-ratio: 706/332){
   body{

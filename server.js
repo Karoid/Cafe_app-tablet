@@ -479,6 +479,7 @@ app.post('/delete_page', function (req, res) {
     //console.log("get");
     //console.log(req.body.page_index);
 
+
     //페이지 하나남았을때 삭제하면 새로고침이 안됌 왜그럴까??
     Page_data.find({page_index: req.body.page_index}).exec(function (err, doc) {
 
@@ -497,6 +498,14 @@ app.post('/delete_page', function (req, res) {
 });
 //제품 삭제
 app.post('/delete_item', function (req, res) {
+    
+   
+        if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+            document.form.submit();
+        }else{   //취소
+            return;
+        }
+    
     Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
         var filePath = doc[0].img_dir;
         try {

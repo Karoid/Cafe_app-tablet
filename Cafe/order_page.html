@@ -20,30 +20,49 @@
           <div class="inner">
 
             <h3> 개인정보 수정 및 입력</h3>
+            <p>- 지난 주문 내역</p>
             <div class="past">
-                    <p>- 지난 주문 내역</p>
                     <p>111111111111</p>
                     <p>222222222221</p>
                     <p>3333333333333</p>
             </div>
 
             <div class = "del-info">
-                <p>-주소 정보 수정 (회원)/ 주문 정보 입력(비회원)</p>
+              <%if(userdata){%>
+                <p>-주소 정보 수정 (회원)</p>
                 <div class="wrap">
-                  <div class="mat-div">
-                    <label for="first-name" class="mat-label">이름</label>
-                    <input type="text" class="mat-input" id="first-name">
+                  <div class="mat-div is-completed">
+                    <label for="first-name" class="mat-label">수령자 이름</label>
+                    <input type="text" class="mat-input" id="first-name" value="<%=userdata.realname%>">
                   </div>
 
-                  <div class="mat-div">
-                    <label for="first-name" class="mat-label">주소</label>
-                    <input type="text" class="mat-input" id="last-name">
+                  <div class="mat-div is-completed">
+                    <label for="first-name" class="mat-label">수령 주소</label>
+                    <input type="text" class="mat-input" id="last-name" value="<%=userdata.address%>">
                   </div>
 
-                    <div class="mat-div">
+                    <div class="mat-div is-completed">
                     <label for="address" class="mat-label">전화번호</label>
-                    <input type="tel" class="mat-input" id="telephone">
+                    <input type="tel" class="mat-input" id="telephone" value="<%=userdata.username%>">
                   </div>
+                  <%}else{%>
+                    <p>-주소 정보 입력 (비회원)</p>
+                    <div class="wrap">
+                    <div class="mat-div is-completed">
+                      <label for="first-name" class="mat-label">수령자 이름</label>
+                      <input type="text" class="mat-input" id="first-name">
+                    </div>
+
+                    <div class="mat-div is-completed">
+                      <label for="first-name" class="mat-label">수령 주소</label>
+                      <input type="text" class="mat-input" id="last-name">
+                    </div>
+
+                      <div class="mat-div is-completed">
+                      <label for="address" class="mat-label">전화번호</label>
+                      <input type="tel" class="mat-input" id="telephone">
+                    </div>
+                  <%}%>
               </div>
             </div>
 
@@ -73,7 +92,7 @@
 
             <div class="selected_menu">
             </div>
-                            
+
                 <input id="finish" type=submit value="">
 
           </div>

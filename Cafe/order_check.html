@@ -14,23 +14,66 @@
     <div class="col-md-6 col-xs-12 right-line">
       <h3>*주문내역 확인</h3>
       <div class="ordered_item">
+        <table>
+          <tr>
+            <th class="col-25">항목</th>
+            <th class="col-25">가격</th>
+            <th class="col-12">휘핑</th>
+            <th class="col-12">시럽</th>
+            <th class="col-12">핫/<br>아이스</th>
+            <th class="col-12">샷</th>
+          </tr>
         <%price=0%>
-        <%orderdata = JSON.parse(unescape(orderdata))%>
-        <%orderdata = orderdata.sort(function(a,b) { return a.eq - b.eq;});%>
+        <%orderdata = JSON.parse(unescape(orderdata)).sort(function(a,b) { return a.eq - b.eq;});%>
         <% orderdata.forEach(function(order){%>
-        <%=order.item_name%> <%=order.item_price%>원 옵션:
-          <%if(parseInt(order.option)%2){%>휘핑<%}%>
-          <%if(parseInt(order.option/2)%2){%>시럽<%}%>
-          <%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%>
-          <%if(parseInt(order.option/8)%2){%>샷<%}%><br>
-        <%price+=parseInt(order.item_price)%>
-        <%})%>
+          <tr>
+            <td><%=order.item_name%></td>
+            <td><%=order.item_price%></td>
+            <td><%if(parseInt(order.option)%2){%>O<%}%></td>
+            <td><%if(parseInt(order.option/2)%2){%>O<%}%></td>
+            <td><%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%></td>
+            <td><%if(parseInt(order.option/8)%2){%>O<%}%></td>
+          <%price+=parseInt(order.item_price)%>
+          <%})%>
+          </tr>
+        </table>
       </div>
       <div class="price">총 금액:<span class="won"><%=price%></span>원</div>
     </div>
     <div class="col-md-6 col-xs-12">
       <h3>*주문정보 확인</h3>
+      <div>
+        <h4>-주소 정보</h4>
+        <table class="stick2left">
+          <%userdata = JSON.parse(unescape(userdata))%>
+          <tr>
+            <th class="col-25">이름</th>
+            <td class="col-25"><%=userdata.name%></td>
+          </tr>
+          <tr>
+            <th class="col-25">주소</th>
+            <td class="col-25"><%=userdata.address%></td>
+          </tr>
+          <tr>
+            <th class="col-25">전화번호</th>
+            <td class="col-25"><%=userdata.telephone%></td>
+          </tr>
+        </table>
+      </div>
+      <div style="clear:both"></div>
+      <div>
+        <p>-배송시 요청사항: <input type="text" name="ect" id="ect" style="width:100%" placeholder="예약시간, 수령장소..."></p>
+        <p>-결제 방법: <label>카드 <input type="radio" name="payment" class="checkbox" value="card" checked> </label>
+        <label>현금 <input type="radio" name="payment" value="cash" class="checkbox"> </label></p>
+      </div>
+      <center>
+        개인정보 이용 동의  <div class="checkbox checked" style="display:inline; vertical-align:top;">
+      </center>
     </div>
+    <input type="hidden" class="orderdata" value="<%=JSON.stringify(orderdata)%>">
+    <input type="hidden" class="userdata" value="<%=JSON.stringify(userdata)%>">
   </div>
+  <a href="javascript:history.back()" style="position: fixed;left: 7vw;bottom: 8vh;">뒤로가기</a>
+  <input id="finish" type="submit" value="">
 </body>
 </html>
