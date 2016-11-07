@@ -158,7 +158,8 @@ router.get('/QnA.html/:page?', function (req, res) {
                     var logged_in_user = req.session.username
                     var not_logged_in = saved_user == "nonuser" && !logged_in_user;
                     var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";
-                    seen_button.push(not_logged_in || logged_inNits_my_article)
+                    var isAdmin = logged_in_user == "admin"
+                    seen_button.push(not_logged_in || logged_inNits_my_article || isAdmin)
                 }
                 return res.end(ejs.render(data, {data: documents, seen_button: seen_button}))
             })
@@ -169,30 +170,30 @@ router.get('/QnA.html/:page?', function (req, res) {
 });
 
 //Qna CRUD 라우팅
-router.get('/QnA_cu/:id?/:del?', function (req, res) {
+router.get('/QnA_cu/:id?/:redirect_url?', function (req, res) {
     fs.readFile('./Cafe/QnA_cu.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
             var user = req.session.username
             console.log(user + "is logged on");
-            if (req.params.id && !req.params.del) {
+            if (req.params.id && !req.params.redirect_url) {
                 //수정하기
                 Qna.find({_id: req.params.id}, function (err, documents) {
                     var saved_user = documents[0].username;
                     var logged_in_user = req.session.username
                     var not_logged_in = saved_user == "nonuser" && !logged_in_user;
                     var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";
-
-                    if (not_logged_in || logged_inNits_my_article) {
+                    var isAdmin = logged_in_user == "admin"
+                    if (not_logged_in || logged_inNits_my_article || isAdmin) {
                         return res.end(ejs.render(data, {data: documents[0], user: req.session.username}))
                     } else {
                         return res.end("수정 권한이 없습니다") //warning
                     }
                 })
-            } else if (req.params.id && req.params.del) {
+            } else if (req.params.id && req.params.redirect_url) {
                 //삭제 비밀번호 받기
-                res.end(ejs.render(data, {data: ["del", req.params.id], user: req.session.username}))
+                res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username}))
             } else {
                 //글쓰기
                 res.end(ejs.render(data, {data: {}, user: req.session.username}))
@@ -200,17 +201,27 @@ router.get('/QnA_cu/:id?/:del?', function (req, res) {
         }
     })
 });
-router.post('/QnA_write/:id?', function (req, res) {
+router.post('/QnA_write/:id?/:isAns?', function (req, res) {
     try {
         if (req.params.id) { //수정하기
             Qna.findOne({_id: req.params.id}, function (err, doc) {
-                if (doc.username != "nonuser" && req.session.username == doc.username) {
+                if (doc.username != "nonuser" && req.session.username == doc.username && req.params.isAns != "1") {
                     //회원 수정하기
                     doc.title = req.body.title;
                     doc.content = req.body.content;
                     doc.save();
                     res.redirect("/cafe/QnA.html")
-                } else if (doc.username == "nonuser" && req.body.password == doc.password && doc.password != "") {
+                } else if (req.body.password == doc.password || ((req.session.username == doc.username || req.session.username == "admin") && req.params.isAns == "1")) {
+                    // 회원, 관리자 댓글 달기
+                    if (req.body.content != "") {
+                      doc.answer.push({username:req.session.username, content:req.body.answer});
+                      doc.save();
+                    }
+                    res.redirect("/cafe/QnA_in/"+req.params.id)
+                } else if (!req.session.username && req.params.isAns == "1") {
+                    //비회원 댓글 달기
+                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+req.body.answer)
+                } else if (!req.session.username && req.body.password == doc.password && doc.password != "") {
                     //비회원 비밀번호 받았을때 수정하기
                     doc.title = req.body.title;
                     doc.content = req.body.content;
@@ -226,7 +237,8 @@ router.post('/QnA_write/:id?', function (req, res) {
                 username: req.body.username,
                 password: req.body.password,
                 title: req.body.title,
-                content: req.body.content
+                content: req.body.content,
+                answer: []
             });
             res.redirect("/cafe/QnA.html")
         }
@@ -235,21 +247,30 @@ router.post('/QnA_write/:id?', function (req, res) {
         res.end(e)
     }
 });
-router.get('/QnA_d/:id', function (req, res) {
+router.get('/QnA_d/:id/:ansArrayNumb?', function (req, res) {
     var user = req.session.username;
     try {
-        Qna.find({_id: req.params.id}, function (err, documents) {
-            var saved_user = documents[0].username;
+        Qna.findOne({_id: req.params.id}, function (err, doc) {
+            var saved_user = doc.username;
             var logged_in_user = req.session.username
-            var not_logged_in = saved_user == "nonuser" && !logged_in_user && req.query.password == documents[0].password;
+            var not_logged_in = saved_user == "nonuser" && !logged_in_user && req.query.password == doc.password;
             var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";
-            if (logged_inNits_my_article || not_logged_in) {
+            var isAdmin = logged_in_user == "admin"
+            if ((logged_inNits_my_article || not_logged_in  || isAdmin )&& !req.params.ansArrayNumb) {
                 //회원, 비회원 삭제하기
                 Qna.find({_id: req.params.id}).remove().exec();
                 res.redirect("/cafe/QnA.html")
-            } else if (documents[0].username == "nonuser") {
+            } else if (doc.username == "nonuser" && !req.query.password) {
                 //비회원 비밀번호 받으러 가기
-                res.redirect("/cafe/QnA_cu/" + req.params.id + "/del")
+                if (!req.params.ansArrayNumb) {
+                  req.params.ansArrayNumb = ""
+                }
+                res.redirect("/cafe/QnA_cu/" + req.params.id +"/"+ escape("/QnA_d/" + req.params.id + "/" + req.params.ansArrayNumb))
+            } else if ((logged_inNits_my_article || not_logged_in  || isAdmin ) && req.params.ansArrayNumb) {
+                //댓글 삭제
+                doc.answer.splice(req.params.ansArrayNumb, 1);
+                doc.save()
+                res.redirect("/cafe/QnA_in/"+req.params.id)
             } else {
                 return res.end("글쓴이와 로그인 정보가 다릅니다") //warning
             }
@@ -261,10 +282,15 @@ router.get('/QnA_d/:id', function (req, res) {
 });
 //qna 내용 보여주기
 router.get('/QnA_in/:id?', function (req, res) {
-    fs.readFile('./Cafe/Qna_in.html', 'utf8', function (err, data) {
+    fs.readFile('./Cafe/QnA_in.html', 'utf8', function (err, data) {
         Qna.find({_id: req.params.id}, function (err, doc) {
-          console.log(doc);
-            return res.end(ejs.render(data,{doc:doc[0]}))
+          var saved_user = doc[0].username;
+          var logged_in_user = req.session.username
+          var not_logged_in = saved_user == "nonuser" && !logged_in_user;
+          var logged_inNits_my_article = logged_in_user == saved_user && logged_in_user != "nonuser";
+          var isAdmin = logged_in_user == "admin"
+          seen_button = not_logged_in || logged_inNits_my_article || isAdmin
+            return res.end(ejs.render(data,{doc:doc[0], seen_button: seen_button, isAdmin: isAdmin}))
         })
     })
 });
@@ -551,4 +577,15 @@ function needtologin(res, req, redirect_url) {
     if (!req.session.username) {
         res.redirect("/cafe/main.html/" + redirect_url)
     }
+}
+function isAdmin(res, req, redirect_url) {
+    if (req.session.username != "admin") {
+        res.redirect("/cafe/main.html/" + redirect_url)
+    }
+}
+function escape(str){
+  return str.replace(/\//g,"%2F")
+}
+function unescape(str){
+  return str.replace(/%2F/g,"/")
 }
