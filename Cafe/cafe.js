@@ -271,7 +271,6 @@ router.get('/Qna_in/:id?', function (req, res) {
 //회원 주문
 router.post('/user_order', function (req, res) {
     //console.log(req.session.username + "가 주문중");
-<<<<<<< HEAD
   if (req.session.username) {
 
       console.log(req.body.orderdata);
@@ -325,7 +324,7 @@ router.post('/user_order', function (req, res) {
               })
           }
 
-=======
+/*=======
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
@@ -392,7 +391,7 @@ router.post('/user_order', function (req, res) {
 
                 });
 >>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
-
+*/
       });
 
 
