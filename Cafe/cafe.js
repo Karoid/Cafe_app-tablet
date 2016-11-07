@@ -100,7 +100,6 @@ router.post('/order_page.html', function (req, res) { //비회원 주문확인
     })
 });
 router.post('/order_check.html', function (req, res) {
-<<<<<<< HEAD
   fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
     if (err) {
       console.log(err);
@@ -108,15 +107,6 @@ router.post('/order_check.html', function (req, res) {
       res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
     }
   })
-=======
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
-        }
-    })
->>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
 });
 router.get('/order_fin.html', function (req, res) {
     fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {

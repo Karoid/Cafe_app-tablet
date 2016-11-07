@@ -148,6 +148,7 @@ input[type="radio"] {
     background-size:100% auto;
   }
 }
+@media (max-height: 710px){}
 @media (max-width: 992px){
   .col-xs-12{
     width:95.2%!important;
