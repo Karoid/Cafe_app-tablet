@@ -5,27 +5,85 @@
 </head>
 <body>
   <div id="map"></div>
+  <ul>
+    <li>
+      <strong>주소</strong>
+      <span>서울특별시 종로구 적선동 80 적선현대빌딩 지하 1층 62호</span>
+    </li>
+    <li>
+      <strong>전화번호</strong>
+      <span>02-736-0555</span>
+    </li>
+  </ul>
   <script>
     function initMap() {
-      var myLatLng = {lat: -25.363, lng: 131.044};
-
       // Create a map object and specify the DOM element for display.
       var map = new google.maps.Map(document.getElementById('map'), {
-        center: myLatLng,
+        center: {lat: 37.575481 , lng: 126.973204},
         scrollwheel: false,
-        zoom: 4
+        zoom: 18
       });
-
       // Create a marker and set its position.
       var marker = new google.maps.Marker({
         map: map,
-        position: myLatLng,
-        title: 'Hello World!'
+        position: {lat: 37.575481 , lng: 126.973204},
+        title: '마루티샵'
       });
     }
 
   </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMeOxojKnoVfjXSwffM1YIgO3mUj9BdrY&callback=initMap"
-      async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLvsPLai6LwXrH4dxlw0HxkQcBZG3OmvI&callback=initMap"
+  async defer></script>
+<style>
+body{
+  font-family:'Malgun Gothic';
+}
+#map{
+  position: relative;
+  overflow: hidden;
+  width: 90vw;
+  height: 80vh;
+  margin: 0 auto;
+}
+ul{
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-top: none;
+  width: 90vw;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+ul li{
+  float: left;
+  width: 50%;
+  font-size: 16px;
+  color: #333;
+  list-style-type: none;
+  list-style: none;
+}
+ul li span {
+    padding-left: 16px;
+    border-left:1px solid gray;
+}
+ul li strong {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 15px;
+    background: url(http://www.hanyang.ac.kr/html-repositories/images/custom/introduction/dot01.png) no-repeat 0 8px;
+}
+ul:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+@media screen and (max-width: 767px){
+  ul li{
+  width: 100%;
+}
+}
+</style>
 </body>
 </html>
