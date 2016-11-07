@@ -252,7 +252,7 @@ router.post('/user_order', function (req, res) {
         } else {
             if (req.session.username || 1) { //디버깅하게 편하게 로그인안해도 주문할수있도록 || 1 붙여놓음 후에 해제바람
 
-                console.log(req.body.orderdata);
+                // console.log(req.body.orderdata);
                 var item = req.body.orderdata;
                 var total_price = 0;
                 var count;
@@ -267,42 +267,48 @@ router.post('/user_order', function (req, res) {
                         {value: count + 1});
 
                     //console.log(req.body.orderdata[0].item_name);
-                    for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
+                    var county = 0;
+                    for (var i = 0; i < item.length; i++) {
+                        //보안 관련하여 db의 실제 제품가격으로 참조함
                         Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
-                            //console.log("제품가격:" + doc[0].item_price);
+                            // onsole.log("제품가격:" + doc[0].item_price);
                             //console.log(doc[0].item_price);
-                            //쿠폰 증가
-                            user.find({username: req.session.username}).lean().exec(function (err, doc) {
-                                count = doc[0].coupon;
-                                conn.collection('order_count').update({value: count},
-                                    {value: count + 1});
-
-                            })
+                            //console.log("i:" + i);
                             total_price = Number(total_price) + Number(doc[0].item_price);
-                            if (i + 1 >= item.length)
-                                insert();
+                            insert();
                         })
                     }
                     function insert() {
-                        // console.log("총가격:" + total_price);
-                        for (i = 0; i < item.length; i++) {
-                            var goitem = new Array();
-                            goitem.push({name: item[i].item_name, option: item[i].option})
+
+                        // console.log("i:" + county);
+                        county++;
+                        // console.log("i:" + county);
+                        if (county == item.length) {
+                            //쿠폰 증가
+                            user.findOne({username: req.session.username}).exec(function (err, doc) {
+                                //console.log(JSON.stringify(doc));
+                                doc.coupon += item.length;
+                                doc.save();
+                            })
+                            // console.log("총가격:" + total_price);
+                            for (i = 0; i < item.length; i++) {
+                                var goitem = new Array();
+                                goitem.push({name: item[i].item_name, option: item[i].option})
+                            }
+
+                            conn.collection('order_data').insert({
+                                order_count: count,
+                                order_count_today: 0,
+                                order_date: Date.now(),
+                                order_total_price: total_price,
+                                order_state: "ready", //ready or done
+                                order_id: req.session.username,
+                                order_count: count,
+                                order_item_index: goitem,
+                                user_index: req.body.userdata
+                            })
                         }
-
-                        conn.collection('order_data').insert({
-                            order_count: count,
-                            order_count_today: 0,
-                            order_date: Date.now(),
-                            order_total_price: total_price,
-                            order_state: "ready", //ready or done
-                            order_id: req.session.username,
-                            order_count: count,
-                            order_item_index: goitem,
-                            user_index: req.body.userdata
-                        })
                     }
-
 
                 });
 
