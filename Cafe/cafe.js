@@ -209,13 +209,13 @@ router.post('/QnA_write/:id?', function (req, res) {
                     doc.title = req.body.title;
                     doc.content = req.body.content;
                     doc.save();
-                    res.redirect("/cafe/Qna.html")
+                    res.redirect("/cafe/QnA.html")
                 } else if (doc.username == "nonuser" && req.body.password == doc.password && doc.password != "") {
                     //비회원 비밀번호 받았을때 수정하기
                     doc.title = req.body.title;
                     doc.content = req.body.content;
                     doc.save();
-                    res.redirect("/cafe/Qna.html")
+                    res.redirect("/cafe/QnA.html")
                 } else {
                     //비회원 비밀번호 틀렸을 때
                     res.end("본인이 쓴 글이 아니거나 비밀번호가 틀렸습니다.") //warning
@@ -228,7 +228,7 @@ router.post('/QnA_write/:id?', function (req, res) {
                 title: req.body.title,
                 content: req.body.content
             });
-            res.redirect("/cafe/Qna.html")
+            res.redirect("/cafe/QnA.html")
         }
     } catch (e) {
         console.log(e);
@@ -260,7 +260,7 @@ router.get('/QnA_d/:id', function (req, res) {
     }
 });
 //qna 내용 보여주기
-router.get('/Qna_in/:id?', function (req, res) {
+router.get('/QnA_in/:id?', function (req, res) {
     fs.readFile('./Cafe/Qna_in.html', 'utf8', function (err, data) {
         Qna.find({_id: req.params.id}, function (err, doc) {
           console.log(doc);
