@@ -100,13 +100,13 @@ router.post('/order_page.html', function (req, res) { //비회원 주문확인
     })
 });
 router.post('/order_check.html', function (req, res) {
-  fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
-    }
-  })
+    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
+        }
+    })
 });
 router.get('/order_fin.html/:id?', function (req, res) {
     fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
@@ -271,132 +271,79 @@ router.get('/Qna_in/:id?', function (req, res) {
 //회원 주문
 router.post('/user_order', function (req, res) {
     //console.log(req.session.username + "가 주문중");
-  if (req.session.username) {
+    if (req.session.username) {
 
-      console.log(req.body.orderdata);
-      var item = req.body.orderdata;
-      var total_price = 0;
-      var count;
+        console.log(req.body.orderdata);
+        var item = req.body.orderdata;
+        var total_price = 0;
+        var count;
 
-      Order_count.find({}).lean().exec(function (err, doc) {
+        Order_count.find({}).lean().exec(function (err, doc) {
 
-          //console.log(doc[0])
-          count = doc[0].value;
-          // console.log(item.length);
+            //console.log(doc[0])
+            count = doc[0].value;
+            // console.log(item.length);
 
-          conn.collection('order_count').update({value: count},
-              {value: count + 1});
+            conn.collection('order_count').update({value: count},
+                {value: count + 1});
 
-          //console.log(req.body.orderdata[0].item_name);
-          for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
-              Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
-                  //console.log("제품가격:" + doc[0].item_price);
-                  //console.log(doc[0].item_price);
-                  //쿠폰 증가
-                  User.find({username: req.session.username}).lean().exec(function (err, doc) {
-                      count = doc[0].coupon;
-                      conn.collection('order_count').update({value: count},
-                          {value: count + 1});
+            //console.log(req.body.orderdata[0].item_name);
+            var county = 0;
+            for (var i = 0; i < item.length; i++) {
+                //보안 관련하여 db의 실제 제품가격으로 참조함
+                Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
+                    // onsole.log("제품가격:" + doc[0].item_price);
+                    //console.log(doc[0].item_price);
+                    //console.log("i:" + i);
+                    total_price = Number(total_price) + Number(doc[0].item_price);
+                    insert();
+                })
+            }
+            function insert() {
 
-                  })
-                  total_price = Number(total_price) + Number(doc[0].item_price);
-                  if (i + 1 >= item.length)
-                      insert();
-              })
-          }
-          function insert() {
-              // console.log("총가격:" + total_price);
-              goitem = new Array();
-              for (i = 0; i < item.length; i++) {
-                  goitem.push({name: item[i].item_name, option: item[i].option})
-              }
+                // console.log("i:" + county);
+                county++;
+                // console.log("i:" + county);
+                if (county == item.length) {
+                    //쿠폰 증가
+                    user.findOne({username: req.session.username}).exec(function (err, doc) {
+                        //console.log(JSON.stringify(doc));
+                        doc.coupon += item.length;
+                        doc.save();
+                    })
+                    var order_info = "";
+                    for (i = 0; i < item.length; i++) {
 
-              conn.collection('order_data').insert({
-                  order_count: count,
-                  order_count_today: 0,
-                  order_date: Date.now(),
-                  order_total_price: total_price,
-                  order_state: "ready", //ready or done
-                  order_id: req.session.username,
-                  order_count: count,
-                  order_item_index: goitem,
-                  user_index: req.body.userdata
-              })
-          }
-
-/*=======
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            if (req.session.username || 1) { //디버깅하게 편하게 로그인안해도 주문할수있도록 || 1 붙여놓음 후에 해제바람
-
-                // console.log(req.body.orderdata);
-                var item = req.body.orderdata;
-                var total_price = 0;
-                var count;
-
-                Order_count.find({}).lean().exec(function (err, doc) {
-
-                    //console.log(doc[0])
-                    count = doc[0].value;
-                    // console.log(item.length);
-
-                    conn.collection('order_count').update({value: count},
-                        {value: count + 1});
-
-                    //console.log(req.body.orderdata[0].item_name);
-                    var county = 0;
-                    for (var i = 0; i < item.length; i++) {
-                        //보안 관련하여 db의 실제 제품가격으로 참조함
-                        Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
-                            // onsole.log("제품가격:" + doc[0].item_price);
-                            //console.log(doc[0].item_price);
-                            //console.log("i:" + i);
-                            total_price = Number(total_price) + Number(doc[0].item_price);
-                            insert();
-                        })
-                    }
-                    function insert() {
-
-                        // console.log("i:" + county);
-                        county++;
-                        // console.log("i:" + county);
-                        if (county == item.length) {
-                            //쿠폰 증가
-                            user.findOne({username: req.session.username}).exec(function (err, doc) {
-                                //console.log(JSON.stringify(doc));
-                                doc.coupon += item.length;
-                                doc.save();
-                            })
-                            // console.log("총가격:" + total_price);
-                            for (i = 0; i < item.length; i++) {
-                                var goitem = new Array();
-                                goitem.push({name: item[i].item_name, option: item[i].option})
-                            }
-
-                            conn.collection('order_data').insert({
-                                order_count: count,
-                                order_count_today: 0,
-                                order_date: Date.now(),
-                                order_total_price: total_price,
-                                order_state: "ready", //ready or done
-                                order_id: req.session.username,
-                                order_count: count,
-                                order_item_index: goitem,
-                                user_index: req.body.userdata
-                            })
-                        }
+                        order_info += item[i].item_name + "";
+                        order_info += "|";
+                        if (item[i].option % 2 == 1)
+                            order_info += "휘핑";
+                        if (Math.floor(item[i].option / 2) % 2 == 1)
+                            order_info += "시럽";
+                        if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
+                            order_info += "HOT";
+                        if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
+                            order_info += "샷";
+                        order_info += "|        ";
+                        //goitem.push({name: item[i].item_name, option: item[i].option})
                     }
 
-                });
->>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
-*/
-      });
-
-
-  }
-  res.end()
+                    conn.collection('order_data').insert({
+                        order_count: count,
+                        order_count_today: 0,
+                        order_date: Date.now(),
+                        order_total_price: total_price,
+                        order_state: "ready", //ready or done
+                        order_id: req.session.username,
+                        order_count: count,
+                        order_item_index: order_info,
+                        user_index: req.body.userdata
+                    })
+                }
+            }
+        });
+    }
+    res.end()
 });
 ;
 //비회원 주문
@@ -448,9 +395,21 @@ router.post('/nonuser_order', function (req, res) {
           for (i = 0; i < item.length; i++) {
               total_price = Number(total_price) + Number(item[i].item_price);
           }
-          var goitem = new Array();
+        //  var goitem = new Array();
+          var order_info = "";
           for (i = 0; i < item.length; i++) {
-              goitem.push({name: item[i].item_name, option: item[i].option})
+              order_info += item[i].item_name + "";
+              order_info += "|";
+              if (item[i].option % 2 == 1)
+                  order_info += "휘핑";
+              if (Math.floor(item[i].option / 2) % 2 == 1)
+                  order_info += "시럽";
+              if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
+                  order_info += "HOT";
+              if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
+                  order_info += "샷";
+              order_info += "|       ";
+              //goitem.push({name: item[i].item_name, option: item[i].option})
           }
           conn.collection('order_data').insert({
               order_count: count,
@@ -460,7 +419,7 @@ router.post('/nonuser_order', function (req, res) {
               order_state: "ready", //ready or done
               order_id: username,
               order_count: count,
-              order_item_index: goitem,
+              order_item_index: order_info,
               user_index: req.body.userdata
           });
 
@@ -470,7 +429,6 @@ router.post('/nonuser_order', function (req, res) {
           res.end(username)
       });
   }
-
 });
 
 // 최근 주문

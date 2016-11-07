@@ -36,7 +36,7 @@
             $scope.test = function () {
                 console.log("test");
                 $http.post('/get_item_data_sorted_by_liked').success(function (data) {
-                    console.log(data);
+//                    console.log(data);
                 })
             };
             $scope.delete_item = function (index) {
@@ -62,7 +62,7 @@
             }
             $scope.get_page_data = function () {
                 $http.post('/get_page_data').success(function (data) {
-                    console.log(data);
+//                    console.log(data);
                     $scope.pages = data;
                 })
             }
@@ -84,22 +84,23 @@
             return {
                 link: function (scope, element, attrs) {
                     element.click(function () {
-                        //console.log(scope)
-                        if (scope.$id == "003") {
+//                        console.log("clicked!")
+                        if (scope.order == null) {
+//                            console.log("change!")
                             change();
-                            return;
-                        }
-                        $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
-                            console.log("done")
-                        })
-
-                        if (scope.selected == "active") {
-                            scope.selected = "unactive";
-                            scope.order.order_state = "done";
                         }
                         else {
-                            scope.selected = "active";
-                            scope.order.order_state = "ready";
+                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function () {
+//                                console.log("done")
+                            })
+                            if (scope.selected == "active") {
+                                scope.selected = "unactive";
+                                scope.order.order_state = "done";
+                            }
+                            else {
+                                scope.selected = "active";
+                                scope.order.order_state = "ready";
+                            }
                         }
                     });
                 }
@@ -128,9 +129,9 @@
             }
             $scope.get_order_data = function () {
                 var search_date = $scope.date - $scope.date % 86400000;
-                console.log(search_date);
+//                console.log(search_date);
                 $http.post('/order_data_search', ({date: search_date})).success(function (data) {
-                    //console.log(data)
+//                    console.log(data)
                     $scope.orders = data;
                 })
             }
