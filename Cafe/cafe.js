@@ -311,10 +311,21 @@ router.post('/user_order', function (req, res) {
                         doc.coupon += item.length;
                         doc.save();
                     })
-                    // console.log("총가격:" + total_price);
+                    var order_info = "";
                     for (i = 0; i < item.length; i++) {
-                        var goitem = new Array();
-                        goitem.push({name: item[i].item_name, option: item[i].option})
+
+                        order_info += item[i].item_name + "";
+                        order_info += "|";
+                        if (item[i].option % 2 == 1)
+                            order_info += "휘핑";
+                        if (Math.floor(item[i].option / 2) % 2 == 1)
+                            order_info += "시럽";
+                        if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
+                            order_info += "HOT";
+                        if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
+                            order_info += "샷";
+                        order_info += "|        ";
+                        //goitem.push({name: item[i].item_name, option: item[i].option})
                     }
 
                     conn.collection('order_data').insert({
@@ -325,7 +336,7 @@ router.post('/user_order', function (req, res) {
                         order_state: "ready", //ready or done
                         order_id: req.session.username,
                         order_count: count,
-                        order_item_index: goitem,
+                        order_item_index: order_info,
                         user_index: req.body.userdata
                     })
                 }
@@ -387,12 +398,25 @@ router.post('/nonuser_order', function (req, res) {
             for (i = 0; i < item.length; i++) {
                 total_price = Number(total_price) + Number(item[i].item_price);
             }
-            var goitem = new Array();
+            //var goitem = new Array();
+            var order_info = "";
             for (i = 0; i < item.length; i++) {
-                goitem.push({name: item[i].item_name, option: item[i].option})
-            }
 
+                order_info += item[i].item_name + "";
+                order_info += "|";
+                if (item[i].option % 2 == 1)
+                    order_info += "휘핑";
+                if (Math.floor(item[i].option / 2) % 2 == 1)
+                    order_info += "시럽";
+                if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
+                    order_info += "HOT";
+                if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
+                    order_info += "샷";
+                order_info += "|       ";
+                //goitem.push({name: item[i].item_name, option: item[i].option})
+            }
             console.log(username);
+            console.log("oi" + order_info)
             conn.collection('order_data').insert({
                 order_count: count,
                 order_count_today: 0,
@@ -401,7 +425,7 @@ router.post('/nonuser_order', function (req, res) {
                 order_state: "ready", //ready or done
                 order_id: username,
                 order_count: count,
-                order_item_index: goitem,
+                order_item_index: order_info,
                 user_index: req.body.userdata
             });
 
