@@ -162,6 +162,32 @@ app.use(function (req, res, next) {
         next();
     }
 });
+//주문상태바꾸기 order_state : done -> ready // ready -> done
+app.post('/order_change_state', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    Order_data.find({order_count: req.body.order_count}).lean().exec(function (err, doc) {
+        var val;
+        if (doc[0].order_state == "ready")//ready -> done
+            val = "done";
+        else
+            val = "ready";
+        Order_data.update({order_count: req.body.order_count}, {$set: {order_state: val}}, function (err, result) {
+            //console.log(val);
+            /*if(err)
+             console.log(err)
+             else
+             console.log(result)
+             return;*/
+        })
+    })
+})
+//유저 정보 받아오기
+app.post('/get_user_data', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    Order_count.findOne({username: req.body.username}).lean().exec(function (err, doc) {
+        if (doc.username == req.body.username) //검색한 정보가 자신의 것일경우 보내줌
+            res.end(JSON.stringify(doc));
+    });
+})
+
 //주문
 app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     //console.log("get");
@@ -169,7 +195,7 @@ app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지
     var count;
     Order_count.find({}).lean().exec(function (err, doc) {
         //console.log(doc[0])
-        console.log(req.body);
+        //console.log(req.body);
         count = doc[0].value;
         //var count_today =conn.collection('order_count_today').find(Order_count)
         //conn.collection('order_count_today').update({Order_count: count}, {item_count: count + 1});
@@ -197,17 +223,17 @@ app.post('/order_data_search', function (req, res) { //날짜를 parma로 하는
     //console.log("get");
     Order_data.find().lean().exec(function (err, doc) {
         var stringArray = "[";
-        console.log(req.body.date);
+        //console.log(req.body.date);
         doc.forEach(function (docu) {
             if (docu.order_date > req.body.date && docu.order_date < req.body.date + 86400000) {
-                console.log(docu.order_date);
+                //console.log(docu.order_date);
                 stringArray += JSON.stringify(docu);
                 stringArray += ","
             }
         })
         stringArray = stringArray.substring(0, stringArray.length - 1);
         stringArray += "]"
-        console.log(stringArray);
+        //console.log(stringArray);
         res.end(stringArray);
     });
 })
@@ -627,7 +653,7 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
 
         Item_data.find({item_name: {$in: itemlist}}).lean().sort("-like").exec(function (err, docs) {
 
-            console.log("b ");
+            //console.log("b ");
             var stringArray = "[";
             for (var i = 0; i < 3; i++) {
                 //console.log(typeof(docs));
@@ -640,8 +666,6 @@ app.post('/get_item_data_sorted_by_liked', function (req, res) {
             // console.log("stringArray:" + JSON.stringify(docs[0]));
             // console.log("stringArray:" + JSON.stringify(docs[1]));
             // console.log("stringArray:" + JSON.stringify(docs[2]));
-            //console.log("stringArray:" + stringArray);
-            //console.log("stringArray:" + JSON.parse(stringArray));
             //console.log("b " + itemlist);
             return res.end(stringArray);
             }

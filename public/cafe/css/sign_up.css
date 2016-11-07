@@ -25,6 +25,9 @@ body{
 .input-box>input{
   width:140px;
 }
+.input-box>input.red{
+  border-color: red;
+}
 #sign_in .input-label{
   width:105px;
   text-align: left;
@@ -250,6 +253,10 @@ input[type=checkbox]:checked + .check-box::before,
 input[type=checkbox].checked + .check-box_auth,
 .check-box_auth.checked {
   border-color: #34b93d;
+}
+input[type=checkbox].red + .check-box_auth,input[type=checkbox].red + .check-box {
+  border-color: red;
+  background: yellow;
 }
 input[type=checkbox].checked + .check-box_auth::after,
 .check-box_auth.checked::after {

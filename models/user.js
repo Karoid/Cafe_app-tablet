@@ -10,8 +10,11 @@ var mongoose = require('mongoose'),
 var userSchema = new mongoose.Schema({
     username: {type: String, required: true, index: {unique: true}},
     password: {type: String, required: true},
+    realname: {type: String, required: true},
+    address: {type: String, required: true},
     loginAttempts: {type: Number, required: true, default: 0},
-    lockUntil: {type: Number}
+    lockUntil: {type: Number},
+    coupon: {type: Number, default: 0}
     //마지막 접속날짜
     //마지막 주문날짜
     //동의여부, 번호, 

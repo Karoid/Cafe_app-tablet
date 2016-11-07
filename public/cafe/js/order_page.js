@@ -103,7 +103,7 @@ Menu.prototype.optionclickevent = function (){
 function Submit(){
   userdata = new Object();
   submit_phone = function (obj) {
-    var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+    var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$|kkk/;
     if(!obj.val()) {
       alert("전화번호를 입력하세요.");
       obj.focus();
@@ -117,6 +117,25 @@ function Submit(){
     }
     return true;
   }
+  submit_input = function(){
+    var x = 0
+    for (var i = 2; i >= 0; i--) {
+      check = $(':text').eq(i).val() ==""
+      if (check) {
+        x++;
+        $(':text').eq(i).addClass('red')
+        $(':text').eq(i).focus()
+        alert("정보입력이 필요합니다")
+      }
+    }
+    if (!$('.private-check input').is(":checked")) {
+      x++;
+      $('.private-check input').addClass('red')
+      alert("약관동의가 필요합니다")
+    }
+    setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
+    if (x==0) { return true }else{ return false }
+  }
   get_userdata = function(){
     userdata.name = $('#first-name').val()
     userdata.address = $('#last-name').val()
@@ -124,7 +143,7 @@ function Submit(){
     userdata.agreement = $('.checkbox').val()
   }
   this.submit_action = function(){
-    done = submit_phone($('#telephone'))
+    done = submit_phone($('#telephone')) && submit_input()
     nonuser = $('.pw').val()
     get_userdata()
     if (done && nonuser == "") {
@@ -141,7 +160,7 @@ function Submit(){
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
-      })
+      })*/
     }else if (done) {
       $.ajax({
         url: '/cafe/nonuser_order',
@@ -155,7 +174,7 @@ function Submit(){
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
       })
-      */
+
     }
   }
 }
@@ -203,6 +222,15 @@ $(document).ready(function() {
         old_count = this_item.children('.item_frame').children('.number').html()
         this_item.children('.item_frame').children('.number').html(parseInt(old_count)+1)
     })
+    $.ajax({
+      url: '/cafe/recent_order',
+      type: 'GET'
+    })
+    .done(function(data) {
+      console.log(data);
+      $('.past').html(data)
+    })
+
     $('.item_frame .after').click(function(){
       this_item = $(this).parent('.item_frame').parent('.item')
       menu.removeMenuData(this_item)
