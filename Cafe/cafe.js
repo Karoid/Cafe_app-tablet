@@ -528,7 +528,7 @@ router.post("/sign_out", function (req, res) {
     res.clearCookie('sid'); // 세션 쿠키 삭제
         
         documents[0].remove();
-    return res.end()
+    return res.redirect("/cafe/main.html/")
         });
     
        

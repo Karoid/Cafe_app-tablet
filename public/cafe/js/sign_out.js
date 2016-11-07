@@ -5,7 +5,10 @@
         $.ajax({
             url: serverip+"/cafe/sign_out",
             method:"POST",
-            data: null,        
+            data: null,
+             success: function(data){
+              window.location = "/cafe/main.html"
+            }
          
      })
     }
