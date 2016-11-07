@@ -84,22 +84,22 @@
             return {
                 link: function (scope, element, attrs) {
                     element.click(function () {
-                        //console.log(scope)
-                        if (scope.$id == "003") {
+                        if (scope.order == null) {
                             change();
                             return;
                         }
-                        $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
-                            console.log("done")
-                        })
-
-                        if (scope.selected == "active") {
-                            scope.selected = "unactive";
-                            scope.order.order_state = "done";
-                        }
                         else {
-                            scope.selected = "active";
-                            scope.order.order_state = "ready";
+                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
+                                console.log("done")
+                            })
+                            if (scope.selected == "active") {
+                                scope.selected = "unactive";
+                                scope.order.order_state = "done";
+                            }
+                            else {
+                                scope.selected = "active";
+                                scope.order.order_state = "ready";
+                            }
                         }
                     });
                 }
@@ -130,7 +130,7 @@
                 var search_date = $scope.date - $scope.date % 86400000;
                 console.log(search_date);
                 $http.post('/order_data_search', ({date: search_date})).success(function (data) {
-                    //console.log(data)
+                    //\\console.log(data)
                     $scope.orders = data;
                 })
             }
