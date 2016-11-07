@@ -84,22 +84,23 @@ router.get('/order_page.html', function (req, res) { //회원 주문확인
         } else {
             var user = req.session.username
             if (user) {
-              User.findOne({username: user},function(err,doc){
-                doc.password = ""
-                doc._id = ""
-                res.end(ejs.render(data, {data:null,userdata: doc}))
-                console.log(doc);
-              })
+                User.findOne({username: user}, function (err, doc) {
+                    doc.password = ""
+                    doc._id = ""
+                    res.end(ejs.render(data, {data: null, userdata: doc}))
+                    console.log(doc);
+                })
             }
         }
     })
 });
 router.post('/order_page.html', function (req, res) { //비회원 주문확인
     fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
-        res.end(ejs.render(data, {data: req.body.password, userdata:null}))
+        res.end(ejs.render(data, {data: req.body.password, userdata: null}))
     })
 });
 router.post('/order_check.html', function (req, res) {
+<<<<<<< HEAD
   fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
     if (err) {
       console.log(err);
@@ -107,15 +108,24 @@ router.post('/order_check.html', function (req, res) {
       res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
     }
   })
+=======
+    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
+        }
+    })
+>>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
 });
 router.get('/order_fin.html', function (req, res) {
-  fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
-    }
-  })
+    fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
+        }
+    })
 });
 router.get('/order_check/:order_id?', function (req, res) { //주문내역 확인
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
@@ -256,21 +266,22 @@ router.get('/QnA_d/:id', function (req, res) {
     }
 });
 //qna 내용 보여주기
-router.get('/Qna_in/:id?', function(req, res) {
-  fs.readFile('./Cafe/Qna_in.html','utf8',function(err,data){
+router.get('/Qna_in/:id?', function (req, res) {
+    fs.readFile('./Cafe/Qna_in.html', 'utf8', function (err, data) {
 
-      var user = req.session.username;
+        var user = req.session.username;
 
 
-      Qna.findOne({ _id: req.params.id }, function (err, doc){
+        Qna.findOne({_id: req.params.id}, function (err, doc) {
 
-          res.end(doc.content) //warning
-          })
-     })
+            res.end(doc.content) //warning
+        })
+    })
 });
 //회원 주문
 router.post('/user_order', function (req, res) {
     //console.log(req.session.username + "가 주문중");
+<<<<<<< HEAD
   if (req.session.username) {
 
       console.log(req.body.orderdata);
@@ -324,6 +335,73 @@ router.post('/user_order', function (req, res) {
               })
           }
 
+=======
+    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (req.session.username || 1) { //디버깅하게 편하게 로그인안해도 주문할수있도록 || 1 붙여놓음 후에 해제바람
+
+                // console.log(req.body.orderdata);
+                var item = req.body.orderdata;
+                var total_price = 0;
+                var count;
+
+                Order_count.find({}).lean().exec(function (err, doc) {
+
+                    //console.log(doc[0])
+                    count = doc[0].value;
+                    // console.log(item.length);
+
+                    conn.collection('order_count').update({value: count},
+                        {value: count + 1});
+
+                    //console.log(req.body.orderdata[0].item_name);
+                    var county = 0;
+                    for (var i = 0; i < item.length; i++) {
+                        //보안 관련하여 db의 실제 제품가격으로 참조함
+                        Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
+                            // onsole.log("제품가격:" + doc[0].item_price);
+                            //console.log(doc[0].item_price);
+                            //console.log("i:" + i);
+                            total_price = Number(total_price) + Number(doc[0].item_price);
+                            insert();
+                        })
+                    }
+                    function insert() {
+
+                        // console.log("i:" + county);
+                        county++;
+                        // console.log("i:" + county);
+                        if (county == item.length) {
+                            //쿠폰 증가
+                            user.findOne({username: req.session.username}).exec(function (err, doc) {
+                                //console.log(JSON.stringify(doc));
+                                doc.coupon += item.length;
+                                doc.save();
+                            })
+                            // console.log("총가격:" + total_price);
+                            for (i = 0; i < item.length; i++) {
+                                var goitem = new Array();
+                                goitem.push({name: item[i].item_name, option: item[i].option})
+                            }
+
+                            conn.collection('order_data').insert({
+                                order_count: count,
+                                order_count_today: 0,
+                                order_date: Date.now(),
+                                order_total_price: total_price,
+                                order_state: "ready", //ready or done
+                                order_id: req.session.username,
+                                order_count: count,
+                                order_item_index: goitem,
+                                user_index: req.body.userdata
+                            })
+                        }
+                    }
+
+                });
+>>>>>>> a1fe4354705604e08c3ff9793d6bbda62066112f
 
       });
 
@@ -331,6 +409,7 @@ router.post('/user_order', function (req, res) {
   }
   res.end()
 });
+;
 //비회원 주문
 
 router.post('/nonuser_order', function (req, res) {
@@ -411,16 +490,16 @@ router.post('/nonuser_order', function (req, res) {
 // 최근 주문
 router.get('/recent_order', function (req, res) {
     if (req.session.username) {
-        Order_data.find({order_id: req.session.username}).lean().exec( function (err, documents) {
+        Order_data.find({order_id: req.session.username}).lean().exec(function (err, documents) {
             var goitem = new Array();
-            if (documents.length>=3) {
-              for (i = 0; i < 3; i++) {
-                goitem.push(documents[i].order_item_index)
-              }
-            }else{
-              for (i = 0; i < documents.length; i++) {
-                goitem.push(documents[i].order_item_index)
-              }
+            if (documents.length >= 3) {
+                for (i = 0; i < 3; i++) {
+                    goitem.push(documents[i].order_item_index)
+                }
+            } else {
+                for (i = 0; i < documents.length; i++) {
+                    goitem.push(documents[i].order_item_index)
+                }
             }
             return res.end(JSON.stringify(goitem));
 
@@ -512,16 +591,14 @@ router.post("/nonusersign_up", function (req, res) {
 router.post("/sign_out", function (req, res) {
     console.log(req.session.username + " is sign out");
     console.log(req.body);
-    User.find({username:req.session.username }).exec(function (err, documents) {
+    User.find({username: req.session.username}).exec(function (err, documents) {
 
-    req.session.destroy();  // 세션 삭제
-    res.clearCookie('sid'); // 세션 쿠키 삭제
+        req.session.destroy();  // 세션 삭제
+        res.clearCookie('sid'); // 세션 쿠키 삭제
 
         documents[0].remove();
-    return res.redirect("/cafe/main.html/")
-        });
-
-
+        return res.redirect("/cafe/main.html/")
+    });
 })
 module.exports = router;
 
