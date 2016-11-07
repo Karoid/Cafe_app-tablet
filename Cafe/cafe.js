@@ -511,7 +511,21 @@ router.post("/nonusersign_up", function (req, res) {
         })
     })
 })
-
+//회원 탈퇴
+router.post("/sign_out", function (req, res) {
+    console.log(req.session.username + " is sign out");
+    console.log(req.body);
+    User.find({username:req.session.username }).exec(function (err, documents) {
+       
+    req.session.destroy();  // 세션 삭제
+    res.clearCookie('sid'); // 세션 쿠키 삭제
+        
+        documents[0].remove();
+    return res.end()
+        });
+    
+       
+})
 module.exports = router;
 
 

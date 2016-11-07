@@ -3,6 +3,7 @@
 <head>
     <script src="/cafe/libs/jquery-1.11.0.min.js"></script>
     <script src="/cafe/js/login.js" type="text/javascript" charset="utf-8"></script>
+     <script src="/cafe/js/sign_out.js" type="text/javascript" charset="utf-8"></script>
     <link rel = "stylesheet" type = "text/css" href = "/cafe/css/main.css">
 <title>메인페이지</title>
 </head>
@@ -15,6 +16,7 @@
             <%if(data){%>
             <button type="submit" id="logout-button">Logout</button>
             <h1><a href="/cafe/order_page.html">주문하러 가기</a></h1>
+               <button type="submit" id="signout-button">회원 탈퇴</button>
               <%if(redirect){%>
                 <script>
                     $(document).ready(function() {
