@@ -77,6 +77,28 @@ router.get('/menu_page.html', function (req, res) {
         }
     })
 });
+router.get('/order_page.html', function (req, res) { //회원 주문확인
+    fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            var user = req.session.username
+            if (user) {
+                User.findOne({username: user}, function (err, doc) {
+                    doc.password = ""
+                    doc._id = ""
+                    res.end(ejs.render(data, {data: null, userdata: doc}))
+                    console.log(doc);
+                })
+            }
+        }
+    })
+});
+router.post('/order_page.html', function (req, res) { //비회원 주문확인
+    fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
+        res.end(ejs.render(data, {data: req.body.password, userdata: null}))
+    })
+});
 router.post('/order_check.html', function (req, res) {
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
@@ -86,25 +108,16 @@ router.post('/order_check.html', function (req, res) {
         }
     })
 });
-router.get('/order_page.html', function (req, res) {
-    fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
+router.get('/order_fin.html', function (req, res) {
+    fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            var user = req.session.username
-            if (user) {
-                console.log(user + "is logged on");
-                res.end(ejs.render(data, {data: null}))
-            }
+            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
         }
     })
 });
-router.post('/order_page.html', function (req, res) {
-    fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
-        res.end(ejs.render(data, {data: req.body.password}))
-    })
-});
-router.get('/order_check/:order_id?', function (req, res) {
+router.get('/order_check/:order_id?', function (req, res) { //주문내역 확인
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
@@ -242,7 +255,19 @@ router.get('/QnA_d/:id', function (req, res) {
         res.end(e)
     }
 });
+//qna 내용 보여주기
+router.get('/Qna_in/:id?', function (req, res) {
+    fs.readFile('./Cafe/Qna_in.html', 'utf8', function (err, data) {
 
+        var user = req.session.username;
+
+
+        Qna.findOne({_id: req.params.id}, function (err, doc) {
+
+            res.end(doc.content) //warning
+        })
+    })
+});
 //회원 주문
 router.post('/user_order', function (req, res) {
     //console.log(req.session.username + "가 주문중");
@@ -252,7 +277,7 @@ router.post('/user_order', function (req, res) {
         } else {
             if (req.session.username || 1) { //디버깅하게 편하게 로그인안해도 주문할수있도록 || 1 붙여놓음 후에 해제바람
 
-                // console.log(req.body.orderdata);
+                console.log(req.body.orderdata);
                 var item = req.body.orderdata;
                 var total_price = 0;
                 var count;
@@ -267,48 +292,42 @@ router.post('/user_order', function (req, res) {
                         {value: count + 1});
 
                     //console.log(req.body.orderdata[0].item_name);
-                    var county = 0;
-                    for (var i = 0; i < item.length; i++) {
-                        //보안 관련하여 db의 실제 제품가격으로 참조함
+                    for (var i = 0; i < item.length; i++) { //보안 관련하여 db의 실제 제품가격으로 참조함
                         Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
-                            // onsole.log("제품가격:" + doc[0].item_price);
+                            //console.log("제품가격:" + doc[0].item_price);
                             //console.log(doc[0].item_price);
-                            //console.log("i:" + i);
+                            //쿠폰 증가
+                            User.find({username: req.session.username}).lean().exec(function (err, doc) {
+                                count = doc[0].coupon;
+                                conn.collection('order_count').update({value: count},
+                                    {value: count + 1});
+
+                            })
                             total_price = Number(total_price) + Number(doc[0].item_price);
-                            insert();
+                            if (i + 1 >= item.length)
+                                insert();
                         })
                     }
                     function insert() {
-
-                        // console.log("i:" + county);
-                        county++;
-                        // console.log("i:" + county);
-                        if (county == item.length) {
-                            //쿠폰 증가
-                            user.findOne({username: req.session.username}).exec(function (err, doc) {
-                                //console.log(JSON.stringify(doc));
-                                doc.coupon += item.length;
-                                doc.save();
-                            })
-                            // console.log("총가격:" + total_price);
-                            for (i = 0; i < item.length; i++) {
-                                var goitem = new Array();
-                                goitem.push({name: item[i].item_name, option: item[i].option})
-                            }
-
-                            conn.collection('order_data').insert({
-                                order_count: count,
-                                order_count_today: 0,
-                                order_date: Date.now(),
-                                order_total_price: total_price,
-                                order_state: "ready", //ready or done
-                                order_id: req.session.username,
-                                order_count: count,
-                                order_item_index: goitem,
-                                user_index: req.body.userdata
-                            })
+                        // console.log("총가격:" + total_price);
+                        goitem = new Array();
+                        for (i = 0; i < item.length; i++) {
+                            goitem.push({name: item[i].item_name, option: item[i].option})
                         }
+
+                        conn.collection('order_data').insert({
+                            order_count: count,
+                            order_count_today: 0,
+                            order_date: Date.now(),
+                            order_total_price: total_price,
+                            order_state: "ready", //ready or done
+                            order_id: req.session.username,
+                            order_count: count,
+                            order_item_index: goitem,
+                            user_index: req.body.userdata
+                        })
                     }
+
 
                 });
 
@@ -354,7 +373,7 @@ router.post('/nonuser_order', function (req, res) {
 
             function insert_order() {
 
-                console.log(req.body.orderdata);
+                //console.log(req.body.orderdata);
                 var item = req.body.orderdata;
                 var total_price = 0;
                 var count;
@@ -401,15 +420,19 @@ router.post('/nonuser_order', function (req, res) {
 
 // 최근 주문
 router.get('/recent_order', function (req, res) {
-    console.log(req.session.username);
     if (req.session.username) {
-        var recent_order;
-        Order_data.find({order_id: req.session.username}, function (err, documents) {
+        Order_data.find({order_id: req.session.username}).lean().exec(function (err, documents) {
             var goitem = new Array();
-            for (i = 0; i < 3; i++) {
-                goitem.push({order: documents[i].order_item_index})
+            if (documents.length >= 3) {
+                for (i = 0; i < 3; i++) {
+                    goitem.push(documents[i].order_item_index)
+                }
+            } else {
+                for (i = 0; i < documents.length; i++) {
+                    goitem.push(documents[i].order_item_index)
+                }
             }
-            return res.end(' ' + goitem);
+            return res.end(JSON.stringify(goitem));
 
         });
     }
@@ -495,7 +518,21 @@ router.post("/nonusersign_up", function (req, res) {
         })
     })
 })
+//회원 탈퇴
+router.post("/sign_out", function (req, res) {
+    console.log(req.session.username + " is sign out");
+    console.log(req.body);
+    User.find({username: req.session.username}).exec(function (err, documents) {
 
+        req.session.destroy();  // 세션 삭제
+        res.clearCookie('sid'); // 세션 쿠키 삭제
+
+        documents[0].remove();
+        return res.redirect("/cafe/main.html/")
+    });
+
+
+})
 module.exports = router;
 
 
