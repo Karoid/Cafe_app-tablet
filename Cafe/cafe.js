@@ -77,15 +77,6 @@ router.get('/menu_page.html', function (req, res) {
         }
     })
 });
-router.post('/order_check.html', function (req, res) {
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
-        }
-    })
-});
 router.get('/order_page.html', function (req, res) { //회원 주문확인
     fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
         if (err) {
@@ -108,7 +99,25 @@ router.post('/order_page.html', function (req, res) { //비회원 주문확인
         res.end(ejs.render(data, {data: req.body.password, userdata:null}))
     })
 });
-router.get('/order_check/:order_id?', function (req, res) {
+router.post('/order_check.html', function (req, res) {
+  fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
+    }
+  })
+});
+router.get('/order_fin.html', function (req, res) {
+  fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata}))
+    }
+  })
+});
+router.get('/order_check/:order_id?', function (req, res) { //주문내역 확인
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
@@ -246,15 +255,15 @@ router.get('/QnA_d/:id', function (req, res) {
         res.end(e)
     }
 });
-//qna 내용 보여주기 
+//qna 내용 보여주기
 router.get('/Qna_in/:id?', function(req, res) {
   fs.readFile('./Cafe/Qna_in.html','utf8',function(err,data){
-      
+
       var user = req.session.username;
-      
-   
+
+
       Qna.findOne({ _id: req.params.id }, function (err, doc){
-        
+
           res.end(doc.content) //warning
           })
      })
@@ -364,7 +373,7 @@ router.post('/nonuser_order', function (req, res) {
 
             function insert_order() {
 
-                console.log(req.body.orderdata);
+                //console.log(req.body.orderdata);
                 var item = req.body.orderdata;
                 var total_price = 0;
                 var count;
@@ -411,21 +420,19 @@ router.post('/nonuser_order', function (req, res) {
 
 // 최근 주문
 router.get('/recent_order', function (req, res) {
-    console.log(req.session.username);
     if (req.session.username) {
-        var recent_order;
-        Order_data.find({order_id: req.session.username}, function (err, documents) {
+        Order_data.find({order_id: req.session.username}).lean().exec( function (err, documents) {
             var goitem = new Array();
             if (documents.length>=3) {
               for (i = 0; i < 3; i++) {
-                goitem.push({order: documents[i].order_item_index})
+                goitem.push(documents[i].order_item_index)
               }
             }else{
               for (i = 0; i < documents.length; i++) {
-                goitem.push({order: documents[i].order_item_index})
+                goitem.push(documents[i].order_item_index)
               }
             }
-            return res.end(' ' + goitem);
+            return res.end(JSON.stringify(goitem));
 
         });
     }

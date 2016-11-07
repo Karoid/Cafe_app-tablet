@@ -25,6 +25,39 @@ h3{
 .container:hover > .col-md-4:hover,.container:hover > .col-md-4.hover {
   width:45.3%;
 }
+.recent_order{
+  border-bottom: 1px solid;
+  cursor: pointer;
+}
+.recent_order:first-child{
+  border-top: 1px solid;
+}
+.recent_order:nth-child(1)::before{
+  content:"1. ";
+}
+.recent_order:nth-child(2)::before{
+  content:"2. ";
+}
+.recent_order:nth-child(3)::before{
+  content:"3. ";
+}
+.recent_order .recent_item{
+  display:inline-block;
+}
+.recent_order .recent_item .item_name{
+  display:inline-block;
+}
+.recent_order .recent_item::after{
+  content:", ";
+  display:inline-block;
+}
+.recent_order .recent_item:last-child::after{
+  content:"";
+  display:inline-block;
+}
+.recent_order .recent_item .item_option{
+  display:none;
+}
 .border{
     height: 96vh;
     float:left;

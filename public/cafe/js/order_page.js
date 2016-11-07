@@ -227,8 +227,24 @@ $(document).ready(function() {
       type: 'GET'
     })
     .done(function(data) {
-      console.log(data);
-      $('.past').html(data)
+      recent = JSON.parse(data);
+      html = ""
+      console.log(recent);
+      recent.forEach(function(elem) {
+        html += '<div class="recent_order">'
+        elem.forEach(function(item) {
+          console.log(item.name, item.option);
+          html+= '<div class="recent_item"><div class="item_name">'+
+                        item.name+
+                      '</div>'+
+                      '<div class="item_option">'+
+                        item.option+
+                      '</div>'+
+                      '</div>'
+        })
+        html+= '</div>'
+      });
+      $('.past').html(html)
     })
 
     $('.item_frame .after').click(function(){
