@@ -29,9 +29,9 @@ $(document).ready(function(){
   })
   var css = setInterval(function(){
     var url = $('#mid_frame').contents().get(0).location.pathname
-    var Regexr = /(\w*order\w+|[Qq]n[Aa]\w*|sign_up|menu_page).*/g
+    var Regexr = /main.html/g
     var change_boolean = Regexr.test(url)
-    if (change_boolean) {
+    if (!change_boolean) {
       $('#mid').addClass('expand')
     }else {
       $('#mid').removeClass('expand')
