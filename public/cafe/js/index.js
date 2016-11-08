@@ -72,7 +72,7 @@ $(document).ready(function(){
     .done(function(count) {
       fillcoupon($('.coupon_frame'),parseInt(count)%10)
       if (count>=10) {
-        $('.popup').append('<div class="coupon_left">'+(parseInt(count)/10)+'</div>')
+        $('.popup').append('<div class="coupon_left">'+parseInt(parseInt(count)/10)+'</div>')
       }else {
         $('.popup').append('<div class="stamp_left">'+(10-parseInt(count))+'</div>')
       }

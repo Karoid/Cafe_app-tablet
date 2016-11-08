@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel = "stylesheet" type = "text/css" href = "/cafe/css/order_check.css">
+  <script src="/cafe/libs/jquery-1.11.0.min.js"></script>
+  <script src="/cafe/js/order_check_in.js" type="text/javascript" charset="utf-8"></script>
+  <title>주문 완료</title>
+</head>
+<body>
+  <input id="return" type="submit" value>
+  <div id="paper">
+    <div class="col-md-6 col-xs-12 right-line">
+      <h3>*주문내역 확인</h3>
+      <div class="ordered_item">
+        <table>
+          <tr>
+            <th class="col-25">항목</th>
+            <th class="col-25">가격</th>
+            <th class="col-12">휘핑</th>
+            <th class="col-12">시럽</th>
+            <th class="col-12 nomobile">핫/<br>아이스</th>
+            <th class="col-12">샷</th>
+          </tr>
+        <% orderdata.forEach(function(order){%>
+          <tr>
+            <td class="name"><%=order.name%></td>
+            <td class="item_price"><%=order.item_price%></td>
+            <td><%if(parseInt(order.option)%2){%>O<%}else{%>✖<%}%></td>
+            <td><%if(parseInt(order.option/2)%2){%>O<%}else{%>✖<%}%></td>
+            <td class="nomobile"><%if(parseInt(order.option/4)%2){%>핫<%}else{%>아이스<%}%></td>
+            <td><%if(parseInt(order.option/8)%2){%>O<%}else{%>✖<%}%></td>
+          <%})%>
+          </tr>
+        </table>
+      </div>
+      <div class="price">총 금액:<span class="won"><%=price%></span>원</div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <h3>*주문정보 확인</h3>
+      <div>
+        <h4>-주소 정보</h4>
+        <table class="stick2left">
+          <tr>
+            <th class="col-25">이름</th>
+            <td class="col-25"><%=userdata.name%></td>
+          </tr>
+          <tr>
+            <th class="col-25">주소</th>
+            <td class="col-25"><%=userdata.address%></td>
+          </tr>
+          <tr>
+            <th class="col-25">전화번호</th>
+            <td class="col-25"><%=userdata.telephone%></td>
+          </tr>
+        </table>
+      </div>
+      <div style="clear:both"></div>
+      <div>
+        <p>-배송시 요청사항: <input type="text" name="ect" id="ect" style="width:100%" placeholder="예약시간, 수령장소..." value="<%=userdata.ect%>" disabled></p>
+      <%if(userdata.payment != 'cash'){%>
+        <p>-결제 방법:</p> 카드 <div class="checkbox checked" style="display:inline; vertical-align:top;margin-right:30px;"></div>
+        현금 <div class="checkbox" style="display:inline; vertical-align:top;"></div>
+      <%}else{%>
+        <p>-결제 방법:</p> 카드 <div class="checkbox" style="display:inline; vertical-align:top;margin-right:30px;"></div>
+        현금 <div class="checkbox checked" style="display:inline; vertical-align:top;"></div>
+      <%}%>
+  </div>
+  <a href="javascript:history.back()" class="back"><span class="xbutton">✖</span></a>
+</body>
+</html>

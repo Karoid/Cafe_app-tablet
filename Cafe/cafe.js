@@ -138,6 +138,18 @@ router.get('/order_check/:page?', function (req, res) { //주문내역 확인
         }
     })
 });
+router.get('/order_check_in/:id?', function (req, res) { //주문내역 확인
+    fs.readFile('./Cafe/order_check_in.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            Order_data.findOne({order_id: req.session.username}, function (err, doc) {
+              console.log(doc);
+              res.end(ejs.render(data, {userdata: doc.user_index, orderdata: doc.order_item_index, price: doc.order_total_price}))
+            })
+        }
+    })
+});
 router.get('/sign_up.html', function (req, res) {
     fs.readFile('./Cafe/sign_up.html', 'utf8', function (err, data) {
         if (err) {

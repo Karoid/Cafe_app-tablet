@@ -129,7 +129,7 @@ input[type="radio"] {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
-#finish{
+#finish,#return{
   position: fixed;
   width: 220px;
   height: 75px;
@@ -142,6 +142,10 @@ input[type="radio"] {
   border: 0;
   right: 7vw;
   bottom: 8vh;
+}
+#return{
+  background-image: url(../img/order_fin2_check.png);
+  background-color: #c19595;
 }
 .back{
   position: fixed;
@@ -180,12 +184,16 @@ input[type="radio"] {
     margin: 0 0 0 0;
     padding: 0;
   }
-  #finish{
+  #finish,#return{
     bottom: 0;
     left: 0;
     height: 10vh;
     width: 100vw;
     border-radius: 0;
+  }
+  #return{
+    background-image: url(../img/order_fin2_check.png);
+    background-color: #c19595;
   }
   .col-xs-12{
     width:95.2%!important;

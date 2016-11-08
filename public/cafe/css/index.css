@@ -157,7 +157,7 @@ div.wood{
     background-image: url("../img/나무사진.jpg");
     background-size: 100% 100%;
 }
-@media screen and (max-aspect-ratio: 1/1){
+@media screen and (max-width: 767px){
   div.main {
       color: black;
       height:270px;
