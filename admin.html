@@ -266,24 +266,24 @@
 
 <script type="text/ng-template" id="/home.html">
     <div class="page-header">
-        <div class="btn-bg" style="background:#7278e5;">
+        <div class="btn-bg home" style="background:#7278e5;">
             <h1 style="text-align:center;color:white">{{test}}</h1>
         </div>
-        <div class="btn-bg bg-1">
+        <div class="btn-bg bg-1 home">
             <div class="btn btn-1">
                 <a href="#/page">
                     <button>Page 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1" style="background:#78c98d;">
+        <div class="btn-bg bg-1 home" style="background:#78c98d;">
             <div class="btn btn-1">
                 <a href="#/item">
                     <button>Item 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1" style="background:#e5d272;">
+        <div class="btn-bg bg-1 home" style="background:#e5d272;">
             <div class="btn btn-1">
                 <a href="#/order">
                     <button>주문 관리</button>
@@ -339,9 +339,28 @@
                 주문번호 : {{order.order_count}}<br>
                 폰번호 : {{order.order_id}}<br>
                 주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br>
-                제품정보 : {{order.order_item_index}}<br>
                 주문가격 : {{order.order_total_price}}<br>
                 주문상황 : {{order.order_state}}<br>
+                <table style="width:80%; max-width:360px">
+                  <tr>
+                    <th class="col-25">항목</th>
+                    <th class="col-12">휘핑</th>
+                    <th class="col-12">시럽</th>
+                    <th class="col-12 nomobile">핫/<br>아이스</th>
+                    <th class="col-12">샷</th>
+                  </tr>
+                  <tr ng-repeat="detail in order.order_item_index">
+                    <td>{{detail.name}}</td>
+                    <td ng-if="(detail.option-0)%2 == 1">O</td>
+                    <td ng-if="(detail.option-0)%2 != 1">X</td>
+                    <td ng-if="(detail.option/2)%2 == 1">O</td>
+                    <td ng-if="(detail.option/2)%2 != 1">X</td>
+                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 == 1">핫</td>
+                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 != 1">아이스</td>
+                    <td ng-if="parseInt(detail.option/8)%2 == 1">O</td>
+                    <td ng-if="parseInt(detail.option/8)%2 != 1">X</td>
+                  </tr>
+                </table>
                 <button click="">주문완료</button>
             </div>
         </div>

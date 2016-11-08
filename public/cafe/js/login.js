@@ -28,8 +28,13 @@ $(document).ready(function(){
   $("#login-button").click(function(event){
     login()
   });
-  $("#signup-button").click(function(event){
+  
+    $("#signup-button").click(function(event){
     window.location = '/cafe/sign_up.html'
+  });
+  
+    $("#usermodify-button").click(function(event){
+    window.location = '/cafe/user_modify.html'
   });
   /*$("#nonuser-button").click(function(event){
     $.ajax({

@@ -143,6 +143,17 @@ router.get('/sign_up.html', function (req, res) {
         }
     })
 });
+
+router.get('/user_modify.html', function (req, res) {
+    fs.readFile('./Cafe/user_modify.html', 'utf8', function (err, data) {
+       
+        User.find({username:req.session.username}).exec(function (err, documents) {
+            console.log(documents);
+            return res.end(ejs.render(data,{data: documents}));
+        
+        })
+})
+});
 router.get('/QnA.html/:page?', function (req, res) {
     fs.readFile('./Cafe/QnA.html', 'utf8', function (err, data) {
         try {
@@ -557,6 +568,7 @@ router.post("/nonusersign_up", function (req, res) {
 })
 //회원 탈퇴
 router.post("/sign_out", function (req, res) {
+
     console.log(req.session.username + " is sign out");
     console.log(req.body);
     User.find({username: req.session.username}).exec(function (err, documents) {
@@ -567,6 +579,31 @@ router.post("/sign_out", function (req, res) {
         documents[0].remove();
         return res.redirect("/cafe/main.html/")
     });
+})
+
+
+//회원 수정
+router.post("/user_modify", function (req, res) {
+   
+    console.log(JSON.stringify(req.body) + "user_modify attempt");
+  
+    
+    User.update(
+            {username: req.session.username},
+            {
+                $set: {
+                     username: req.body.username,
+        password: req.body.password,
+        realname: req.body.realname,
+        address: req.body.address
+                }
+            },
+            function (err, numberAffected, rawResponse) {
+                //console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
+                res.redirect("../cafe/main.html");
+            })
+    // save user to database 회원가입 부분 최초저장부분
+    
 })
 module.exports = router;
 
