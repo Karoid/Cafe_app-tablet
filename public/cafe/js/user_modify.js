@@ -38,6 +38,26 @@ $(document).ready(function(){
   $('.show_info').click(function(){
     $("iframe").css("display","")
   })
+  
+  $("#signout-button").click(function(){
+   if(confirm("정말 탈퇴하시겠습니까?"))
+    {
+        $.ajax({
+            url: serverip+"/cafe/sign_out",
+            method:"POST",
+            data: null,
+             success: function(data){
+              window.location = "/cafe/main.html"
+            }
+         
+     })
+    }
+     else
+     {
+            return ;
+     }
+
+      })
   $('#submit').click(function(event) {
     var x = 0
     for (var i = 0; i < 4; i++) {
