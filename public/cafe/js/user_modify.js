@@ -40,7 +40,7 @@ $(document).ready(function(){
   })
   $('#submit').click(function(event) {
     var x = 0
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 4; i++) {
       check = $(':checkbox').eq(i).hasClass("checked")
       if (!check) {
         x++;
@@ -55,15 +55,15 @@ $(document).ready(function(){
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
     if (x==0) {
       $.ajax({
-        url: serverip+"/cafe/user_modify",
+        url: serverip+loginLocation+"user_modify",
         method:"post",
-        data: {'username':$("#tel").val(),'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
+        data: {'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
         success: function(data){
           console.log("sign_up server accessed");
           var login = eval("("+data+")")
           if (data) {
             $(".notification").html(login.msg)
-            if (/\w*가입완료/.test(login.msg)) {
+            if (/\w*수정완료/.test(login.msg)) {
               window.location = "/cafe/main.html"
             }
           } else {

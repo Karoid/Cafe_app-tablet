@@ -20,9 +20,7 @@
         </div>
 
         <div class="input-check">
-          <input type="checkbox" name="tel_check" id="tel_check">
-          <div for='tel_check' class="check-box_auth">
-          </div>
+          
           <input type="checkbox" name="pass_check" id="pass_check">
           <div for='pass_check' class="check-box_auth">
           </div>
@@ -37,11 +35,11 @@
           </div>
         </div>
         <div class="input-box">
-            <p name="id" id="tel" ><%=data.documents[0].username%></p><br>
-          <input required type="password" name="PASS" id="password"><br>
+            <p name="id" id="tel" ><%=data[0].username%></p><br>
+          <input required type="password" name="PASS" id="password" ><br>
           <input required type="password" id="password_check" ><br>
-          <input required name="name" type="text" id="name"><br>
-          <input type="text" name="address" id="address" ><br>
+          <input required name="name" type="text" id="name" value="<%=data[0].realname%>"><br>
+          <input type="text" name="address" id="address" value = "<%=data[0].address%>"><br>
         </div>
       </div><br>
       *전화번호는 아이디의 기능도 수행합니다.<br>

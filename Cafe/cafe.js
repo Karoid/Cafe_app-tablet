@@ -146,7 +146,7 @@ router.get('/sign_up.html', function (req, res) {
 
 router.get('/user_modify.html', function (req, res) {
     fs.readFile('./Cafe/user_modify.html', 'utf8', function (err, data) {
-        console.log("gg"+req.session.username);
+       
         User.find({username:req.session.username}).exec(function (err, documents) {
             console.log(documents);
             return res.end(ejs.render(data,{data: documents}));
