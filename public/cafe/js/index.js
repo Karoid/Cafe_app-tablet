@@ -1,7 +1,7 @@
 function popup(txt){
   html= '<div class="popup">' +
-        '<div class="back"><span class="xbutton">✖</span></div>' +
-          txt +
+        '<div class="back"><span class="xbutton">✖</span></div>'+
+          txt +'<div class="back"><button type="submit" id="couponin-button">쿠폰 적립</button>'+ '<button type="submit" id="couponout-button">쿠폰 사용</button></div>'+
         '</div>'
   $('body').append(html)
   $('.popup .back').click(function(){
