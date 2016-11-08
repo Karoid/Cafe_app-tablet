@@ -121,16 +121,20 @@ router.get('/order_fin.html/:id?', function (req, res) {
         }
     })
 });
-router.get('/order_check/:order_id?', function (req, res) { //주문내역 확인
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+router.get('/order_check/:page?', function (req, res) { //주문내역 확인
+    fs.readFile('./Cafe/order_check_list.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            var user = req.session.username
-            if (user) {
-                console.log(user + "is logged on");
-            }
-            res.end(ejs.render(data, {data: user}))
+          if (req.params.page) {
+              var page_num = req.params.page;
+          } else {
+              var page_num = 1;
+          }
+            Order_data.paginate({order_id: req.session.username}, {page: page_num, limit: 5}, function (err, docs) {
+              console.log(docs);
+              res.end(ejs.render(data, {data: docs}))
+            })
         }
     })
 });
@@ -146,11 +150,11 @@ router.get('/sign_up.html', function (req, res) {
 
 router.get('/user_modify.html', function (req, res) {
     fs.readFile('./Cafe/user_modify.html', 'utf8', function (err, data) {
-       
+
         User.find({username:req.session.username}).exec(function (err, documents) {
             console.log(documents);
             return res.end(ejs.render(data,{data: documents}));
-        
+
         })
 })
 });
@@ -593,10 +597,10 @@ router.post("/sign_out", function (req, res) {
 
 //회원 수정
 router.post("/user_modify", function (req, res) {
-   
+
     console.log(JSON.stringify(req.body) + "user_modify attempt");
-  
-    
+
+
     User.update(
             {username: req.session.username},
             {
@@ -612,7 +616,7 @@ router.post("/user_modify", function (req, res) {
                 res.redirect("../cafe/main.html");
             })
     // save user to database 회원가입 부분 최초저장부분
-    
+
 })
 module.exports = router;
 

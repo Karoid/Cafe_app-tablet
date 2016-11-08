@@ -70,11 +70,11 @@ $(document).ready(function(){
       url: '/cafe/get_coupon_data',
     })
     .done(function(count) {
-      fillcoupon($('.coupon_frame'),count%10)
+      fillcoupon($('.coupon_frame'),parseInt(count)%10)
       if (count>=10) {
-        $('.popup').append('<div class="coupon_left">'+parseInt(count/10)+'</div>')
+        $('.popup').append('<div class="coupon_left">'+(parseInt(count)/10)+'</div>')
       }else {
-        $('.popup').append('<div class="stamp_left">'+(10-count)+'</div>')
+        $('.popup').append('<div class="stamp_left">'+(10-parseInt(count))+'</div>')
       }
     })
     .fail(function() {
