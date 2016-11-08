@@ -600,7 +600,7 @@ router.post("/sign_out", function (req, res) {
 
         req.session.destroy();  // 세션 삭제
         res.clearCookie('sid'); // 세션 쿠키 삭제
-
+        console.log("회원탈퇴")
         documents[0].remove();
         return res.redirect("/cafe/main.html/")
     });
