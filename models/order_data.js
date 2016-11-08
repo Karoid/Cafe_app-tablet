@@ -2,6 +2,7 @@
  * Created by AJH322 on 2016-10-31.
  */
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 //var User_data = require('./user');
 var userSchema = new mongoose.Schema({
     order_count: {type: Number, unique: true, default: 0}, //총 주문횟수 PK
@@ -26,5 +27,6 @@ userSchema.pre('save', function (next) {
     }
     next();
 });
+userSchema.plugin(mongoosePaginate);
 var order_data = mongoose.model('order_data', userSchema, "order_data");
 module.exports = order_data;

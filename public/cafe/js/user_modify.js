@@ -38,7 +38,7 @@ $(document).ready(function(){
   $('.show_info').click(function(){
     $("iframe").css("display","")
   })
-  
+
   $("#signout-button").click(function(){
    if(confirm("정말 탈퇴하시겠습니까?"))
     {
@@ -49,7 +49,7 @@ $(document).ready(function(){
              success: function(data){
               window.location = "/cafe/main.html"
             }
-         
+
      })
     }
      else
@@ -73,16 +73,16 @@ $(document).ready(function(){
       $('.agreement input').addClass('red')
     }
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
-   
+
       $.ajax({
         url: serverip+loginLocation+"user_modify",
         method:"post",
         data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
         success: function(data){
           console.log("modify server accessed");
-              window.location = "/cafe/main.html"
+          window.location = "/cafe/main.html"
           }
       })
-    
+
   });
 })
