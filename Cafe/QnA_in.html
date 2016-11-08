@@ -1,13 +1,73 @@
 <html>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+  <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/cafe/css/QnA_in.css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+  <div class="article fr-view ">
+    <!--제목 시작-->
+    <h3 style="display:inline-block"><%=doc.title%></h3>
+    <span> - <%=doc.username%></span>
+    <%if(seen_button){%>
+    <!--수정 버튼-->
+    <form action="/cafe/QnA_write/<%=doc._id%>" method="post" style="display:inline-block">
+      <input type="hidden" name="title" value="<%=doc.title%>">
+      <input type="hidden" name="content" value="<%=doc.content%>">
+      <button type="submit" class="glyphicon glyphicon-edit" aria-hidden="true" style="border:none;background:none"></button>
+    </form>
+    <!--삭제 버튼-->
+    <form action="/cafe/QnA_d/<%=doc._id%>" method="get" style="display:inline-block">
+      <button type="submit" class="glyphicon glyphicon-remove" aria-hidden="true" style="border:none;background:none" data-confirm="삭제 하시겠습니까?"></button>
+    </form>
+    <%}%>
+    <hr>
+    <!--본문 시작-->
+    <%=doc.content%>
+    <hr>
+    <div class="comments">
+      <%if(seen_button){%>
+  		<div class="comment-wrap">
+  				<div class="photo">
+              <%if(isAdmin){%>
+  						<div class="avatar" style="background-image: url('/cafe/img/admin_icon.jpg')"></div>
+              <%}else{%>
+  						<div class="avatar" style="background-image: url('/cafe/img/user_icon.png')"></div>
+              <%}%>
+  				</div>
+  				<div class="comment-block">
+  						<form action="/cafe/QnA_write/<%=doc._id%>/1" method="post">
+  								<textarea name="answer" id="" cols="30" rows="3" placeholder="Add comment..."></textarea>
+                  <input type="submit" class="submit" value="등록">
+  						</form>
+  				</div>
+  		</div>
+      <%}%>
+      <%if(doc.answer){doc.answer.forEach(function(comment,index){%>
+  		<div class="comment-wrap">
+  				<div class="photo">
+              <%if(comment.username == "admin"){%>
+  						<div class="avatar" style="background-image: url('/cafe/img/admin_icon.jpg')"></div>
+              <%}else{%>
+  						<div class="avatar" style="background-image: url('/cafe/img/user_icon.png')"></div>
+              <%}%>
+  				</div>
+  				<div class="comment-block">
+  						<p class="comment-text"><%=comment.content%></p>
+              <%if(seen_button){%>
+              <form action="/cafe/QnA_d/<%=doc._id%>/<%=index%>" method="get">
+                  <input type="submit" class="submit" value="삭제">
+              </form>
+              <%}%>
+  						<div class="bottom-comment">
+  								<div class="comment-date"><%=comment.username%></div>
+  						</div>
+  				</div>
+  		</div>
+      <%})}%>
+  </div>
 
-
-    
-
-<%=data.docs[0].content%>
-    
-
-
+  </div>
+  </div>
+</body>
 </html>
-    

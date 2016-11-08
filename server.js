@@ -171,12 +171,12 @@ app.post('/order_change_state', function (req, res) { //페이지 인덱스로 �
         else
             val = "ready";
         Order_data.update({order_count: req.body.order_count}, {$set: {order_state: val}}, function (err, result) {
-            //console.log(val);
-            /*if(err)
-             console.log(err)
-             else
-             console.log(result)
-             return;*/
+            console.log(val);
+            if (err)
+                console.log(err)
+            else
+                console.log(result)
+            res.end();
         })
     })
 })

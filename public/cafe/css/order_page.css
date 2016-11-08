@@ -28,6 +28,8 @@ h3{
 .recent_order{
   border-bottom: 1px solid;
   cursor: pointer;
+  height: 21px;
+  overflow-y: hidden;
 }
 .recent_order:first-child{
   border-top: 1px solid;
@@ -82,6 +84,7 @@ h3{
   box-sizing: border-box;
   height:89vh;
   overflow-y:scroll;
+  overflow-x: hidden;
   scrollbar-track-color: white;
 }
 .inner::-webkit-scrollbar {
@@ -98,6 +101,11 @@ h3{
 }
 .private-check{
   margin:20px;
+}
+.show_info{
+  display: inline-block;
+  color:#1011e3;
+  cursor: pointer;
 }
 .item{
   width:110px;

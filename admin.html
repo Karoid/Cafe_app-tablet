@@ -36,7 +36,7 @@
             $scope.test = function () {
                 console.log("test");
                 $http.post('/get_item_data_sorted_by_liked').success(function (data) {
-                    console.log(data);
+//                    console.log(data);
                 })
             };
             $scope.delete_item = function (index) {
@@ -62,7 +62,7 @@
             }
             $scope.get_page_data = function () {
                 $http.post('/get_page_data').success(function (data) {
-                    console.log(data);
+//                    console.log(data);
                     $scope.pages = data;
                 })
             }
@@ -84,22 +84,23 @@
             return {
                 link: function (scope, element, attrs) {
                     element.click(function () {
-                        //console.log(scope)
-                        if (scope.$id == "003") {
+//                        console.log("clicked!")
+                        if (scope.order == null) {
+//                            console.log("change!")
                             change();
-                            return;
-                        }
-                        $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function (data) {
-                            console.log("done")
-                        })
-
-                        if (scope.selected == "active") {
-                            scope.selected = "unactive";
-                            scope.order.order_state = "done";
                         }
                         else {
-                            scope.selected = "active";
-                            scope.order.order_state = "ready";
+                            $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function () {
+//                                console.log("done")
+                            })
+                            if (scope.selected == "active") {
+                                scope.selected = "unactive";
+                                scope.order.order_state = "done";
+                            }
+                            else {
+                                scope.selected = "active";
+                                scope.order.order_state = "ready";
+                            }
                         }
                     });
                 }
@@ -128,9 +129,9 @@
             }
             $scope.get_order_data = function () {
                 var search_date = $scope.date - $scope.date % 86400000;
-                console.log(search_date);
+//                console.log(search_date);
                 $http.post('/order_data_search', ({date: search_date})).success(function (data) {
-                    //console.log(data)
+//                    console.log(data)
                     $scope.orders = data;
                 })
             }
@@ -265,24 +266,24 @@
 
 <script type="text/ng-template" id="/home.html">
     <div class="page-header">
-        <div class="btn-bg" style="background:#7278e5;">
+        <div class="btn-bg home" style="background:#7278e5;">
             <h1 style="text-align:center;color:white">{{test}}</h1>
         </div>
-        <div class="btn-bg bg-1">
+        <div class="btn-bg bg-1 home">
             <div class="btn btn-1">
                 <a href="#/page">
                     <button>Page 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1" style="background:#78c98d;">
+        <div class="btn-bg bg-1 home" style="background:#78c98d;">
             <div class="btn btn-1">
                 <a href="#/item">
                     <button>Item 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1" style="background:#e5d272;">
+        <div class="btn-bg bg-1 home" style="background:#e5d272;">
             <div class="btn btn-1">
                 <a href="#/order">
                     <button>주문 관리</button>
@@ -338,9 +339,28 @@
                 주문번호 : {{order.order_count}}<br>
                 폰번호 : {{order.order_id}}<br>
                 주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br>
-                제품정보 : {{order.order_item_index}}<br>
                 주문가격 : {{order.order_total_price}}<br>
                 주문상황 : {{order.order_state}}<br>
+                <table style="width:80%; max-width:360px">
+                  <tr>
+                    <th class="col-25">항목</th>
+                    <th class="col-12">휘핑</th>
+                    <th class="col-12">시럽</th>
+                    <th class="col-12 nomobile">핫/<br>아이스</th>
+                    <th class="col-12">샷</th>
+                  </tr>
+                  <tr ng-repeat="detail in order.order_item_index">
+                    <td>{{detail.name}}</td>
+                    <td ng-if="(detail.option-0)%2 == 1">O</td>
+                    <td ng-if="(detail.option-0)%2 != 1">X</td>
+                    <td ng-if="(detail.option/2)%2 == 1">O</td>
+                    <td ng-if="(detail.option/2)%2 != 1">X</td>
+                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 == 1">핫</td>
+                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 != 1">아이스</td>
+                    <td ng-if="parseInt(detail.option/8)%2 == 1">O</td>
+                    <td ng-if="parseInt(detail.option/8)%2 != 1">X</td>
+                  </tr>
+                </table>
                 <button click="">주문완료</button>
             </div>
         </div>

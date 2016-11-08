@@ -143,12 +143,50 @@ input[type="radio"] {
   right: 7vw;
   bottom: 8vh;
 }
+.back{
+  position: fixed;
+  left: 7vw;
+  bottom: 8vh;
+}
+.xbutton{
+  display: table;
+  right: 6vw;
+  top: 7vh;
+  position: fixed;
+  color: black;
+  font-size: 30px;
+}
 @media (min-aspect-ratio: 706/332){
   body{
     background-size:100% auto;
   }
 }
+@media (max-height: 710px){
+  .ordered_item{
+    height:300px;
+  }
+}
+@media (max-height: 500px){
+  .ordered_item{
+    height:200px;
+  }
+}
 @media (max-width: 992px){
+  #paper {
+    position: fixed;
+    overflow-y: scroll;
+    height: 90vh;
+    width: 100vw;
+    margin: 0 0 0 0;
+    padding: 0;
+  }
+  #finish{
+    bottom: 0;
+    left: 0;
+    height: 10vh;
+    width: 100vw;
+    border-radius: 0;
+  }
   .col-xs-12{
     width:95.2%!important;
     height: auto!important;
@@ -162,5 +200,19 @@ input[type="radio"] {
   }
   .ordered_item{
     height:100%;
+    padding: 7px;
+  }
+  .back{
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: table;
+    text-decoration:none;
+  }
+  .xbutton{
+    top: 3vh;
+  }
+  .nomobile{
+    display: none;
   }
 }
