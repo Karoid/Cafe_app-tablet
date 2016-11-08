@@ -9,10 +9,7 @@
         <%}else{%>
           <div style="color:white">글의 비밀번호 입력</div>
           <form class="form" method="post" action="/cafe/<%=data[0]%>">
-            <script>
-              document.onreadystatechange = function () {document.getElementById("ans").value = window.location.search.split('?content=')[1]}
-            </script>
-          <input type="hidden" name="answer" id="ans" value="javascript:window.location.search.split('?content=')[1]">
+          <input type="hidden" name="answer" id="ans" value="<%=content%>">
         <%}%>
         <%if(user){%>
         <p class="name">

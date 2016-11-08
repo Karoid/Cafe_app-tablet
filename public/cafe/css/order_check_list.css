@@ -1,0 +1,4 @@
+.item_name::after{content:",";}
+td .item_name:last-child::after{content:""}
+.item_name{display: inline;}
+.lengthy{max-width: 60%; overflow-x: hidden;}

@@ -1,6 +1,7 @@
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
+var urlencode = require('urlencode');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
@@ -121,16 +122,32 @@ router.get('/order_fin.html/:id?', function (req, res) {
         }
     })
 });
-router.get('/order_check/:order_id?', function (req, res) { //주문내역 확인
-    fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
+router.get('/order_check/:page?', function (req, res) { //주문내역 확인
+    fs.readFile('./Cafe/order_check_list.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-            var user = req.session.username
-            if (user) {
-                console.log(user + "is logged on");
-            }
-            res.end(ejs.render(data, {data: user}))
+          if (req.params.page) {
+              var page_num = req.params.page;
+          } else {
+              var page_num = 1;
+          }
+            Order_data.paginate({order_id: req.session.username}, {page: page_num, limit: 5}, function (err, docs) {
+              console.log(docs);
+              res.end(ejs.render(data, {data: docs}))
+            })
+        }
+    })
+});
+router.get('/order_check_in/:id?', function (req, res) { //주문내역 확인
+    fs.readFile('./Cafe/order_check_in.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            Order_data.findOne({order_id: req.session.username}, function (err, doc) {
+              console.log(doc);
+              res.end(ejs.render(data, {userdata: doc.user_index, orderdata: doc.order_item_index, price: doc.order_total_price}))
+            })
         }
     })
 });
@@ -146,11 +163,11 @@ router.get('/sign_up.html', function (req, res) {
 
 router.get('/user_modify.html', function (req, res) {
     fs.readFile('./Cafe/user_modify.html', 'utf8', function (err, data) {
-       
+
         User.find({username:req.session.username}).exec(function (err, documents) {
-            
+
             return res.end(ejs.render(data,{data: documents}));
-        
+
         })
 })
 });
@@ -204,7 +221,8 @@ router.get('/QnA_cu/:id?/:redirect_url?', function (req, res) {
                 })
             } else if (req.params.id && req.params.redirect_url) {
                 //삭제 비밀번호 받기
-                res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username}))
+                console.log(urlencode.decode(req.query.content));
+                res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username, content:urlencode.decode(req.query.content)}))
             } else {
                 //글쓰기
                 res.end(ejs.render(data, {data: {}, user: req.session.username}))
@@ -231,7 +249,7 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     res.redirect("/cafe/QnA_in/"+req.params.id)
                 } else if (!req.session.username && req.params.isAns == "1") {
                     //비회원 댓글 달기
-                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+req.body.answer)
+                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+urlencode(req.body.answer))
                 } else if (!req.session.username && req.body.password == doc.password && doc.password != "") {
                     //비회원 비밀번호 받았을때 수정하기
                     doc.title = req.body.title;
@@ -584,7 +602,7 @@ router.post("/sign_out", function (req, res) {
 
         req.session.destroy();  // 세션 삭제
         res.clearCookie('sid'); // 세션 쿠키 삭제
-
+        console.log("회원탈퇴")
         documents[0].remove();
         return res.redirect("/cafe/main.html/")
     });
@@ -593,24 +611,18 @@ router.post("/sign_out", function (req, res) {
 
 //회원 수정
 router.post("/user_modify", function (req, res) {
-   
-    console.log(JSON.stringify(req.body) + "user_modify attempt");
-    User.update(
-            {username: req.session.username},
-            {
-                $set: {
-                    username: req.session.username,
-                    password: req.body.password,
-                    realname: req.body.realname,
-                    address: req.body.address
-                }
-            },
-            function (err, numberAffected, rawResponse) {
-                //console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
-                res.redirect("../cafe/main.html");
+
+    console.log(JSON.stringify(req.body) + "user_modify attempt" + req.session.username);
+    User.findOne(
+            {username: req.session.username},function(err, doc){
+              //doc.username= req.session.username
+              doc.password= req.body.password
+              doc.realname= req.body.realname
+              doc.address= req.body.address
+              doc.save()
             })
     // save user to database 회원가입 부분 최초저장부분
-    
+
 })
 module.exports = router;
 

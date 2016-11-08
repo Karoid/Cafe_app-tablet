@@ -113,3 +113,11 @@ p {
 .comment-actions li:hover {
   color: #0095ff;
 }
+@media screen and (max-width: 767px){
+  html,body{
+    padding:0px;
+  }
+  .article{
+    padding:20px;
+  }
+}
