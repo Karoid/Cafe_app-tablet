@@ -488,7 +488,16 @@ router.get('/recent_order', function (req, res) {
     else
         res.end();
 });
-
+//쿠폰 정보
+router.get('/get_coupon_data',function(req,res){
+  if (req.session.username) {
+    User.findOne({username:req.session.username},function(err,doc){
+      res.end(""+doc.coupon)
+    })
+  }else {
+    res.end("0")
+  }
+})
 //User 로그인
 // create a user a new user
 router.post("/login", function (req, res) {
