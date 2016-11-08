@@ -8,7 +8,30 @@ function popup(txt){
     $('.popup').remove()
   })
 }
+function fillcoupon(coupon_frame, count){
+  frame_top = coupon_frame.position().top
+  frame_left = coupon_frame.position().left
+  frame_width = coupon_frame.width()
+  frame_height = coupon_frame.height()
+  stamp_width = frame_width*39/260
+  stamp_top = frame_top + frame_height*14/129
+  stamp_delta_left = frame_width*262.5/1440
+  stamp_delta_top = frame_height*87/179
+  if (frame_width>=500) {
+    stamp_left = $(document).width()*0.4 -stamp_width/2 -stamp_delta_left*2
+  }else {
+    stamp_left = frame_left + frame_width*14/260
 
+  }
+  for (var i = 0; i < 2; i++) {
+    for (var j = 0; j < 5; j++) {
+      $('.popup').append('<img src="/cafe/img/coffee_empty.png" style="position:absolute;top:'+(stamp_top + stamp_delta_top*i) +'px;left:'+(stamp_left + stamp_delta_left*j) +'px;width:'+stamp_width+'px;" class="stamp">')
+    }
+  }
+  for (var i = 0; i < count; i++) {
+    $('.stamp').eq(i).attr('src', '/cafe/img/coffee_fill.png');
+  }
+}
 $(document).ready(function(){
   $('.cafe_title').click(function(){
     window.location = "/cafe/index"
@@ -41,4 +64,22 @@ $(document).ready(function(){
   $('.agreement').click(function(){
     popup("<iframe src='/cafe/agreement.txt' style='width:100%;'>")
   })
+  $('.coupon').click(function(event) {
+    popup("<img src='/cafe/img/coupon_frame.png' class='coupon_frame'>")
+    $.ajax({
+      url: '/cafe/get_coupon_data',
+    })
+    .done(function(count) {
+      fillcoupon($('.coupon_frame'),count%10)
+      if (count>=10) {
+        $('.popup').append('<div class="coupon_left">'+parseInt(count/10)+'</div>')
+      }else {
+        $('.popup').append('<div class="stamp_left">'+(10-count)+'</div>')
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+
+  });
 })
