@@ -38,6 +38,26 @@ $(document).ready(function(){
   $('.show_info').click(function(){
     $("iframe").css("display","")
   })
+  
+  $("#signout-button").click(function(){
+   if(confirm("정말 탈퇴하시겠습니까?"))
+    {
+        $.ajax({
+            url: serverip+"cafe/sign_out",
+            method:"POST",
+            data: null,
+             success: function(data){
+              window.location = "/cafe/main.html"
+            }
+         
+     })
+    }
+     else
+     {
+            return ;
+     }
+
+      })
   $('#submit').click(function(event) {
     var x = 0
     for (var i = 0; i < 4; i++) {
@@ -53,25 +73,16 @@ $(document).ready(function(){
       $('.agreement input').addClass('red')
     }
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
-    if (x==0) {
+   
       $.ajax({
         url: serverip+loginLocation+"user_modify",
         method:"post",
-        data: {'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
+        data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
         success: function(data){
-          console.log("sign_up server accessed");
-          var login = eval("("+data+")")
-          if (data) {
-            $(".notification").html(login.msg)
-            if (/\w*수정완료/.test(login.msg)) {
+          console.log("modify server accessed");
               window.location = "/cafe/main.html"
-            }
-          } else {
-            $(".notification").html("sign_up successful")
-            empty_form()
           }
-        }
       })
-    }
+    
   });
 })
