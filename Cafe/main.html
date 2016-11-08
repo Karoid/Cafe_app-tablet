@@ -14,6 +14,7 @@
           <h1 class="notification"><%if(data){%><%}else{%><%if(redirect){%><%=redirect%>에 접속하기 위해 <%}}%></h1>
           <div class="form">
             <%if(data){%>
+
               <div class="userbox">
                 <div class="gray-header">
                   <p style="width:100%"><%=data%> 님 반갑습니다!</p>
@@ -22,6 +23,8 @@
                 <div class="login">
                 <button type="submit" id="logout-button">Logout</button>
                 <button type="submit" id="signout-button">회원 탈퇴</button>
+                                         <button type="submit" id="usermodify-button">회원 수정</button>
+
                 </div>
                 <div class="login nonuserlogin-change">
                     <a href="/cafe/order_page.html"><button style="height:30px">주문 하기</button></a>
@@ -33,6 +36,7 @@
                   <img src="./img/user_order.png" alt="회원 주문하기" style="width:100%">
                 </a>
               </div>
+
               <%if(redirect){%>
                 <script>
                     $(document).ready(function() {

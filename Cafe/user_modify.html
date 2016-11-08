@@ -1,0 +1,62 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="/cafe/libs/jquery-1.11.0.min.js"></script>
+<script src="/cafe/js/user_modify.js" type="text/javascript" charset="utf-8"></script>
+<link rel = "stylesheet" type = "text/css" href = "/cafe/css/sign_up.css">
+<head>
+  <title>메인페이지</title>
+</head>
+<body>
+<div id="sign_in">
+  <div class="userbox">
+      <h1 class="notification">회원정보 수정</h1>
+      <div class="input">
+        <div class="input-label">
+          전화번호<br>
+          비밀번호<br>
+          비밀번호 확인<br>
+          이름<br>
+          기본 배송지<br>
+        </div>
+
+        <div class="input-check">
+          
+          <input type="checkbox" name="pass_check" id="pass_check">
+          <div for='pass_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="pass2_check" id="pass_check">
+          <div for='pass2_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="name_check" id="name_check">
+          <div for='name_check' class="check-box_auth">
+          </div>
+          <input type="checkbox" name="address_check" id="address_check">
+          <div for='address_check' class="check-box_auth">
+          </div>
+        </div>
+        <div class="input-box">
+            <p name="id" id="tel" ><%=data[0].username%></p><br>
+          <input required type="password" name="PASS" id="password" ><br>
+          <input required type="password" id="password_check" ><br>
+          <input required name="name" type="text" id="name" value="<%=data[0].realname%>"><br>
+          <input type="text" name="address" id="address" value = "<%=data[0].address%>"><br>
+        </div>
+      </div><br>
+      *전화번호는 아이디의 기능도 수행합니다.<br>
+      <iframe src="/cafe/agreement.txt" width="" height="" style="display:none;"></iframe><br>
+      <div class="agreement">
+        <input type="checkbox" name="check" id="check">
+        <label for='check' class="check-box">
+        </label>
+        <label for='check' class="right-border">
+          약관에 동의합니다
+        </label>
+        <div class="show_info">
+          약관보기
+        </div>
+      </div><br>
+      <input type="submit" id="submit"> <!-- 성공적으로 가입하면 메인페이지로 돌아가고 아니면 남아있기 -->
+  </div>
+</div>
+</body>
+</html>
