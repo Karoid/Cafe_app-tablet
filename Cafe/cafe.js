@@ -599,18 +599,18 @@ router.post("/sign_out", function (req, res) {
 router.post("/user_modify", function (req, res) {
 
     console.log(JSON.stringify(req.body) + "user_modify attempt");
-    User.update(
-            {username: req.session.username},
-            {
-                $set: {
-                    username: req.session.username,
-                    password: req.body.password,
-                    realname: req.body.realname,
-                    address: req.body.address
-                }
-            },
+    User.findOne(
+            {username: req.session.username},function(err, doc){
+              console.log(1);
+              //doc.username= req.session.username
+              doc.password= req.body.password
+              doc.realname= req.body.realname
+              doc.address= req.body.address
+              doc.save()
+            }
+            ,
             function (err, numberAffected, rawResponse) {
-                //console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
+                console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
                 res.redirect("../cafe/main.html");
             })
     // save user to database 회원가입 부분 최초저장부분
