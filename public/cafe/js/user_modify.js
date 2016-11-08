@@ -57,7 +57,7 @@ $(document).ready(function(){
       $.ajax({
         url: serverip+loginLocation+"user_modify",
         method:"post",
-        data: {'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
+        data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
         success: function(data){
           console.log("sign_up server accessed");
           var login = eval("("+data+")")
