@@ -53,25 +53,16 @@ $(document).ready(function(){
       $('.agreement input').addClass('red')
     }
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
-    if (x==0) {
+   
       $.ajax({
         url: serverip+loginLocation+"user_modify",
         method:"post",
         data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
         success: function(data){
-          console.log("sign_up server accessed");
-          var login = eval("("+data+")")
-          if (data) {
-            $(".notification").html(login.msg)
-            if (/\w*수정완료/.test(login.msg)) {
+          console.log("modify server accessed");
               window.location = "/cafe/main.html"
-            }
-          } else {
-            $(".notification").html("sign_up successful")
-            empty_form()
           }
-        }
       })
-    }
+    
   });
 })

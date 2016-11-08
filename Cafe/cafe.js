@@ -148,7 +148,7 @@ router.get('/user_modify.html', function (req, res) {
     fs.readFile('./Cafe/user_modify.html', 'utf8', function (err, data) {
        
         User.find({username:req.session.username}).exec(function (err, documents) {
-            console.log(documents);
+            
             return res.end(ejs.render(data,{data: documents}));
         
         })
@@ -595,16 +595,14 @@ router.post("/sign_out", function (req, res) {
 router.post("/user_modify", function (req, res) {
    
     console.log(JSON.stringify(req.body) + "user_modify attempt");
-  
-    
     User.update(
             {username: req.session.username},
             {
                 $set: {
-                     username: req.body.username,
-        password: req.body.password,
-        realname: req.body.realname,
-        address: req.body.address
+                    username: req.session.username,
+                    password: req.body.password,
+                    realname: req.body.realname,
+                    address: req.body.address
                 }
             },
             function (err, numberAffected, rawResponse) {

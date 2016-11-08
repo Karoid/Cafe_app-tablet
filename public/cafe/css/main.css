@@ -112,7 +112,7 @@ ul#up div.userlogin-change>button{
   cursor: pointer;
   margin-left: 5px;
 }
-#logout-button, #signout-button{height:30px;}
+#logout-button, #usermodify-button{height:30px;}
 .input-ect .right-border{
   vertical-align: top;
   border-right:1px solid black;
