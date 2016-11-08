@@ -15,8 +15,10 @@
           <div class="form">
             <%if(data){%>
             <button type="submit" id="logout-button">Logout</button>
+                     <button type="submit" id="signout-button">회원 탈퇴</button>
+                     <button type="submit" id="usermodify-button">회원 수정</button>
             <h1><a href="/cafe/order_page.html">주문하러 가기</a></h1>
-               <button type="submit" id="signout-button">회원 탈퇴</button>
+          
               <%if(redirect){%>
                 <script>
                     $(document).ready(function() {
