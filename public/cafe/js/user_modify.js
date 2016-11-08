@@ -36,7 +36,7 @@ $(document).ready(function(){
     }
   },500)
   $('.show_info').click(function(){
-    $("iframe").css("display","")
+    $(".iframe").css("display","")
   })
 
   $("#signout-button").click(function(){

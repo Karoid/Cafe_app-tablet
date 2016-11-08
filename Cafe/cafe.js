@@ -1,6 +1,7 @@
 var express = require('express');
 var fs = require('fs');
 var ejs = require('ejs');
+var urlencode = require('urlencode');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
@@ -220,7 +221,8 @@ router.get('/QnA_cu/:id?/:redirect_url?', function (req, res) {
                 })
             } else if (req.params.id && req.params.redirect_url) {
                 //삭제 비밀번호 받기
-                res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username}))
+                console.log(urlencode.decode(req.query.content));
+                res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username, content:urlencode.decode(req.query.content)}))
             } else {
                 //글쓰기
                 res.end(ejs.render(data, {data: {}, user: req.session.username}))
@@ -247,7 +249,7 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     res.redirect("/cafe/QnA_in/"+req.params.id)
                 } else if (!req.session.username && req.params.isAns == "1") {
                     //비회원 댓글 달기
-                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+req.body.answer)
+                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+urlencode(req.body.answer))
                 } else if (!req.session.username && req.body.password == doc.password && doc.password != "") {
                     //비회원 비밀번호 받았을때 수정하기
                     doc.title = req.body.title;

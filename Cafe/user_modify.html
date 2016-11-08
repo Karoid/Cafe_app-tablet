@@ -40,12 +40,12 @@
           <input required type="password" id="password_check" ><br>
           <input required name="name" type="text" id="name" value="<%=data[0].realname%>"><br>
           <input type="text" name="address" id="address" value = "<%=data[0].address%>"><br>
-                                <button type="submit" id="signout-button">회원 탈퇴</button>
+
 
         </div>
       </div><br>
       *전화번호는 아이디의 기능도 수행합니다.<br>
-      <iframe src="/cafe/agreement.txt" width="" height="" style="display:none;"></iframe><br>
+      <img src="/cafe/img/user_agreement.png" alt="" style="display:none;width:100%" class="iframe" /><br>
       <div class="agreement">
         <input type="checkbox" name="check" id="check">
         <label for='check' class="check-box">
@@ -57,7 +57,7 @@
           약관보기
         </div>
       </div><br>
-      <input type="submit" id="submit"> <!-- 성공적으로 가입하면 메인페이지로 돌아가고 아니면 남아있기 -->
+      <input type="submit" id="submit"><br><button type="submit" id="signout-button">회원 탈퇴</button> <!-- 성공적으로 가입하면 메인페이지로 돌아가고 아니면 남아있기 -->
   </div>
 </div>
 </body>
