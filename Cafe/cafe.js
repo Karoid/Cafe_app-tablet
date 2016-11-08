@@ -598,7 +598,7 @@ router.post("/sign_out", function (req, res) {
 //회원 수정
 router.post("/user_modify", function (req, res) {
 
-    console.log(JSON.stringify(req.body) + "user_modify attempt");
+    console.log(JSON.stringify(req.body) + "user_modify attempt" + req.session.username);
     User.findOne(
             {username: req.session.username},function(err, doc){
               //doc.username= req.session.username
@@ -606,11 +606,6 @@ router.post("/user_modify", function (req, res) {
               doc.realname= req.body.realname
               doc.address= req.body.address
               doc.save()
-            }
-            ,
-            function (err, numberAffected, rawResponse) {
-                console.log("에러:"+err+"영향"+numberAffected+"raw"+rawResponse);
-                res.redirect("../cafe/main.html");
             })
     // save user to database 회원가입 부분 최초저장부분
 
