@@ -601,7 +601,6 @@ router.post("/user_modify", function (req, res) {
     console.log(JSON.stringify(req.body) + "user_modify attempt");
     User.findOne(
             {username: req.session.username},function(err, doc){
-              console.log(1);
               //doc.username= req.session.username
               doc.password= req.body.password
               doc.realname= req.body.realname
