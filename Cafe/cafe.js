@@ -516,6 +516,37 @@ router.get('/get_coupon_data',function(req,res){
     res.end("0")
   }
 })
+
+//쿠폰 적립 큐알코드
+router.get('/coupon_in.html',function(req,res){
+    fs.readFile('./Cafe/coupon_in.html', 'utf8', function (err, data) {
+        
+        
+        console.log(req.session.username);
+        if (err) {
+            console.log(err);
+        } else {
+           
+            res.end(ejs.render(data));
+        }
+    })
+
+})
+
+//쿠폰 사용 큐알코드
+router.get('/coupon_out.html',function(req,res){
+ 
+        console.log(req.session.username);
+    fs.readFile('./Cafe/coupon_out.html', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+           
+            res.end(ejs.render(data))
+        }
+    })
+
+})
 //User 로그인
 // create a user a new user
 router.post("/login", function (req, res) {
