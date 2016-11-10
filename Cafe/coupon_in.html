@@ -13,23 +13,17 @@
 <script src="/cafe/js/jquery.qrcode.js" type="text/javascript" ></script>
 <script type="text/javascript" src="/cafe/js/qrcode.js"></script>
 
-<p>Render in table</p>
+<p>쿠폰 적립</p>
 <div id="qrcodeTable"></div>
-<p>Render in canvas</p>
-<div id="qrcodeCanvas"></div>
+
+
 <script>
 	//jQuery('#qrcode').qrcode("this plugin is great");
 	jQuery('#qrcodeTable').qrcode({
-		render	: "table",
-<<<<<<< HEAD
-		text	: "www.naver.com"
-=======
-		text	: "http://jetienne.com"
+
+		text	: "status 0, <%=user%>"
 	});	
-	jQuery('#qrcodeCanvas').qrcode({
-		text	: "http://jetienne.com"
->>>>>>> 9fdea83313fa1d296f4e264edcab47325807c994
-	});	
+
 </script>
 
 </body>

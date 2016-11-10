@@ -20,14 +20,10 @@ $('.couponout-button').click(function(event) {
     $.ajax({
       url: '/coupon_out.html',
       
-    }) .done(function() {
-      window.location="/cafe/coupon_out.html"
-    })
-    .fail(function() {
-      console.log("error");
-    })
-
-
+    }) 
+      window.location=serverip+"cafe/coupon_out.html"
+  
+  
 });
 }
 function fillcoupon(coupon_frame, count){
