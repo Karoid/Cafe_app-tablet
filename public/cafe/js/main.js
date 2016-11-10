@@ -57,6 +57,8 @@ $(document).ready(function () {
               setCookie("userInputId", userInputId, 7); // 7일 동안 쿠키 보관
           }
       });
-
+      $(".notification").click(function(){
+        $(this).html("")
+      })
 
 })

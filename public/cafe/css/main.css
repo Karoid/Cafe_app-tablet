@@ -112,6 +112,11 @@ ul#up div.userlogin-change>button{
   cursor: pointer;
   margin-left: 5px;
 }
+.notification{
+  background: yellow;
+  margin:0;
+  cursor:pointer;
+}
 #logout-button, #usermodify-button{height:30px;}
 .input-ect .right-border{
   vertical-align: top;
@@ -139,6 +144,10 @@ ul#up div.userlogin-change>button{
     background-color: white;
     border: 1px black solid;
     box-shadow: 1px 1px 2px #888888;
+  }
+  .notification{
+    width:100%;
+    font-size: 15px;
   }
 }
 
