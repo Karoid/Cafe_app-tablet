@@ -7,18 +7,19 @@ function popup(txt){
   $('.popup .back').click(function(){
     $('.popup').remove()
   })
-
- $('.popup .couponin-button').click(function(event) {
-$.ajax({
-  url: '/cafe/coupon_in.html',
-     type: 'GET'
-})
-  window.location="/cafe/coupon_in.html"
-});
-
-
+$('.popup .couponin-button').click(function(event) {
+    $.ajax({
+      url: '/cafe/coupon_in.html',
+      type: 'GET'
+    })
+      window.location="/cafe/coupon_in.html"
+    });
+ 
 $('#couponout-button').click(function(event) {
-    
+    $.ajax({
+      url: '/cafe/coupon_out.html',
+      type: 'GET'
+    })
     window.location="/cafe/coupon_out.html"
 });
 }
