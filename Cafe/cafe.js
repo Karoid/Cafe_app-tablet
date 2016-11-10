@@ -179,7 +179,7 @@ router.get('/QnA.html/:page?', function (req, res) {
             } else {
                 var page_num = 1;
             }
-            Qna.paginate({}, {page: page_num, limit: 5}, function (err, documents) {
+            Qna.paginate({}, {page: page_num, limit: 5,sort:{created_at:-1}}, function (err, documents) {
                 var seen_button = new Array()
                 for (var i = 0; i < documents.docs.length; i++) {
                     var saved_user = documents.docs[i].username;
@@ -240,7 +240,7 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     doc.content = req.body.content;
                     doc.save();
                     res.redirect("/cafe/QnA.html")
-                } else if (req.body.password == doc.password || ((req.session.username == doc.username || req.session.username == "admin") && req.params.isAns == "1")) {
+                } else if (((req.body.password == doc.password && !req.session.username) || req.session.username == doc.username || req.session.username == "admin" )&& req.params.isAns == "1") {
                     // 회원, 관리자 댓글 달기
                     if (req.body.content != "") {
                       doc.answer.push({username:req.session.username, content:req.body.answer});
@@ -267,6 +267,7 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                 password: req.body.password,
                 title: req.body.title,
                 content: req.body.content,
+                created_at: new Date(),
                 answer: []
             });
             res.redirect("/cafe/QnA.html")
@@ -527,7 +528,7 @@ router.get('/coupon_in.html',function(req,res){
             var user ;
             if(req.session.username==null)
                 user="hh";
-            else                  
+            else
                 user = req.session.username;
 
             console.log("쿠폰2"+user);
@@ -537,13 +538,13 @@ router.get('/coupon_in.html',function(req,res){
 })
 //쿠폰 사용 큐알코드
 router.get('/coupon_out.html',function(req,res){
- 
+
         console.log(req.session.username);
     fs.readFile('./Cafe/coupon_out.html', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
         } else {
-           
+
                 var user = req.session.username;
                    ejs.render(data,{user:user})
         }
@@ -654,9 +655,9 @@ router.post("/user_modify", function (req, res) {
               doc.realname= req.body.realname
               doc.address= req.body.address
               doc.save()
+              return res.end()
             })
     // save user to database 회원가입 부분 최초저장부분
-
 })
 module.exports = router;
 

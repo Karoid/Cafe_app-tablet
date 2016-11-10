@@ -8,10 +8,10 @@
   <div class="article fr-view ">
     <!--제목 시작-->
     <h3 style="display:inline-block"><%=doc.title%></h3>
-    <span> - <%=doc.username%></span>
+    <span> - <%=doc.username%></span><br><%=doc.created_at.toISOString().replace(/T/, ' ').replace(/\..+/, '')%>
     <%if(seen_button){%>
     <!--수정 버튼-->
-    <form action="/cafe/QnA_write/<%=doc._id%>" method="post" style="display:inline-block">
+    <form action="/cafe/QnA_cu/<%=doc._id%>" method="get" style="display:inline-block">
       <input type="hidden" name="title" value="<%=doc.title%>">
       <input type="hidden" name="content" value="<%=doc.content%>">
       <button type="submit" class="glyphicon glyphicon-edit" aria-hidden="true" style="border:none;background:none"></button>

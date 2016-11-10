@@ -1,4 +1,4 @@
-serverip = "http://52.78.68.136/"
+serverip = "http://www.marootshop.com/"
 loginLocation = "cafe/"
 function submit_action(obj) {
   var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;

@@ -1,4 +1,4 @@
-var serverip = "http://52.78.68.136"
+var serverip = "http://www.marootshop.com/"
 var selected_menu = new Array()
 /*class menu start*/
 function Menu(){}
@@ -197,7 +197,7 @@ $(document).ready(function() {
   })
   /*ajax call*/
   $.ajax({
-    url: serverip+'/get_item_data',
+    url: '/get_item_data',
     type: 'POST'
   })
   .done(function(data) {

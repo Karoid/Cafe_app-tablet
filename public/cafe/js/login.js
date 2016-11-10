@@ -1,9 +1,7 @@
-var serverip = ""
-var loginLocation = "/cafe/"
 $(document).ready(function(){
   function login(){
     $.ajax({
-      url: serverip+loginLocation+"login",
+      url: "/cafe/login",
       method:"post",
       data: {'username':$("#username").val(),'password':$("#password").val() },
       success: function(data){
@@ -28,34 +26,17 @@ $(document).ready(function(){
   $("#login-button").click(function(event){
     login()
   });
-  
+
     $("#signup-button").click(function(event){
     window.location = '/cafe/sign_up.html'
   });
-  
+
     $("#usermodify-button").click(function(event){
     window.location = '/cafe/user_modify.html'
   });
-  /*$("#nonuser-button").click(function(event){
-    $.ajax({
-      url: serverip+loginLocation+"nonusersign_up",
-      method:"post",
-      data: {'password':$("#nonuser_password").val() },
-      success: function(data){
-        console.log("nonuser logging");
-        var login = eval("("+data+")")
-        try {
-          $(".notification").html(login.err)
-          empty_form()
-        } catch (e) {
-          $(".notification").html(login.err)
-        }
-      }
-    })
-  });*/
   $("#logout-button").click(function(){
     $.ajax({
-      url: serverip+loginLocation+"logout",
+      url: "/cafe/logout",
       method:"get",
       data: null,
       success: function(data){
