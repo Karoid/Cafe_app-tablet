@@ -520,23 +520,21 @@ router.get('/get_coupon_data',function(req,res){
 //쿠폰 적립 큐알코드
 router.get('/coupon_in.html',function(req,res){
     fs.readFile('./Cafe/coupon_in.html', 'utf8', function (err, data) {
-        
-        
-        console.log(req.session.username);
-        
+      console.log("쿠폰"+req.session.username);
         if (err) {
             console.log(err);
         } else {
-           
-                var user = req.session.username;
-                ejs.render(data,{user:user})
+            var user ;
+            if(req.session.username==null)
+                user="hh";
+            else                  
+                user = req.session.username;
+
+            console.log("쿠폰2"+user);
+            ejs.render(data,{user:user})
             }
-        
         })
 })
-
-
-
 //쿠폰 사용 큐알코드
 router.get('/coupon_out.html',function(req,res){
  

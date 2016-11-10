@@ -10,7 +10,7 @@ function popup(txt){
 
  $('.popup .couponin-button').click(function(event) {
 $.ajax({
-  url: '/cafe/coupon_in',
+  url: '/cafe/coupon_in.html',
      type: 'GET'
 })
   window.location="/cafe/coupon_in.html"
