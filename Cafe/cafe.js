@@ -523,15 +523,19 @@ router.get('/coupon_in.html',function(req,res){
         
         
         console.log(req.session.username);
+        
         if (err) {
             console.log(err);
         } else {
            
-            res.end(ejs.render(data));
-        }
-    })
-
+                var user = req.session.username;
+                ejs.render(data,{user:user})
+            }
+        
+        })
 })
+
+
 
 //쿠폰 사용 큐알코드
 router.get('/coupon_out.html',function(req,res){
@@ -542,7 +546,8 @@ router.get('/coupon_out.html',function(req,res){
             console.log(err);
         } else {
            
-            res.end(ejs.render(data))
+                var user = req.session.username;
+                   ejs.render(data,{user:user})
         }
     })
 
