@@ -1,25 +1,33 @@
+serverip = "http://52.78.68.136/"
+
 function popup(txt){
   html= '<div class="popup">' +
         '<div class="back"><span class="xbutton">✖</span></div>'+
-          txt +'<button type="submit" class="couponin-button">쿠폰 적립</button>'+ '<button type="submit" id="couponout-button">쿠폰 사용</button>'+
+          txt +'<button type="submit" class="couponin-button">쿠폰 적립</button>'+ '<button type="submit" class="couponout-button">쿠폰 사용</button>'+
         '</div>'
   $('body').append(html)
   $('.popup .back').click(function(){
     $('.popup').remove()
   })
+$('.couponin-button').click(function(event) {
+     $.ajax({
+      url: "/coupon_in.html",
+    })
+     window.location=serverip+"cafe/coupon_in.html"
+    });
+ 
+$('.couponout-button').click(function(event) {
+    $.ajax({
+      url: '/coupon_out.html',
+      
+    }) .done(function() {
+      window.location="/cafe/coupon_out.html"
+    })
+    .fail(function() {
+      console.log("error");
+    })
 
- $('.popup .couponin-button').click(function(event) {
-$.ajax({
-  url: '/cafe/coupon_in.html',
-     type: 'GET'
-})
-  window.location="/cafe/coupon_in.html"
-});
 
-
-$('#couponout-button').click(function(event) {
-    
-    window.location="/cafe/coupon_out.html"
 });
 }
 function fillcoupon(coupon_frame, count){
