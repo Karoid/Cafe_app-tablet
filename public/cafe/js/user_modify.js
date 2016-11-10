@@ -47,7 +47,6 @@ $(document).ready(function(){
              success: function(data){
               window.location = "/cafe/main.html"
             }
-
      })
     }
      else
