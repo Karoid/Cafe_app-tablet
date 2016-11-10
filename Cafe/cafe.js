@@ -524,7 +524,7 @@ router.get('/coupon_in.html',function(req,res){
             console.log(err);
         } else {
             var user = req.session.username;
-            ejs.render(data,{user:user});
+            res.end(ejs.render(data,{user:user}));
             }
         })
 });
@@ -535,7 +535,7 @@ router.get('/coupon_out.html',function(req,res){
             console.log(err);
         } else {
                 var user = req.session.username;
-                ejs.render(data,{user:user})
+               res.end(ejs.render(data,{user:user}));
         }
     })
 
