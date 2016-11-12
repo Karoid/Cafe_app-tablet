@@ -13,15 +13,14 @@
 <script src="/cafe/js/jquery.qrcode.js" type="text/javascript" ></script>
 <script type="text/javascript" src="/cafe/js/qrcode.js"></script>
 
-<p>쿠폰 적립</p>
-<div id="qrcodeTable"></div>
-
+<p>쿠폰 사용</p>
+<div id="qrcodeCanvas"></div>
 
 <script>
 	//jQuery('#qrcode').qrcode("this plugin is great");
-	jQuery('#qrcodeTable').qrcode({
+	jQuery('#qrcodeCanvas').qrcode({
 
-		text	: "status 0, <%=user%>"
+		text	: "status 1, <%=user%>"
 	});
 
 </script>

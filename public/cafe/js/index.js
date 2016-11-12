@@ -1,26 +1,26 @@
 function popup(txt){
+  $('.popup').remove()
   html= '<div class="popup">' +
         '<div class="back"><span class="xbutton">✖</span></div>'+
-          txt +'<button type="submit" class="couponin-button">쿠폰 적립</button>'+ '<button type="submit" id="couponout-button">쿠폰 사용</button>'+
+          txt +
         '</div>'
   $('body').append(html)
   $('.popup .back').click(function(){
     $('.popup').remove()
   })
+$('.couponin-button').click(function(event) {
+  popup("<iframe src='/cafe/coupon_in.html' style='width:100%;'>")
+    });
 
- $('.popup .couponin-button').click(function(event) {
-$.ajax({
-  url: '/cafe/coupon_in',
-     type: 'GET'
-})
-  window.location="/cafe/coupon_in.html"
+$('.couponout-button').click(function(event) {
+  popup("<iframe src='/cafe/coupon_out.html' style='width:100%;'>")
 });
-
-
-$('#couponout-button').click(function(event) {
-    
-    window.location="/cafe/coupon_out.html"
-});
+}
+function coupon_seen(){
+  height = $(document).height() - ($(".header").height()+$("#mid").height())
+  if ( height <= 100) {
+    $("#mid").css("height",$(document).height() - (150 + $(".header").height()))
+  }
 }
 function fillcoupon(coupon_frame, count){
   frame_top = coupon_frame.position().top
@@ -70,8 +70,10 @@ $(document).ready(function(){
     var change_boolean = Regexr.test(url)
     if (!change_boolean) {
       $('#mid').addClass('expand')
+      $('#mid').attr("style","")
     }else {
       $('#mid').removeClass('expand')
+      coupon_seen()
     }
   },500)
 
@@ -79,7 +81,12 @@ $(document).ready(function(){
     popup("<iframe src='/cafe/agreement.txt' style='width:100%;'>")
   })
   $('.coupon').click(function(event) {
-    popup("<img src='/cafe/img/coupon_frame.png' class='coupon_frame'>")
+    txt = "<img src='/cafe/img/coupon_frame.png' class='coupon_frame'>"+
+    '<div class="buttons">'+
+    '<button type="submit" class="couponin-button">쿠폰 적립</button>'+
+    '<button type="submit" class="couponout-button">쿠폰 사용</button>'+
+    '</div>'
+    popup(txt)
     $.ajax({
       url: '/cafe/get_coupon_data',
     })
@@ -89,15 +96,17 @@ $(document).ready(function(){
         $('.popup').append('<div class="coupon_left">'+parseInt(parseInt(count)/10)+'</div>')
       }else {
         $('.popup').append('<div class="stamp_left">'+(10-parseInt(count))+'</div>')
+        $('.popup .couponout-button').attr("disabled","true")
       }
+      $('.popup .couponout-button').html($('.popup .couponout-button').html()+"("+parseInt(parseInt(count)/10)+")")
     })
     .fail(function() {
       console.log("error");
     })
 
   });
-    
- 
+
+
 
 
 })

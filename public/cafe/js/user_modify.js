@@ -1,5 +1,3 @@
-serverip = "http://52.78.68.136/"
-loginLocation = "cafe/"
 function submit_action(obj) {
   var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
   if(!obj.val()) {
@@ -43,13 +41,12 @@ $(document).ready(function(){
    if(confirm("정말 탈퇴하시겠습니까?"))
     {
         $.ajax({
-            url: serverip+"cafe/sign_out",
+            url: "/cafe/sign_out",
             method:"POST",
             data: null,
              success: function(data){
               window.location = "/cafe/main.html"
             }
-
      })
     }
      else
@@ -74,15 +71,15 @@ $(document).ready(function(){
     }
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
 
-      $.ajax({
-        url: "/cafe/user_modify",
-        method:"post",
-        data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
-        success: function(data){
-          console.log("modify server accessed");
-          window.location = "/cafe/main.html"
-          }
-      })
+    $.ajax({
+      url: "/cafe/user_modify",
+      method:"post",
+      data: {'username':null,'password':$("#password").val(),'realname':$('#name').val(),'address':$('#address').val()},
+      success: function(data){
+        console.log("modify server accessed");
+        window.location = "/cafe/main.html"
+        }
+    })
 
   });
 })

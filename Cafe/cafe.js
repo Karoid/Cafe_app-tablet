@@ -12,6 +12,14 @@ var Order_data = require('../models/order_data')
 var user = require('../models/user')
 var Qna = require('../models/qna');
 var Item_data = require('../models/item_data');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: function(){return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+    })
+  ]
+});
 var router = express.Router();
 // middleware that is specific to this router
 router.use(cookieParser());
@@ -29,11 +37,10 @@ router.use(session({
 router.get('/index', function (req, res) {
     fs.readFile('./Cafe/index.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             if (req.session.username) {
                 var user = req.session.username
-                console.log(user + "is logged on");
             }
             res.end(ejs.render(data, {data: user}))
         }
@@ -42,11 +49,10 @@ router.get('/index', function (req, res) {
 router.get('/introduce.html', function (req, res) {
     fs.readFile('./Cafe/introduce.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("err",err);
         } else {
             if (req.session.username) {
                 var user = req.session.username
-                console.log(user + "is logged on");
             }
             res.end(ejs.render(data, {data: user}))
         }
@@ -55,11 +61,11 @@ router.get('/introduce.html', function (req, res) {
 router.get('/main.html/:redirect_url?', function (req, res) {
     fs.readFile('./Cafe/main.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             if (req.session.username) {
                 var user = req.session.username
-                console.log(user + "is logged on");
+
             }
             res.end(ejs.render(data, {data: user, redirect: req.params.redirect_url}))
         }
@@ -68,11 +74,11 @@ router.get('/main.html/:redirect_url?', function (req, res) {
 router.get('/menu_page.html', function (req, res) {
     fs.readFile('./Cafe/menu_page.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             if (req.session.username) {
                 var user = req.session.username
-                console.log(user + "is logged on");
+
             }
             res.end(ejs.render(data, {data: user}))
         }
@@ -81,7 +87,7 @@ router.get('/menu_page.html', function (req, res) {
 router.get('/order_page.html', function (req, res) { //회원 주문확인
     fs.readFile('./Cafe/order_page.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             var user = req.session.username
             if (user) {
@@ -89,7 +95,6 @@ router.get('/order_page.html', function (req, res) { //회원 주문확인
                     doc.password = ""
                     doc._id = ""
                     res.end(ejs.render(data, {data: null, userdata: doc}))
-                    console.log(doc);
                 })
             }
         }
@@ -103,7 +108,7 @@ router.post('/order_page.html', function (req, res) { //비회원 주문확인
 router.post('/order_check.html', function (req, res) {
     fs.readFile('./Cafe/order_check.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, pw: req.body.pw}))
         }
@@ -112,7 +117,7 @@ router.post('/order_check.html', function (req, res) {
 router.get('/order_fin.html/:id?', function (req, res) {
     fs.readFile('./Cafe/order_fin.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
           if (req.params.id) {
             res.end(ejs.render(data, {userdata: req.body.userdata, orderdata: req.body.orderdata, id:req.params.id}))
@@ -125,7 +130,7 @@ router.get('/order_fin.html/:id?', function (req, res) {
 router.get('/order_check/:page?', function (req, res) { //주문내역 확인
     fs.readFile('./Cafe/order_check_list.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
           if (req.params.page) {
               var page_num = req.params.page;
@@ -133,7 +138,6 @@ router.get('/order_check/:page?', function (req, res) { //주문내역 확인
               var page_num = 1;
           }
             Order_data.paginate({order_id: req.session.username}, {page: page_num, limit: 5}, function (err, docs) {
-              console.log(docs);
               res.end(ejs.render(data, {data: docs}))
             })
         }
@@ -142,10 +146,9 @@ router.get('/order_check/:page?', function (req, res) { //주문내역 확인
 router.get('/order_check_in/:id?', function (req, res) { //주문내역 확인
     fs.readFile('./Cafe/order_check_in.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             Order_data.findOne({order_id: req.session.username}, function (err, doc) {
-              console.log(doc);
               res.end(ejs.render(data, {userdata: doc.user_index, orderdata: doc.order_item_index, price: doc.order_total_price}))
             })
         }
@@ -154,7 +157,7 @@ router.get('/order_check_in/:id?', function (req, res) { //주문내역 확인
 router.get('/sign_up.html', function (req, res) {
     fs.readFile('./Cafe/sign_up.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             res.end(ejs.render(data))
         }
@@ -179,7 +182,7 @@ router.get('/QnA.html/:page?', function (req, res) {
             } else {
                 var page_num = 1;
             }
-            Qna.paginate({}, {page: page_num, limit: 5}, function (err, documents) {
+            Qna.paginate({}, {page: page_num, limit: 5,sort:{created_at:-1}}, function (err, documents) {
                 var seen_button = new Array()
                 for (var i = 0; i < documents.docs.length; i++) {
                     var saved_user = documents.docs[i].username;
@@ -191,8 +194,8 @@ router.get('/QnA.html/:page?', function (req, res) {
                 }
                 return res.end(ejs.render(data, {data: documents, seen_button: seen_button}))
             })
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            logger.log("error",err);
         }
     })
 });
@@ -201,10 +204,9 @@ router.get('/QnA.html/:page?', function (req, res) {
 router.get('/QnA_cu/:id?/:redirect_url?', function (req, res) {
     fs.readFile('./Cafe/QnA_cu.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
             var user = req.session.username
-            console.log(user + "is logged on");
             if (req.params.id && !req.params.redirect_url) {
                 //수정하기
                 Qna.find({_id: req.params.id}, function (err, documents) {
@@ -221,7 +223,6 @@ router.get('/QnA_cu/:id?/:redirect_url?', function (req, res) {
                 })
             } else if (req.params.id && req.params.redirect_url) {
                 //삭제 비밀번호 받기
-                console.log(urlencode.decode(req.query.content));
                 res.end(ejs.render(data, {data: [unescape(req.params.redirect_url), req.params.id], user: req.session.username, content:urlencode.decode(req.query.content)}))
             } else {
                 //글쓰기
@@ -239,11 +240,15 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     doc.title = req.body.title;
                     doc.content = req.body.content;
                     doc.save();
+                    logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                    logger.log("info",req.session.username+"회원 수정하기")
                     res.redirect("/cafe/QnA.html")
-                } else if (req.body.password == doc.password || ((req.session.username == doc.username || req.session.username == "admin") && req.params.isAns == "1")) {
+                } else if (((req.body.password == doc.password && !req.session.username) || req.session.username == doc.username || req.session.username == "admin" )&& req.params.isAns == "1") {
                     // 회원, 관리자 댓글 달기
                     if (req.body.content != "") {
                       doc.answer.push({username:req.session.username, content:req.body.answer});
+                      logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                      logger.log("info",req.session.username+"회원 댓글")
                       doc.save();
                     }
                     res.redirect("/cafe/QnA_in/"+req.params.id)
@@ -255,6 +260,8 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     doc.title = req.body.title;
                     doc.content = req.body.content;
                     doc.save();
+                    logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                    logger.log("info",req.session.username+"비회원 수정")
                     res.redirect("/cafe/QnA.html")
                 } else {
                     //비회원 비밀번호 틀렸을 때
@@ -267,12 +274,13 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                 password: req.body.password,
                 title: req.body.title,
                 content: req.body.content,
+                created_at: new Date(),
                 answer: []
             });
             res.redirect("/cafe/QnA.html")
         }
     } catch (e) {
-        console.log(e);
+        logger.log("error",e);
         res.end(e)
     }
 });
@@ -288,6 +296,8 @@ router.get('/QnA_d/:id/:ansArrayNumb?', function (req, res) {
             if ((logged_inNits_my_article || not_logged_in  || isAdmin )&& !req.params.ansArrayNumb) {
                 //회원, 비회원 삭제하기
                 Qna.find({_id: req.params.id}).remove().exec();
+                logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                logger.log("info","Qna "+req.params.id+" del success")
                 res.redirect("/cafe/QnA.html")
             } else if (doc.username == "nonuser" && !req.query.password) {
                 //비회원 비밀번호 받으러 가기
@@ -299,13 +309,16 @@ router.get('/QnA_d/:id/:ansArrayNumb?', function (req, res) {
                 //댓글 삭제
                 doc.answer.splice(req.params.ansArrayNumb, 1);
                 doc.save()
+                logger.log("-----")
+                logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                logger.log("info","Qna "+req.params.id+": reply del success\n")
                 res.redirect("/cafe/QnA_in/"+req.params.id)
             } else {
                 return res.end("글쓴이와 로그인 정보가 다릅니다") //warning
             }
         })
     } catch (e) {
-        console.log(e);
+        logger.log("error",e);
         res.end(e)
     }
 });
@@ -325,10 +338,7 @@ router.get('/QnA_in/:id?', function (req, res) {
 });
 //회원 주문
 router.post('/user_order', function (req, res) {
-    //console.log(req.session.username + "가 주문중");
     if (req.session.username) {
-
-        console.log(req.body.orderdata);
         var item = req.body.orderdata;
         var total_price = 0;
         var count;
@@ -344,40 +354,21 @@ router.post('/user_order', function (req, res) {
             for (var i = 0; i < item.length; i++) {
                 //보안 관련하여 db의 실제 제품가격으로 참조함
                 Item_data.find({item_name: req.body.orderdata[i].item_name}).lean().exec(function (err, doc) {
-                    // onsole.log("제품가격:" + doc[0].item_price);
-                    //console.log(doc[0].item_price);
-                    //console.log("i:" + i);
                     total_price = Number(total_price) + Number(doc[0].item_price);
                     insert();
                 })
             }
             function insert() {
 
-                // console.log("i:" + county);
                 county++;
-                // console.log("i:" + county);
                 if (county == item.length) {
                     //쿠폰 증가
                     user.findOne({username: req.session.username}).exec(function (err, doc) {
-                        //console.log(JSON.stringify(doc));
                         doc.coupon += item.length;
                         doc.save();
                     })
                     var goitem = new Array()
-                    //var order_info = "";
                     for (i = 0; i < item.length; i++) {
-
-                        /*order_info += item[i].item_name + "";
-                        order_info += "|";
-                        if (item[i].option % 2 == 1)
-                            order_info += "휘핑";
-                        if (Math.floor(item[i].option / 2) % 2 == 1)
-                            order_info += "시럽";
-                        if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
-                            order_info += "HOT";
-                        if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
-                            order_info += "샷";
-                        order_info += "|        ";*/
                         goitem.push({name: item[i].item_name, option: item[i].option})
                     }
 
@@ -415,12 +406,14 @@ router.post('/nonuser_order', function (req, res) {
           function atfunctionend(){
             testUser.save(function (err) {
                 if (err) {
-                    console.log(testUser.username + "sign up failed");
-                    console.log(err);
+                  logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                    logger.log("info",testUser.username + "sign up failed");
+                    logger.log("error",err);
                     if (err.code == 11000) return res.end('{"err":"' + testUser.username + '은 이미 사용중입니다"}')
                     return res.end(JSON.stringify(err))
                 }else{
-                    console.log(req.body + "sign_up success");
+                  logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                    logger.log("info",req.body + "sign_up success\n");
                     return res.end('{"err":"id값이 ' + testUser.username + '로 비회원 가입되었습니다!"}')
                 }
             })
@@ -432,36 +425,20 @@ router.post('/nonuser_order', function (req, res) {
   }
 
   function insert_order(username) {
-
-      console.log("insert_order");
       var item = req.body.orderdata;
       var total_price = 0;
       var count;
 
       Order_count.find({}).lean().exec(function (err, doc) {
 
-          //console.log(doc[0])
           count = doc[0].value;
-          // console.log(item.length);
 
 
           for (i = 0; i < item.length; i++) {
               total_price = Number(total_price) + Number(item[i].item_price);
           }
           var goitem = new Array();
-          //var order_info = "";
           for (i = 0; i < item.length; i++) {
-              /*order_info += item[i].item_name + "";
-              order_info += "|";
-              if (item[i].option % 2 == 1)
-                  order_info += "휘핑";
-              if (Math.floor(item[i].option / 2) % 2 == 1)
-                  order_info += "시럽";
-              if (Math.floor(Math.floor(item[i].option / 2) / 2) % 2 == 1)
-                  order_info += "HOT";
-              if (Math.floor(Math.floor(Math.floor(item[i].option / 2) / 2) / 2) % 2 == 1)
-                  order_info += "샷";
-              order_info += "|       ";*/
               goitem.push({name: item[i].item_name, option: item[i].option})
           }
           conn.collection('order_data').insert({
@@ -520,44 +497,38 @@ router.get('/get_coupon_data',function(req,res){
 //쿠폰 적립 큐알코드
 router.get('/coupon_in.html',function(req,res){
     fs.readFile('./Cafe/coupon_in.html', 'utf8', function (err, data) {
-        
-        
-        console.log(req.session.username);
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
-           
-            res.end(ejs.render(data));
-        }
-    })
-
-})
-
+            var user = req.session.username;
+            res.end(ejs.render(data,{user:user}));
+            }
+        })
+});
 //쿠폰 사용 큐알코드
 router.get('/coupon_out.html',function(req,res){
- 
-        console.log(req.session.username);
-    fs.readFile('./Cafe/coupon_out.html', 'utf8', function (err, data) {
+     fs.readFile('./Cafe/coupon_out.html', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            logger.log("error",err);
         } else {
-           
-            res.end(ejs.render(data))
+                var user = req.session.username;
+               res.end(ejs.render(data,{user:user}));
         }
     })
 
-})
+});
 //User 로그인
 // create a user a new user
 router.post("/login", function (req, res) {
-    console.log(req.body + "login attempt");
+    logger.log("info","login attempt");
     // attempt to authenticate user
     User.getAuthenticated(req.body.username, req.body.password, function (err, user, reason) {
         if (err) return res.end(JSON.stringify(err))
         // login was successful if we have a user
         if (user) {
             // handle login success
-            console.log(user.username + 'login success');
+            logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+            logger.log("info",user.username + 'login success');
             req.session.username = req.body.username
             return res.end(JSON.stringify(user));
         }
@@ -577,14 +548,15 @@ router.post("/login", function (req, res) {
     });
 });
 router.get("/logout", function (req, res) {
-    console.log(req.session.username + " is logged out");
+    logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+    logger.log("info",req.session.username + " is logged out");
     req.session.destroy();  // 세션 삭제
     res.clearCookie('sid'); // 세션 쿠키 삭제
     return res.end()
 })
 //User 회원가입
 router.post("/sign_up", function (req, res) {
-    console.log(JSON.stringify(req.body) + "sign_up attempt");
+    logger.log("info","sign_up attempt");
     var testUser = new User({
         username: req.body.username,
         password: req.body.password,
@@ -594,11 +566,13 @@ router.post("/sign_up", function (req, res) {
     // save user to database 회원가입 부분 최초저장부분
     return testUser.save(function (err) {
         if (err) {
-            console.log(req.body.username + "log on failed");
+          logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+            logger.log("info",req.body.username + "sign_up failed"+err);
             if (err.code == 11000) return res.end('{"msg":"' + testUser.username + '은 이미 사용중입니다"}')
             return res.end(JSON.stringify(err))
         } else {
-            console.log(req.body + "sign_up success");
+          logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+            logger.log("info",req.body + "sign_up success");
             return res.end('{"msg":"' + testUser.username + ' 가입완료"}')
         }
     })
@@ -614,11 +588,13 @@ router.post("/nonusersign_up", function (req, res) {
         // save user to database
         return testUser.save(function (err) {
             if (err) {
-                console.log(req.body.username + "log on failed");
+              logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                logger.log("info",req.body.username + "sign_up failed"+err);
                 if (err.code == 11000) return res.end('{"err":"' + testUser.username + '은 이미 사용중입니다"}')
                 return res.end(JSON.stringify(err))
             } else {
-                console.log(req.body + "sign_up success");
+              logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+                logger.log("info",req.body + "sign_up success");
                 return res.end('{"err":"id값이 ' + testUser.username + '로 비회원 가입되었습니다!"}')
             }
         })
@@ -627,13 +603,13 @@ router.post("/nonusersign_up", function (req, res) {
 //회원 탈퇴
 router.post("/sign_out", function (req, res) {
 
-    console.log(req.session.username + " is sign out");
-    console.log(req.body);
+    logger.log("info",req.session.username + " sign out attempt");
     User.find({username: req.session.username}).exec(function (err, documents) {
 
         req.session.destroy();  // 세션 삭제
         res.clearCookie('sid'); // 세션 쿠키 삭제
-        console.log("회원탈퇴")
+        logger.log("info",req.session.username + " sign out success");
+        logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
         documents[0].remove();
         return res.redirect("/cafe/main.html/")
     });
@@ -643,7 +619,7 @@ router.post("/sign_out", function (req, res) {
 //회원 수정
 router.post("/user_modify", function (req, res) {
 
-    console.log(JSON.stringify(req.body) + "user_modify attempt" + req.session.username);
+    logger.log("info","user_modify attempt" + req.session.username);
     User.findOne(
             {username: req.session.username},function(err, doc){
               //doc.username= req.session.username
@@ -651,9 +627,11 @@ router.post("/user_modify", function (req, res) {
               doc.realname= req.body.realname
               doc.address= req.body.address
               doc.save()
+              logger.log("info","user_modify success" + req.session.username);
+              logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+              return res.end()
             })
     // save user to database 회원가입 부분 최초저장부분
-
 })
 module.exports = router;
 

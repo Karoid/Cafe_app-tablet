@@ -28,6 +28,7 @@ iframe{
   background-size: 100% 100%;
   background-repeat: no-repeat;
   padding: 20px;
+  z-index:999;
 }
 .popup .back{
   font-size: 30px;
@@ -64,8 +65,48 @@ iframe{
 .coupon_left::after{
   content:"잔을 공짜로 마실 수 있습니다!";
 }
+.couponin-button, .couponout-button{
+  display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    margin:10px 20px;
+}
+.buttons{text-align: center}
+.couponin-button:hover, .couponout-button:hover{
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.couponin-button[disabled], .couponout-button[disabled]{
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: .65;
+}
+.stamp_left::before{
+  content:"앞으로";
+}
 .stamp_left::after{
-  content:"장의 쿠폰을 더 모으면 앞으로 1잔을 공짜로 마실 수 있습니다!";
+  content:"장의 쿠폰을 더 모으면 1잔을 공짜로 마실 수 있습니다!";
 }
 .coupon_left,.stamp_left{
   padding: 10px;
