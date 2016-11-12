@@ -88,7 +88,7 @@ if (os.type() == "Linux") {
   var options = {
     key: fs.readFileSync('key.pem'),
     cert: fs.readFileSync('cert.pem'),
-    passphrase: process.env.PASSPHRASE
+    passphrase: process.env.$PASSPHRASE
   };
   https.createServer(options, app).listen(443, function(){
     logger.log("info","Https server listening on port " + 443);
