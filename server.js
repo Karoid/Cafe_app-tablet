@@ -77,22 +77,23 @@ app.use(function (req, res, next) {
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe', require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정
-
+//http listen
 http.createServer(app).listen(80, function(){
   logger.log("info","Http server listening on port " + 80);
 });
 
-//로컬 테스트시 주석처리 요망 시작
-var options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
-  passphrase: process.env.PASSPHRASE
-};
-https.createServer(options, app).listen(443, function(){
-  logger.log("info","Https server listening on port " + 443);
-});
-//로컬 테스트시 주석처리 요망 끝
-
+//https listen
+if (os.type() == "Linux") {
+  //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
+  var options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+    passphrase: process.env.PASSPHRASE
+  };
+  https.createServer(options, app).listen(443, function(){
+    logger.log("info","Https server listening on port " + 443);
+  });
+}
 //***** 라우팅 설정 *****//
 app.get('/', function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
