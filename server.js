@@ -1,3 +1,5 @@
+var http = require('http');
+var https = require('https');
 var express = require('express'); // 웹서버 사용
 var app = express();
 var fs = require('fs'); // 파일 로드 사용.
@@ -75,9 +77,21 @@ app.use(function (req, res, next) {
 app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe', require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정
-app.listen(process.env.PORT || 80, process.env.IP || "0.0.0.0", function () {
-    logger.log("info",'Server Start');
+
+http.createServer(app).listen(80, function(){
+  logger.log("info","Http server listening on port " + 80);
 });
+
+//로컬 테스트시 주석처리 요망 시작
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
+  passphrase: process.env.PASSPHRASE
+};
+https.createServer(options, app).listen(443, function(){
+  logger.log("info","Https server listening on port " + 443);
+});
+//로컬 테스트시 주석처리 요망 끝
 
 //***** 라우팅 설정 *****//
 app.get('/', function (req, res) {
