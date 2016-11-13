@@ -11,42 +11,46 @@ async = require("async");
 var os = require("os");
 var winston = require('winston');
 var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({
-      timestamp: function(){return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}
-    }),
-    new (winston.transports.File) ({
-      timestamp: function(){return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')},
-      filename: './maroot.log'
-    })
-  ]
+    transports: [
+        new (winston.transports.Console)({
+            timestamp: function () {
+                return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+            }
+        }),
+        new (winston.transports.File)({
+            timestamp: function () {
+                return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+            },
+            filename: './maroot.log'
+        })
+    ]
 });
 if (os.type() == "Linux") {
-  logger.log("info","server is on AWS");
-  mongoose.connect('mongodb://localhost:27017/test', function (err) {
-      mongoose.Promise = global.Promise;
-      if (err) {
-          logger.log("err","connection failed");
-          logger.log("err",os.hostname());
-          logger.log("err",os.type());
-          logger.log("err",os.platform());
-          logger.log("err",err)
-          throw err;
-      }
+    logger.log("info", "server is on AWS");
+    mongoose.connect('mongodb://localhost:27017/test', function (err) {
+        mongoose.Promise = global.Promise;
+        if (err) {
+            logger.log("err", "connection failed");
+            logger.log("err", os.hostname());
+            logger.log("err", os.type());
+            logger.log("err", os.platform());
+            logger.log("err", err)
+            throw err;
+        }
     });
 } else {
-  mongoose.connect('mongodb://52.78.68.136:27017/test', function (err) {
-      mongoose.Promise = global.Promise;
-      logger.log("info","server is on LOCAL");
-      if (err) {
-          logger.log("err","connection failed");
-          logger.log("err",os.hostname());
-          logger.log("err",os.type());
-          logger.log("err",os.platform());
-          logger.log("err",err)
-          throw err;
-      }
-  });
+    mongoose.connect('mongodb://52.78.68.136:27017/test', function (err) {
+        mongoose.Promise = global.Promise;
+        logger.log("info", "server is on LOCAL");
+        if (err) {
+            logger.log("err", "connection failed");
+            logger.log("err", os.hostname());
+            logger.log("err", os.type());
+            logger.log("err", os.platform());
+            logger.log("err", err)
+            throw err;
+        }
+    });
 }
 var conn = mongoose.connection;
 var User = require('./models/like'); //모듈화 해놓은 like스키마 불러오기
@@ -69,8 +73,8 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (!Object.keys(req.body).length == 0) {
-      logger.log("info","body:"+JSON.stringify(req.body).replace(/\"password\":\"\w*\"/g,"password") +"url:"+ JSON.stringify(req.url)+"\n")
-      logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
+        logger.log("info", "body:" + JSON.stringify(req.body).replace(/\"password\":\"\w*\"/g, "password") + "url:" + JSON.stringify(req.url) + "\n")
+        logger.log("info", req.headers['x-real-ip'] || req.connection.remoteAddress)
     }
     next();
 });
@@ -78,39 +82,39 @@ app.use('/user', require('./User/user')); //로그인 라우팅 연결
 app.use('/cafe', require('./Cafe/cafe')); //카페 사이트 라우팅 연결
 // 포트 설정
 //http listen
-http.createServer(app).listen(80, function(){
-  logger.log("info","Http server listening on port " + 80);
+http.createServer(app).listen(80, function () {
+    logger.log("info", "Http server listening on port " + 80);
 });
 
 //https listen
 if (os.type() == "Linux") {
-  //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
-  var options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
-    passphrase: process.env.$PASSPHRASE
-  };
-  https.createServer(options, app).listen(443, function(){
-    logger.log("info","Https server listening on port " + 443);
-  });
+    //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
+    var options = {
+        key: fs.readFileSync('key.pem'),
+        cert: fs.readFileSync('cert.pem'),
+        passphrase: process.env.$PASSPHRASE
+    };
+    https.createServer(options, app).listen(443, function () {
+        logger.log("info", "Https server listening on port " + 443);
+    });
 }
 //***** 라우팅 설정 *****//
 app.get('/', function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
     res.end("<script>window.location='/cafe/index'</script>");
-/*    res.end('<html>' +
-        '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head>' +
-        '<body>' +
-        '<a href="/cafe/index">카페 사이트</a><br><a href="/index.html">테블릿 사이트</a><br><a href="/user">로그인 사이트</a><br><a href="/admin.html">어드민 사이트</a>' +
-        '</body>' +
-        '</html>'
-    )*/
+    /*    res.end('<html>' +
+     '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head>' +
+     '<body>' +
+     '<a href="/cafe/index">카페 사이트</a><br><a href="/index.html">테블릿 사이트</a><br><a href="/user">로그인 사이트</a><br><a href="/admin.html">어드민 사이트</a>' +
+     '</body>' +
+     '</html>'
+     )*/
 });
 //테블릿 라우팅
 app.get('/index.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
     fs.readFile('index.html', function (error, data) { // index.html 파일 로드 .
         if (error) {
-            logger.log("info",error);
+            logger.log("info", error);
         } else {
             res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
             res.end(data); // 로드 html response .
@@ -120,7 +124,7 @@ app.get('/index.html', function (req, res) { // 웹서버 기본주소로 접속
 app.get('/today.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
     fs.readFile('today.html', function (error, data) { // index.html 파일 로드 .
         if (error) {
-            logger.log("info",error);
+            logger.log("info", error);
         } else {
             res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
             res.end(data); // 로드 html response .
@@ -130,7 +134,7 @@ app.get('/today.html', function (req, res) { // 웹서버 기본주소로 접속
 app.get('/best.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
     fs.readFile('best.html', function (error, data) { // index.html 파일 로드 .
         if (error) {
-            logger.log("info",error);
+            logger.log("info", error);
         } else {
             res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
             res.end(data); // 로드 html response .
@@ -141,7 +145,7 @@ app.get('/best.html', function (req, res) { // 웹서버 기본주소로 접속 
 app.get('/admin.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
     fs.readFile('admin.html', function (error, data) { // index.html 파일 로드 .
         if (error) {
-            logger.log("info",error);
+            logger.log("info", error);
         } else {
             res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
             res.end(data); // 로드 html response .
@@ -195,6 +199,25 @@ app.use(function (req, res, next) {
         next();
     }
 });
+//쿠폰
+app.post('/qr_scanned', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
+    var status = req.body.split(', ');
+    if (status[0] == "status 0") //적립
+    {
+        User.findOne({username: status[1]}).exec(function (err, doc) {
+            doc.coupon += status[2] * 1;
+            doc.save();
+        })
+    }
+    else { //사용
+        User.findOne({username: status[1]}).exec(function (err, doc) {
+            doc.coupon -= status[2] * 1;
+            if (doc.coupon <= 0)
+                doc.coupon = 0;
+            doc.save();
+        })
+    }
+})
 //주문상태바꾸기 order_state : done -> ready // ready -> done
 app.post('/order_change_state', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     Order_data.find({order_count: req.body.order_count}).lean().exec(function (err, doc) {
@@ -205,7 +228,7 @@ app.post('/order_change_state', function (req, res) { //페이지 인덱스로 �
             val = "ready";
         Order_data.update({order_count: req.body.order_count}, {$set: {order_state: val}}, function (err, result) {
             if (err)
-                logger.log("info",err)
+                logger.log("info", err)
             res.end();
         })
     })
@@ -322,10 +345,10 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
     });
     var dir;
     if (req.file != null) { //이미지 새로 업로드 했을때임.
-        logger.log("info","이미지 업로드 " + req.file);
+        logger.log("info", "이미지 업로드 " + req.file);
         Page_data.find({page_index: req.body.page_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
-            logger.log("info","업로드 성공"+doc[0].img_dir);
+            logger.log("info", "업로드 성공" + doc[0].img_dir);
             try {
                 fs.unlinkSync("./public" + filePath);
             } catch (e) {
@@ -364,7 +387,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
     var dir;
     var tempItem;
     if (req.file != null) { //이미지 새로 업로드 했을때임.
-        logger.log("info","이미지 업로드 " + req.file);
+        logger.log("info", "이미지 업로드 " + req.file);
         Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
             var filePath = doc[0].img_dir;
             logger.log("hear" + doc[0].item_name);
@@ -399,7 +422,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
                 }
             },
             function (err, numberAffected, rawResponse) {
-                logger.log("info","에러2:" + err + "영향" + numberAffected + "raw" + rawResponse);
+                logger.log("info", "에러2:" + err + "영향" + numberAffected + "raw" + rawResponse);
 
             })
 
@@ -412,7 +435,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
                 }
             }, {multi: true},
             function (err, numberAffected, rawResponse) {
-                logger.log("info","에러:" + err + "영향" + numberAffected + "raw" + rawResponse);
+                logger.log("info", "에러:" + err + "영향" + numberAffected + "raw" + rawResponse);
                 res.redirect("../admin.html#/item");
             })
     }
@@ -437,7 +460,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
             conn.collection('item_count').update({item_count: count}, {item_count: count + 1});
         }
         catch (err) {
-            logger.log("info",err)
+            logger.log("info", err)
         }
     });
     res.redirect("../admin.html#/item");
@@ -477,11 +500,11 @@ app.post('/delete_page', function (req, res) {
 app.post('/delete_item', function (req, res) {
 
 
-        if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-            document.form.submit();
-        }else{   //취소
-            return;
-        }
+    if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
+        document.form.submit();
+    } else {   //취소
+        return;
+    }
 
     Item_data.find({item_index: req.body.item_index}).exec(function (err, doc) {
         var filePath = doc[0].img_dir;
@@ -560,7 +583,7 @@ app.post('/get_todayable_page_data', function (req, res) {
             })
         }
         catch (err) {
-            logger.log("info",err);
+            logger.log("info", err);
         }
 
     })
