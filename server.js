@@ -422,7 +422,11 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
 app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
     var count;
     Item_count.find().lean().exec(function (err, doc) {
+      if (doc[0]) {
         count = doc[0].item_count;
+      }else{
+        conn.collection('item_count').insert({item_count:0})
+      }
         try {
             conn.collection('Item_data').insert({
                 item_index: count,
