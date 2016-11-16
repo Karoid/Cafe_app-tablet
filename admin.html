@@ -11,6 +11,8 @@
     <script src="/js/jquery-1.12.4.min.js"></script>
     <script src="/js/angular.min.js"></script>
     <script src="/js/angular-ui-router.js"></script>
+    <script src="/js/jsqrcode-combined.min.js"></script>
+    <script src="/js/qr-scanner.js"></script>
     <script>
         function change() {
             if ($('.unactive').css("display") == "none")
@@ -20,7 +22,7 @@
         }
     </script>
     <script>
-        var app = angular.module('flapperNews', ['ui.router'])
+        var app = angular.module('flapperNews', ['ui.router', 'qrScanner'])
         app.controller('MainCtrl',
                 function ($scope) {
                     $scope.test = "관리자 페이지";
@@ -181,11 +183,43 @@
                     $scope.item_index = data[0].item_index;
                 })
             };
-
             $scope.get_item_data();
-
-
         })
+        app.controller('qrCtrl', function ($scope, $http) {
+            $scope.onSuccess = function (data) {
+                console.log(data);
+                var status = data.split(',');
+                // 0은 적립임. 증가
+                if (status[0] == "status 0") {
+                    var person = prompt("쿠폰을 몇장 적립합니까?", 1);
+                    if (person != null) {
+                        data = data + ", " + person;
+                        $http.post('/qr_scanned').success(function (data) {
+                            //console.log(data);
+                            $window.alert("처리완료" + data);
+                        })
+                    }
+
+                }
+                else {
+                    var person = prompt("쿠폰을 몇장 사용합니까?", 10);
+                    if (person != null) {
+                        data = data + ", " + person;
+                        $http.post('/qr_scanned').success(function (data) {
+                            //console.log(data);
+                            $window.alert("처리완료" + data);
+                        })
+                    }
+                }
+            };
+            $scope.onError = function (error) {
+                console.log(error);
+            };
+            $scope.onVideoError = function (error) {
+                console.log(error);
+            };
+        })
+
         app.config([
             '$stateProvider',
             '$urlRouterProvider',
@@ -228,6 +262,12 @@
                             templateUrl: '/edit_item.html'
                             , controller: 'editCtrl2'
                         });
+                $stateProvider
+                        .state('qr', {
+                            url: '/qr',
+                            templateUrl: '/qr.html'
+                            , controller: 'qrCtrl'
+                        });
 
                 $urlRouterProvider.otherwise('home');
             }]);
@@ -248,6 +288,7 @@
             </g>
         </svg>
     </label>
+
     <div class="menu">
         <div><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
         <div><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
@@ -268,6 +309,7 @@
     <div class="page-header">
         <div class="btn-bg home" style="background:#7278e5;">
             <h1 style="text-align:center;color:white">{{test}}</h1>
+
         </div>
         <div class="btn-bg bg-1 home">
             <div class="btn btn-1">
@@ -283,10 +325,17 @@
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1 home" style="background:#e5d272;">
+        <div class="btn-bg bg-3 home" style="background:#e5d272;">
             <div class="btn btn-1">
                 <a href="#/order">
                     <button>주문 관리</button>
+                </a>
+            </div>
+        </div>
+        <div class="btn-bg bg-3 home" style="background:#e5d272;">
+            <div class="btn btn-1">
+                <a href="#/qr">
+                    <button>qr 인식</button>
                 </a>
             </div>
         </div>
@@ -326,6 +375,11 @@
         </div>
     </div>
 </script>
+<script type="text/ng-template" id="/qr.html">
+    <div class="page-header">
+        <qr-scanner width="400" height="300" ng-success="onSuccess(data)" ng-error="onError(error)"/>
+    </div>
+</script>
 <script type="text/ng-template" id="/order.html">
     <div class="page-header" id="slider">
         <div class="btn-bg bg-2">
@@ -342,24 +396,24 @@
                 주문가격 : {{order.order_total_price}}<br>
                 주문상황 : {{order.order_state}}<br>
                 <table style="width:80%; max-width:360px">
-                  <tr>
-                    <th class="col-25">항목</th>
-                    <th class="col-12">휘핑</th>
-                    <th class="col-12">시럽</th>
-                    <th class="col-12 nomobile">핫/<br>아이스</th>
-                    <th class="col-12">샷</th>
-                  </tr>
-                  <tr ng-repeat="detail in order.order_item_index">
-                    <td>{{detail.name}}</td>
-                    <td ng-if="(detail.option-0)%2 == 1">O</td>
-                    <td ng-if="(detail.option-0)%2 != 1">X</td>
-                    <td ng-if="(detail.option/2)%2 == 1">O</td>
-                    <td ng-if="(detail.option/2)%2 != 1">X</td>
-                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 == 1">핫</td>
-                    <td class="nomobile" ng-if="parseInt(detail.option/4)%2 != 1">아이스</td>
-                    <td ng-if="parseInt(detail.option/8)%2 == 1">O</td>
-                    <td ng-if="parseInt(detail.option/8)%2 != 1">X</td>
-                  </tr>
+                    <tr>
+                        <th class="col-25">항목</th>
+                        <th class="col-12">휘핑</th>
+                        <th class="col-12">시럽</th>
+                        <th class="col-12 nomobile">핫/<br>아이스</th>
+                        <th class="col-12">샷</th>
+                    </tr>
+                    <tr ng-repeat="detail in order.order_item_index">
+                        <td>{{detail.name}}</td>
+                        <td ng-if="(detail.option-0)%2 == 1">O</td>
+                        <td ng-if="(detail.option-0)%2 != 1">X</td>
+                        <td ng-if="(detail.option/2)%2 == 1">O</td>
+                        <td ng-if="(detail.option/2)%2 != 1">X</td>
+                        <td class="nomobile" ng-if="parseInt(detail.option/4)%2 == 1">핫</td>
+                        <td class="nomobile" ng-if="parseInt(detail.option/4)%2 != 1">아이스</td>
+                        <td ng-if="parseInt(detail.option/8)%2 == 1">O</td>
+                        <td ng-if="parseInt(detail.option/8)%2 != 1">X</td>
+                    </tr>
                 </table>
                 <button click="">주문완료</button>
             </div>
