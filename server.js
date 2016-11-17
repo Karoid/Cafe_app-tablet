@@ -88,15 +88,15 @@ http.createServer(app).listen(80, function () {
 
 //https listen
 if (os.type() == "Linux") {
-    //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
-    var options = {
-        key: fs.readFileSync('key.pem'),
-        cert: fs.readFileSync('cert.pem'),
-        passphrase: process.env.$PASSPHRASE
-    };
-    https.createServer(options, app).listen(443, function () {
-        logger.log("info", "Https server listening on port " + 443);
-    });
+  //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
+  var options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+    passphrase: process.env.PASSPHRASE
+  };
+  https.createServer(options, app).listen(443, function(){
+    logger.log("info","Https server listening on port " + 443);
+  });
 }
 //***** 라우팅 설정 *****//
 app.get('/', function (req, res) {
@@ -245,7 +245,13 @@ app.post('/get_user_data', function (req, res) { //페이지 인덱스로 페이
 app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
     var count;
     Order_count.find({}).lean().exec(function (err, doc) {
-        count = doc[0].value;
+      if (doc[0]) {
+        count = doc[0].order_count;
+      }else{
+        conn.collection('order_count').insert({order_count:0})
+        count = 0;
+      }
+
         conn.collection('order_data').insert({
             order_count: count,
             order_count_today: 0,
@@ -255,7 +261,7 @@ app.post('/user_order', function (req, res) { //페이지 인덱스로 페이지
             order_id: req.body.telephone,
             order_state: "ready", //ready or done
         });
-        conn.collection('order_count').update({value: count}, {value: count + 1});
+        conn.collection('order_count').update({order_count: count}, {order_count: count + 1});
     });
 })
 app.post('/get_order_data', function (req, res) { //모든 주문정보 받아오기
@@ -302,6 +308,12 @@ app.post('/make_page', upload_main.single('uploadFile'), function (req, res) {
     });
     var count;
     Page_count.find().lean().exec(function (err, doc) {
+      if (doc[0]) {
+        count = doc[0].page_count;
+      }else{
+        conn.collection('page_count').insert({page_count:0})
+        count = 0;
+      }
         try {
             conn.collection('Page_data').insert({
                 page_index: count,
@@ -445,7 +457,12 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
 app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
     var count;
     Item_count.find().lean().exec(function (err, doc) {
+      if (doc[0]) {
         count = doc[0].item_count;
+      }else{
+        conn.collection('item_count').insert({item_count:0})
+        count = 0;
+      }
         try {
             conn.collection('Item_data').insert({
                 item_index: count,

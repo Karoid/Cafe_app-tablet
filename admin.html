@@ -22,7 +22,7 @@
         }
     </script>
     <script>
-        var app = angular.module('flapperNews', ['ui.router', 'qrScanner'])
+        var app = angular.module('flapperNews', ['ui.router']) //, 'qrScanner'
         app.controller('MainCtrl',
                 function ($scope) {
                     $scope.test = "관리자 페이지";

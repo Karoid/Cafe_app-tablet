@@ -17,9 +17,9 @@ $('.couponout-button').click(function(event) {
 });
 }
 function coupon_seen(){
-  height = $(document).height() - ($(".header").height()+$("#mid").height())
+  height = $(window).height() - ($(".header").height()+$("#mid").height())
   if ( height <= 100) {
-    $("#mid").css("height",$(document).height() - (150 + $(".header").height()))
+    $("#mid").css("height",$(window).height() - (150 + $(".header").height()))
   }
 }
 function fillcoupon(coupon_frame, count){
@@ -32,7 +32,7 @@ function fillcoupon(coupon_frame, count){
   stamp_delta_left = frame_width*262.5/1440
   stamp_delta_top = frame_height*87/179
   if (frame_width>=500) {
-    stamp_left = $(document).width()*0.4 -stamp_width/2 -stamp_delta_left*2
+    stamp_left = $(window).width()*0.4 -stamp_width/2 -stamp_delta_left*2
   }else {
     stamp_left = frame_left + frame_width*14/260
 
@@ -103,10 +103,5 @@ $(document).ready(function(){
     .fail(function() {
       console.log("error");
     })
-
   });
-
-
-
-
 })
