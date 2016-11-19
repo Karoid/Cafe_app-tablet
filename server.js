@@ -89,9 +89,11 @@ http.createServer(app).listen(80, function () {
 //https listen
 if (os.type() == "Linux") {
   //git에 cert.pem이 없어서, 로컬에서 실행되지 않음
+  ca = [fs.readFileSync("ssl/root.crt"), fs.readFileSync("ssl/1_Intermediate.crt")]
   var options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync('ssl/key.pem'),
+    cert: fs.readFileSync('ssl/cert.pem'),
+    ca: ca,
     passphrase: process.env.PASSPHRASE
   };
   https.createServer(options, app).listen(443, function(){
