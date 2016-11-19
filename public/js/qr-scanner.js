@@ -74,11 +74,11 @@
                 };
 
                 element.bind('$destroy', function () {
-                    if ($window.localMediaStream) {
+                    if (typeof $window.localMediaStream.stop === 'function') {
                         $window.localMediaStream.stop();
                     }
                     if (stopScan) {
-                        $interval.cancel(stopScan);
+                      $interval.cancel(stopScan);
                     }
                 });
             }

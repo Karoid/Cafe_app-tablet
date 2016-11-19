@@ -22,7 +22,7 @@
         }
     </script>
     <script>
-        var app = angular.module('flapperNews', ['ui.router']) //, 'qrScanner'
+        var app = angular.module('flapperNews', ['ui.router', 'qrScanner'])
         app.controller('MainCtrl',
                 function ($scope) {
                     $scope.test = "관리자 페이지";
@@ -290,10 +290,11 @@
     </label>
 
     <div class="menu">
-        <div><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
-        <div><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
-        <div><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
-        <div><a href="#/order" onclick="document.getElementById('test').checked = false">주문 관리</a></div>
+        <div class="firstcolor"><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
+        <div class="secondcolor"><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
+        <div class="thirdcolor"><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
+        <div class="fourthcolor"><a href="#/order" onclick="document.getElementById('test').checked = false">주문 관리</a></div>
+        <div class="fifthcolor"><a href="#/qr" onclick="document.getElementById('test').checked = false">QR 인식</a></div>
     </div>
 
 
@@ -307,32 +308,32 @@
 
 <script type="text/ng-template" id="/home.html">
     <div class="page-header">
-        <div class="btn-bg home" style="background:#7278e5;">
+        <div class="btn-bg home firstcolor">
             <h1 style="text-align:center;color:white">{{test}}</h1>
 
         </div>
-        <div class="btn-bg bg-1 home">
+        <div class="btn-bg bg-1 home secondcolor">
             <div class="btn btn-1">
                 <a href="#/page">
                     <button>Page 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-1 home" style="background:#78c98d;">
+        <div class="btn-bg bg-1 home thirdcolor">
             <div class="btn btn-1">
                 <a href="#/item">
                     <button>Item 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-3 home" style="background:#e5d272;">
+        <div class="btn-bg bg-1 home fourthcolor">
             <div class="btn btn-1">
                 <a href="#/order">
                     <button>주문 관리</button>
                 </a>
             </div>
         </div>
-        <div class="btn-bg bg-3 home" style="background:#e5d272;">
+        <div class="btn-bg bg-1 home fifthcolor">
             <div class="btn btn-1">
                 <a href="#/qr">
                     <button>qr 인식</button>
@@ -343,7 +344,7 @@
 </script>
 <script type="text/ng-template" id="/page.html">
     <div class="page-header">
-        <div class="btn-bg" style="background:#7278e5;">
+        <div class="btn-bg firstcolor">
             <h1 style="text-align:center;color:white">Page 관리</h1>
             <form action="/make_page" , method="post" enctype="multipart/form-data" name="make_page">
                 제품 이름 <select name="item_name">
@@ -358,7 +359,7 @@
             </form>
         </div>
         <div ng-repeat="page in pages">
-            <div class="btn-bg bg-1" style="height:380px">
+            <div class="btn-bg bg-1 secondcolor item">
                 <div class="btn btn-1">
                     <h2>{{page.page_info}}</h2>
                     제품명 : {{page.item_name}}<br>
@@ -375,21 +376,47 @@
         </div>
     </div>
 </script>
-<script type="text/ng-template" id="/qr.html">
-    <div class="page-header">
-        <qr-scanner width="400" height="300" ng-success="onSuccess(data)" ng-error="onError(error)"/>
+<script type="text/ng-template" id="/item.html">
+  <div class="page-header">
+    <div class="btn-bg firstcolor">
+      <h1 style="text-align:center;color:white">Item 관리</h1>
+      <form action="/make_item" , method="post" enctype="multipart/form-data" name="make_item">
+        제품 이름 <input type="text" name="item_name"><br>
+        제품 영문 <input type="text" name="item_name_eng"><br>
+        제품 가격 <input type="number" name="item_price"><br>
+        좋아요 수 <input type="number" name="like"><br>
+        이미지 업로드 <input type="file" name="uploadFile"/>
+        <br>
+        <input type=submit>
+      </form>
     </div>
+    <div ng-repeat="item in items">
+      <div class="btn-bg thirdcolor item">
+        <div class="btn btn-1">
+          <h2>제품명 : {{item.item_name}}</h2>
+          제품명(영문) : {{item.item_name_eng}}<br>
+          가격 : {{item.item_price}}<br>
+          좋아요 : {{item.like}}<br>
+          할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
+          이미지 : <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
+          <button ng-click="delete_item($index)">제품 삭제</button>
+          <button ng-click="edit_item($index)">제품 수정</button>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
 </script>
 <script type="text/ng-template" id="/order.html">
     <div class="page-header" id="slider">
-        <div class="btn-bg bg-2">
+        <div class="btn-bg firstcolor">
             <button ng-click="pre()">이전</button>
             {{date|date:'yyyy-MM-dd'}}
             <button ng-click="next()">다음</button>
             완료주문<input type="checkbox" click="" ng-model="check">
         </div>
         <div ng-repeat="order in orders" repeat-directive>
-            <div ng-class="selected" ng-click="">
+            <div ng-class="selected" ng-click="" class="btn-bg bg-1 fourthcolor item">
                 주문번호 : {{order.order_count}}<br>
                 폰번호 : {{order.order_id}}<br>
                 주문시각 : {{order.order_date|date:'yyyy-MM-dd HH:mm'}}<br>
@@ -421,35 +448,9 @@
     </div>
     </div>
 </script>
-<script type="text/ng-template" id="/item.html">
+<script type="text/ng-template" id="/qr.html">
     <div class="page-header">
-        <div class="btn-bg" style="background:#7278e5;">
-            <h1 style="text-align:center;color:white">Item 관리</h1>
-            <form action="/make_item" , method="post" enctype="multipart/form-data" name="make_item">
-                제품 이름 <input type="text" name="item_name"><br>
-                제품 영문 <input type="text" name="item_name_eng"><br>
-                제품 가격 <input type="number" name="item_price"><br>
-                좋아요 수 <input type="number" name="like"><br>
-                이미지 업로드 <input type="file" name="uploadFile"/>
-                <br>
-                <input type=submit>
-            </form>
-        </div>
-        <div ng-repeat="item in items">
-            <div class="btn-bg bg-1" style="height:450px">
-                <div class="btn btn-1">
-                    <h2>제품명 : {{item.item_name}}</h2>
-                    제품명(영문) : {{item.item_name_eng}}<br>
-                    가격 : {{item.item_price}}<br>
-                    좋아요 : {{item.like}}<br>
-                    할인 : {{item_discount}} 할인가 : {{item.discount_price}}<br><br>
-                    이미지 : <img height="250" width="250" ng-src="{{item.img_dir}}"><br>
-                    <button ng-click="delete_item($index)">제품 삭제</button>
-                    <button ng-click="edit_item($index)">제품 수정</button>
-                    <br>
-                </div>
-            </div>
-        </div>
+        <qr-scanner width="400" height="300" ng-success="onSuccess(data)" ng-error="onError(error)"/>
     </div>
 </script>
 <script type="text/ng-template" id="/edit_page.html">

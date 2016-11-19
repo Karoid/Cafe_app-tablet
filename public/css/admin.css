@@ -13,12 +13,11 @@ body .btn-bg {
   justify-content: center;
 }
 body .home{
-  height:25vh;
+  height:20vh;
 }
 body .btn-bg.bg-1 {
   background: #6ab1c9;
 }
-
   body .btn-bg.bg-2 {
     background: #6ab1c9;
     font-size: 12px;
@@ -53,6 +52,21 @@ body .btn-bg.bg-1 .btn-1 button:active {
   -webkit-transform: translate(5px, 5px);
   transform: translate(5px, 5px);
 }
+.firstcolor{
+background:#7278e5!important;
+}
+.secondcolor{
+background:#6ab1c9!important;
+}
+.thirdcolor{
+background:#78c98d!important;
+}
+.fourthcolor{
+background:#e5d272!important;
+}
+.fifthcolor{
+background:#e485c6!important;
+}
 table{text-align: center;}
 .btn {
   margin: 0 auto 30px auto;
@@ -79,6 +93,25 @@ a button {
 }
 button a {
   text-decoration: none;
+}
+.item{
+  float: left!important;
+  width:33.33%!important;
+  height:auto!important;
+}
+@media (max-width: 1200px) {
+  .item{
+    float: left!important;
+    width:50%!important;
+    height:auto!important;
+  }
+}
+@media (max-width: 780px) {
+  .item{
+    float: left!important;
+    width:100%!important;
+    height:auto!important;
+  }
 }
 @-moz-keyframes cloud-animation {
   100% {
@@ -144,7 +177,6 @@ button a {
     color: #fff;
   }
 }
-
 /******************Menu CSS******************/
 label {
   position: absolute;
@@ -215,10 +247,6 @@ input#test:checked ~ label .close {
 
 .menu {
   z-index:-1;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -236,8 +264,8 @@ input#test:checked ~ label .close {
   width: 100vw;
   height: 100vh;
   background-color: tomato;
-  -webkit-transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -webkit-transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   color: #ffffff;
   text-transform: uppercase;
   font-size: 24px;
@@ -246,17 +274,24 @@ input#test:checked ~ label .close {
 }
 
 input#test:checked ~ .menu {
-  display:flex;
   opacity: 1;
   z-index:1;
 }
 
 .menu div {
   margin-top: 50px;
-  -webkit-transition: margin 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transition: margin 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -webkit-transition: margin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: margin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.menu a{text-decoration:none;color:inherit;}
+.menu a{
+  text-decoration:none;
+  color:inherit;
+  width:100vw;
+  height:20vh;
+  display: block;
+  line-height: 20vh;
+  text-align: center;
+}
 input#test:checked ~ .menu div {
   margin-top: 0px;
 }
