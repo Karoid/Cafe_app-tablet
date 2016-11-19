@@ -144,16 +144,6 @@ app.get('/best.html', function (req, res) { // 웹서버 기본주소로 접속 
     });
 });
 
-app.get('/admin.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
-    fs.readFile('admin.html', function (error, data) { // index.html 파일 로드 .
-        if (error) {
-            logger.log("info", error);
-        } else {
-            res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
-            res.end(data); // 로드 html response .
-        }
-    });
-});
 app.use(express.static(__dirname + '/public'));
 var storage_main = multer.diskStorage({
     destination: './public/img/main_img',

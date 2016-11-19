@@ -16,12 +16,6 @@ $('.couponout-button').click(function(event) {
   popup("<iframe src='/cafe/coupon_out.html' style='width:100%;'>")
 });
 }
-function coupon_seen(){
-  height = $(window).height() - ($(".header").height()+$("#mid").height())
-  if ( height <= 100) {
-    $("#mid").css("height",$(window).height() - (150 + $(".header").height()))
-  }
-}
 function fillcoupon(coupon_frame, count){
   frame_top = coupon_frame.position().top
   frame_left = coupon_frame.position().left
@@ -73,7 +67,9 @@ $(document).ready(function(){
       $('#mid').attr("style","")
     }else {
       $('#mid').removeClass('expand')
-      coupon_seen()
+    }
+    if (url == '/cafe/admin.html') {
+      window.location = '/cafe/admin.html'
     }
   },500)
 

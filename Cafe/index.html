@@ -21,7 +21,11 @@
             </div>
             <div class="navbar col-md-6">
                 <a href="main.html" target="mid"><img src="img/홈아이콘.png"></a>
-                <a href="introduce.html" target="mid"><img src="img/가게소개아이콘.png"></a>
+                <%if(data == 'admin'){%>
+                  <a href="introduce.html" target="mid"><img src="img/admin_ico.png"></a>
+                <%}else{%>
+                  <a href="introduce.html" target="mid"><img src="img/가게소개아이콘.png"></a>
+                <%}%>
                 <a href="menu_page.html" target="mid"><img src="img/메뉴아이콘.png"></a>
                 <a href="QnA.html" target="mid"><img src="img/질문.png"></a>
             </div>

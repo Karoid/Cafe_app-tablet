@@ -34,6 +34,21 @@ router.use(session({
 }));
 //router.use(function timeLog(req, res, next) {});
 // define the home page route
+router.get('/admin.html', function (req, res) { // 웹서버 기본주소로 접속 할 경우 실행 . ( 현재 설정은 localhost 에 3303 port 사용 : 127.0.0.1:3303 )
+  console.log(req.session);
+  if (req.session.username != "admin") {
+      res.redirect("/")
+  }else{
+    fs.readFile('admin.html', function (error, data) { // index.html 파일 로드 .
+        if (error) {
+            logger.log("info", error);
+        } else {
+            res.writeHead(200, {'Content-Type': 'text/html'}); // Head Type 설정 .
+            res.end(data); // 로드 html response .
+        }
+    });
+  }
+});
 router.get('/index', function (req, res) {
     fs.readFile('./Cafe/index.html', 'utf8', function (err, data) {
         if (err) {
@@ -47,6 +62,9 @@ router.get('/index', function (req, res) {
     })
 });
 router.get('/introduce.html', function (req, res) {
+  if (req.session.username == 'admin') {
+    return res.redirect("/cafe/admin.html")
+  }
     fs.readFile('./Cafe/introduce.html', 'utf8', function (err, data) {
         if (err) {
             logger.log("err",err);

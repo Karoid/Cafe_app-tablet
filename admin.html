@@ -290,7 +290,7 @@
     </label>
 
     <div class="menu">
-        <div class="firstcolor"><a href="#/home" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
+        <div class="firstcolor"><a href="/cafe/index" onclick="document.getElementById('test').checked = false">관리자 페이지</a></div>
         <div class="secondcolor"><a href="#/page" onclick="document.getElementById('test').checked = false">Page 관리</a></div>
         <div class="thirdcolor"><a href="#/item" onclick="document.getElementById('test').checked = false">Item 관리</a></div>
         <div class="fourthcolor"><a href="#/order" onclick="document.getElementById('test').checked = false">주문 관리</a></div>
@@ -309,7 +309,8 @@
 <script type="text/ng-template" id="/home.html">
     <div class="page-header">
         <div class="btn-bg home firstcolor">
-            <h1 style="text-align:center;color:white">{{test}}</h1>
+            <h1 style="text-align:center;color:white">
+              <a href="/cafe/index" style="text-decoration:none;color:white">{{test}}</a></h1>
 
         </div>
         <div class="btn-bg bg-1 home secondcolor">
