@@ -320,7 +320,7 @@ app.post('/make_page', upload_main.single('uploadFile'), function (req, res) {
         }
         catch (err) {
         }
-        res.redirect("../admin.html#/page");
+        res.redirect("../cafe/admin.html#/page");
     })
 
 
@@ -381,7 +381,7 @@ app.post('/edit_page', upload_main.single('uploadFile'), function (req, res) {
                 }
             },
             function (err, numberAffected, rawResponse) {
-                res.redirect("../admin.html#/page");
+                res.redirect("../cafe/admin.html#/page");
             })
     }
 
@@ -440,7 +440,7 @@ app.post('/edit_item', upload_item.single('uploadFile'), function (req, res) {
             }, {multi: true},
             function (err, numberAffected, rawResponse) {
                 logger.log("info", "에러:" + err + "영향" + numberAffected + "raw" + rawResponse);
-                res.redirect("../admin.html#/item");
+                res.redirect("../cafe/admin.html#/item");
             })
     }
 
@@ -472,7 +472,7 @@ app.post('/make_item', upload_item.single('uploadFile'), function (req, res) {
             logger.log("info", err)
         }
     });
-    res.redirect("../admin.html#/item");
+    res.redirect("../cafe/admin.html#/item");
 });
 
 app.post('/get_page_data_by_page_index', function (req, res) { //페이지 인덱스로 페이지 데이터 검색하기
