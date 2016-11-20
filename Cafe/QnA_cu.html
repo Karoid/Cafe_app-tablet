@@ -9,29 +9,29 @@
         <%}else{%>
           <div style="color:white">글의 비밀번호 입력</div>
           <form class="form" method="post" action="/cafe/<%=data[0]%>">
-          <input type="hidden" name="answer" id="ans" value="<%=content%>">
+          <input required type="hidden" name="answer" id="ans" value="<%=content%>">
         <%}%>
         <%if(user){%>
         <p class="name">
-            <input type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input"
+            <input required type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input"
                    value="<%=user%>" id="name" disabled/>
-            <input name="username" type="hidden" value="<%=user%>"/>
+            <input required name="username" type="hidden" value="<%=user%>"/>
         </p>
         <%}else{ %>
-        <input name="username" type="hidden" value="nonuser"/>
+        <input required name="username" type="hidden" value="nonuser"/>
         <p class="password">
-            <input type="password" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input"
+            <input required type="password" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input"
                    name="password" id="name" placeholder="password"/>
         </p>
         <%}%>
         <%if(!data[0]){ //글쓰기, 수정하기 일때%>
         <p class="email">
-            <input name="title" type="text" class="validate[required,custom[email]] feedback-input" id="email"
+            <input required name="title" type="text" class="validate[required,custom[email]] feedback-input" id="email"
                    value="<%=data.title%>" placeholder="title"/>
         </p>
 
         <p class="text">
-            <textarea name="content" class="validate[required,length[6,300]] feedback-input" id="comment"
+            <textarea required name="content" class="validate[required,length[6,300]] feedback-input" id="comment"
                       placeholder="글쓰기"><%=data.content%></textarea>
         </p>
         <%}%>
