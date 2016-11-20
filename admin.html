@@ -447,24 +447,29 @@
     </div>
 </script>
 <script type="text/ng-template" id="/edit_page.html">
-    <br><br><br>
-    <form action="/edit_page" , method="post" enctype="multipart/form-data" name="edit_page">
-        <!--제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}" ng-model="selected">{{item.item_name}}</option></select><br>-->
-        제품 이름 <select name="item_name" ng-options="item as item.item_name for item in items track by item.item_name"
-                      value=item.item_name ng-model="selected"></select><br>
-        <input type="text" name="page_info" value="{{page.page_info}}"><br>
-        <input type="hidden" name="page_index" value="{{page_index}}"><br>
-        <img height="250" width="250" ng-src="{{page.img_dir}}"><br>
-        이미지 수정 <input type="file" name="uploadFile"/><br>
-        메인 페이지 <input type="checkbox" name="testable" ng-checked=page.testable>
-        오늘의 메뉴 <input type="checkbox" name="todayable" ng-checked=page.todayble>
-        베스트 메뉴 <input type="checkbox" name="bestable" ng-checked=page.bestable><br>
-        <input type=submit value="수정하기">
-    </form>
-
+  <div class="page-header">
+      <div class="btn-bg firstcolor">
+      <h1 style="text-align:center;color:white">Page 수정</h1>
+      <form action="/edit_page" , method="post" enctype="multipart/form-data" name="edit_page">
+          <!--제품 이름 <select name="item_name"><option ng-repeat="item in items" value="{{item.item_name}}" ng-model="selected">{{item.item_name}}</option></select><br>-->
+          제품 이름 <select name="item_name" ng-options="item as item.item_name for item in items track by item.item_name"
+                        value=item.item_name ng-model="selected"></select><br>
+          페이지 정보 <input type="text" name="page_info" value="{{page.page_info}}"><br>
+          <input type="hidden" name="page_index" value="{{page_index}}"><br>
+          <img height="250" width="250" ng-src="{{page.img_dir}}"><br>
+          이미지 수정 <input type="file" name="uploadFile"/><br>
+          메인 페이지 <input type="checkbox" name="testable" ng-checked=page.testable>
+          오늘의 메뉴 <input type="checkbox" name="todayable" ng-checked=page.todayble>
+          베스트 메뉴 <input type="checkbox" name="bestable" ng-checked=page.bestable><br>
+          <input type=submit value="수정하기">
+      </form>
+      </div>
+  </div>
 </script>
 <script type="text/ng-template" id="/edit_item.html">
-    <br><br><br><br><br>
+  <div class="page-header">
+    <div class="btn-bg firstcolor">
+      <h1 style="text-align:center;color:white">Item 수정</h1>
     <form action="/edit_item" , method="post" enctype="multipart/form-data" name="edit_item">
         제품명<input type="text" name="item_name" value="{{item.item_name}}"><br>
         제품명(영문)<input type="text" name="item_name_eng" value="{{item.item_name_eng}}"><br>
@@ -475,7 +480,8 @@
         이미지 수정 <input type="file" name="uploadFile"/><br>
         <input type=submit value="수정하기">
     </form>
-
+    </div>
+  </div>
 </script>
 </body>
 </html>
