@@ -135,6 +135,10 @@ function Submit(){
     setTimeout(function(){$(':checkbox').removeClass('red');$('.input-box input').removeClass('red');$('.agreement input').removeClass('red')},1000)
     if (x==0) { return true }else{ return false }
   }
+  submit_selected_menu = function(){
+    alert("음료를 선택해주세요!")
+    return !!selected_menu.length
+  }
   get_userdata = function(){
     userdata.name = $('#first-name').val()
     userdata.address = $('#last-name').val()
@@ -142,32 +146,15 @@ function Submit(){
     userdata.agreement = $('.checkbox').val()
   }
   this.submit_action = function(){
-    done = submit_phone($('#telephone')) && submit_input()
+    done = submit_phone($('#telephone')) && submit_input() && submit_selected_menu()
     nonuser = $('.pw').val()
     get_userdata()
-    console.log(done);
     if (done && nonuser == "") {
-      console.log("회원");
       var redirect = '/cafe/order_check.html';
       $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu)});
     }else if (done) {
-      console.log("비회원");
       var redirect = '/cafe/order_check.html';
       $.redirectPost(redirect, {userdata: JSON.stringify(userdata), orderdata: JSON.stringify(selected_menu), pw: nonuser});
-      /*
-      $.ajax({
-        url: '/cafe/nonuser_order',
-        type: 'POST',
-        dataType: 'application/json',
-        data: {userdata: userdata, orderdata: selected_menu, pw:nonuser}
-      })
-      .done(function(data) {
-        console.log("success");
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        alert(errorThrown);
-      })*/
-
     }
   }
 }
@@ -222,11 +209,9 @@ $(document).ready(function() {
     .done(function(data) {
       recent = JSON.parse(data);
       html = ""
-      console.log(recent);
       recent.forEach(function(elem) {
         html += '<div class="recent_order">'
         elem.forEach(function(item) {
-          console.log(item.name, item.option);
           html+= '<div class="recent_item"><div class="item_name">'+
                         item.name+
                       '</div>'+
@@ -243,10 +228,8 @@ $(document).ready(function() {
           array = $(".menu-image .item .item_name")
           elem=($(elem));
           for (var i = 0; i < array.length; i++) {
-            console.log("menu:"+array.eq(i).text(),"elem:"+ elem.text());
             if (array.eq(i).text() == elem.text()) {
               item_el = $(".menu-image .item").eq(i)
-              console.log("found!", item_el);
               item_el.addClass('active')
               menu.addMenuData(item_el)
               old_count = item_el.children('.item_frame').children('.number').html()

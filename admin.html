@@ -38,7 +38,6 @@
             $scope.test = function () {
                 console.log("test");
                 $http.post('/get_item_data_sorted_by_liked').success(function (data) {
-//                    console.log(data);
                 })
             };
             $scope.delete_item = function (index) {
@@ -47,11 +46,9 @@
                 })
             }
             $scope.edit_item = function (index) {
-//                console.log($scope.items[index].item_index)
                 $state.go("edit_item", {id: $scope.items[index].item_index});
             };
             $scope.get_item_data();
-            //$scope.test();
         });
 
 
@@ -64,7 +61,6 @@
             }
             $scope.get_page_data = function () {
                 $http.post('/get_page_data').success(function (data) {
-//                    console.log(data);
                     $scope.pages = data;
                 })
             }
@@ -75,7 +71,6 @@
             };
 
             $scope.edit_page = function (index) {
-                //console.log($scope.pages[index].page_index);
                 $state.go("edit_page", {id: $scope.pages[index].page_index});
             };
 
@@ -86,14 +81,11 @@
             return {
                 link: function (scope, element, attrs) {
                     element.click(function () {
-//                        console.log("clicked!")
                         if (scope.order == null) {
-//                            console.log("change!")
                             change();
                         }
                         else {
                             $http.post('/order_change_state', ({order_count: scope.order.order_count})).success(function () {
-//                                console.log("done")
                             })
                             if (scope.selected == "active") {
                                 scope.selected = "unactive";
@@ -131,10 +123,13 @@
             }
             $scope.get_order_data = function () {
                 var search_date = $scope.date - $scope.date % 86400000;
-//                console.log(search_date);
                 $http.post('/order_data_search', ({date: search_date})).success(function (data) {
-//                    console.log(data)
+                  console.log(data)
+                  if(data != ']'){
                     $scope.orders = data;
+                  }else{
+                    $scope.orders = null
+                  }
                 })
             }
             $scope.get_order_data();
@@ -152,13 +147,10 @@
                 })
             };
             $scope.get_page_data = function () {
-                //console.log($stateParams.id);
                 $http.post('/get_page_data_by_page_index', ({page_index: $stateParams.id})).success(function (data) {
                     $scope.page = data[0];
                     preset = data[0];
                     return $scope.preset();
-                    //$scope.selected = data[0].item_name;
-                    //$scope.selected = data[0];
 
                 });
             }

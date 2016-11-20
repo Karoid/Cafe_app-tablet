@@ -25,12 +25,12 @@
   <tbody>
     <%for (var i = 0; i < data.docs.length; i++) {%>
     <tr>
-      <th scope="row"><%=(data.page-1)*5+i+1%></th>
+      <th scope="row"><%=data.total - (data.page-1)*5 - i%></th>
       <td class="lengthy"><a href="/cafe/order_check_in/<%=data.docs[i]._id%>"><%data.docs[i].order_item_index.forEach(function(el,index){%><div class="item_name"><%=el.name%> </div><%})%></a></td>
       <td><%=data.docs[i].order_total_price%></td>
       <td><%=data.docs[i].order_date.toISOString().slice(0,10).replace(/-/g,"");%></td>
       <%if(data.docs[i].order_state == "ready"){%>
-      <td> <a href="/cafe/Qna_d/<%=data.docs[i]._id%>">주문 취소</a></td>
+      <td> <a href="#">준비중</a></td>
       <%}else{%>
       <td>접수</td>
       <%}%>

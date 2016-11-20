@@ -155,7 +155,7 @@ router.get('/order_check/:page?', function (req, res) { //주문내역 확인
           } else {
               var page_num = 1;
           }
-            Order_data.paginate({order_id: req.session.username}, {page: page_num, limit: 5}, function (err, docs) {
+            Order_data.paginate({order_id: req.session.username}, {page: page_num, limit: 5,sort:{order_date:-1}}, function (err, docs) {
               res.end(ejs.render(data, {data: docs}))
             })
         }
@@ -356,7 +356,7 @@ router.get('/QnA_in/:id?', function (req, res) {
 });
 //회원 주문
 router.post('/user_order', function (req, res) {
-    if (req.session.username) {
+    if (req.session.username && req.body.orderdata) {
         var item = req.body.orderdata;
         var total_price = 0;
         var count;
@@ -449,7 +449,6 @@ router.post('/nonuser_order', function (req, res) {
       var item = req.body.orderdata;
       var total_price = 0;
       var count;
-
       Order_count.find({}).lean().exec(function (err, doc) {
           if (doc[0]) {
             count = doc[0].order_count;
@@ -457,12 +456,16 @@ router.post('/nonuser_order', function (req, res) {
             conn.collection('order_count').insert({order_count:0})
             count = 0;
           }
-          for (i = 0; i < item.length; i++) {
+          if (item) {
+            for (i = 0; i < item.length; i++) {
               total_price = Number(total_price) + Number(item[i].item_price);
-          }
-          var goitem = new Array();
-          for (i = 0; i < item.length; i++) {
+            }
+            var goitem = new Array();
+            for (i = 0; i < item.length; i++) {
               goitem.push({name: item[i].item_name, option: item[i].option})
+            }
+          }else {
+            res.end()
           }
           conn.collection('order_data').insert({
               order_count: count,
