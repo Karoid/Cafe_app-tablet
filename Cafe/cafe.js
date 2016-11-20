@@ -255,15 +255,17 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
             Qna.findOne({_id: req.params.id}, function (err, doc) {
                 if (doc.username != "nonuser" && req.session.username == doc.username && req.params.isAns != "1") {
                     //회원 수정하기
-                    doc.title = req.body.title;
-                    doc.content = req.body.content;
-                    doc.save();
+                    if (req.body.title != "" && req.body.content != "") {
+                      doc.title = req.body.title;
+                      doc.content = req.body.content;
+                      doc.save();
+                    }
                     logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
                     logger.log("info",req.session.username+"회원 수정하기")
                     res.redirect("/cafe/QnA.html")
                 } else if (((req.body.password == doc.password && !req.session.username) || req.session.username == doc.username || req.session.username == "admin" )&& req.params.isAns == "1") {
                     // 회원, 관리자 댓글 달기
-                    if (req.body.content != "") {
+                    if (req.body.answer != "") {
                       doc.answer.push({username:req.session.username, content:req.body.answer});
                       logger.log("info",req.headers['x-real-ip'] || req.connection.remoteAddress)
                       logger.log("info",req.session.username+"회원 댓글")
@@ -272,7 +274,11 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                     res.redirect("/cafe/QnA_in/"+req.params.id)
                 } else if (!req.session.username && req.params.isAns == "1") {
                     //비회원 댓글 달기
-                    res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+urlencode(req.body.answer))
+                    if (req.body.answer != "") {
+                      res.redirect("/cafe/QnA_cu/"+req.params.id + "/" + escape("/QnA_write/"+req.params.id+"/1")+"?content="+urlencode(req.body.answer))
+                    }else{
+                      res.redirect("/cafe/QnA_in/"+req.params.id)
+                    }
                 } else if (!req.session.username && req.body.password == doc.password && doc.password != "") {
                     //비회원 비밀번호 받았을때 수정하기
                     doc.title = req.body.title;
@@ -287,6 +293,8 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                 }
             });
         } else {             //글쓰기
+          console.log(req.body.username != 'nonuser', !!req.body.password, req.body.username != 'nonuser' || !!req.body.password);
+          if (req.body.title != "" && req.body.content != "" && (req.body.username != 'nonuser' || !!req.body.password)) {
             conn.collection('Qna').insert({
                 username: req.body.username,
                 password: req.body.password,
@@ -295,7 +303,8 @@ router.post('/QnA_write/:id?/:isAns?', function (req, res) {
                 created_at: new Date(),
                 answer: []
             });
-            res.redirect("/cafe/QnA.html")
+          }
+          res.redirect("/cafe/QnA.html")
         }
     } catch (e) {
         logger.log("error",e);

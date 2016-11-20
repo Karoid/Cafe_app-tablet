@@ -136,7 +136,9 @@ function Submit(){
     if (x==0) { return true }else{ return false }
   }
   submit_selected_menu = function(){
-    alert("음료를 선택해주세요!")
+    if (!selected_menu.length) {
+      alert("음료를 선택해주세요!")
+    }
     return !!selected_menu.length
   }
   get_userdata = function(){
