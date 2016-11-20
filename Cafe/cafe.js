@@ -362,9 +362,12 @@ router.post('/user_order', function (req, res) {
         var count;
 
         Order_count.find({}).lean().exec(function (err, doc) {
-
-            count = doc[0].value;
-
+            if (doc[0]) {
+              count = doc[0].order_count;
+            }else{
+              conn.collection('order_count').insert({order_count:0})
+              count = 0;
+            }
             conn.collection('order_count').update({value: count},
                 {value: count + 1});
 
@@ -448,10 +451,12 @@ router.post('/nonuser_order', function (req, res) {
       var count;
 
       Order_count.find({}).lean().exec(function (err, doc) {
-
-          count = doc[0].value;
-
-
+          if (doc[0]) {
+            count = doc[0].order_count;
+          }else{
+            conn.collection('order_count').insert({order_count:0})
+            count = 0;
+          }
           for (i = 0; i < item.length; i++) {
               total_price = Number(total_price) + Number(item[i].item_price);
           }
